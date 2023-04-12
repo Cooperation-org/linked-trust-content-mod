@@ -1,0 +1,56 @@
+# Dependency directory
+node_modules
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# data files
+data
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Yarn integrity file
+.yarn-integrity
+
+# Optional npm cache directory
+.npm
+
+# Modern Yarn files
+.pnp.*
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# IDE - VSCode
+.vscode/*
+
+# Local history for Visual Studio Code
+.history
+
+# Next Files
+.next
+
+
+
+# Built Visual Studio Code extensions
+*.vsix
+
+# OS
+.DS_Store
+
+build
+
+#cache
+cache
+packages/examples/fortune/exchange/.env.development

@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model JobCreator {
+  id       Int     @id @default(autoincrement())
+  name     String?
+  email    String?
+  password String?
+  address  String  @unique
+  groups   Group[]
+}
+
+model Worker {
+  id       Int      @id @default(autoincrement())
+  name     String?
+  email    String?
+  password String?
+  address  String   @unique
+  groups   Group[]  @relation("Members")
+  Review   Review[]
+}
+
+model Group {
+  id            Int        @id @default(autoincrement())
+  name          String
+  description   String?
+  creator       JobCreator @relation(fields: [createdById], references: [id])
+  createdById   Int
+  jobs          Job[]
+  members       Worker[]   @relation("Members")
+  funded        Boolean    @default(false)
+  funded_amt    Int
+  used_amt      Float?
+  guideline_url String
+  apiKey        String?    @unique
+  chainId       Int
+  token         String
+}
+
+model Job {
+  id                Int      @id @default(autoincrement())
+  title             String
+  description       String?
+  group             Group    @relation(fields: [groupId], references: [id])
+  groupId           Int
+  content           Content?
+  contentId         Int?
+  reviewersRequired Int
+  fundAmount        Int
+  escrowAddress     String?  @unique
+  createdAt         DateTime @default(now())
+}
+
+model Content {
+  id         Int      @id @default(autoincrement())
+  url        String
+  message    String
+  job        Job      @relation(fields: [jobId], references: [id])
+  jobId      Int      @unique
+  status     String   @default("Pending")
+  updateHook String?
+  imgUrl     String?
+  isThread   Boolean?
+  fullThread Json?
+  reviews    Review[]
+}
+
+model Review {
+  id         Int      @id @default(autoincrement())
+  content    Content  @relation(fields: [contentId], references: [id])
+  contentId  Int
+  reviewer   Worker   @relation(fields: [reviewerId], references: [id])
+  reviewerId Int
+  status     String   @default("NotReviewed") // possible values: "NotReviewed", "Risk", "NoRisk"
+  risk       Boolean?
+  notRisk    Boolean?
+}
+
+model Nonce {
+  id      Int      @id @default(autoincrement())
+  address String   @unique
+  nonce   String
+  created DateTime @default(now())
+}

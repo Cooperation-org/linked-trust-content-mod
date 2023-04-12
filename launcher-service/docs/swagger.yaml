@@ -1,0 +1,370 @@
+openapi: 3.0.0
+info:
+  title: Conten-Moderation(WhatsCookin)
+  version: 1.0.0
+servers:
+  - url: http://localhost:8082/api/
+paths:
+  /auth/nonce:
+    post:
+      tags:
+        - default
+      summary: Generate Nonce
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                address: ''
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/renewToken:
+    post:
+      tags:
+        - default
+      summary: Renew JWT Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                refreshToken: ''
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /auth/login:
+    get:
+      tags:
+        - default
+      summary: Login Endpoint for Job Creator and Worker
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /job-creators:
+    post:
+      tags:
+        - default
+      summary: Create Job Creator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Sarthak
+                email: sarthak@gmail.com
+                password: dummy password
+                address: '0xbb5fdE6509c21834f7890C26a8A247b04f20509d'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - default
+      summary: Get Job Creators
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /workers:
+    post:
+      tags:
+        - default
+      summary: Create Worker
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Sarthak
+                email: sarthak@gmail.com
+                password: dummy password
+                address: '0xbb5fdE6509c21834f7890C26a8A247b04f205078'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /groups:
+    post:
+      tags:
+        - default
+      summary: Create Group
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Test Group
+                description: Test Group description
+                creatorId: 1
+                funded: true
+                chainId: 80001
+                fundedAmt: '2'
+                guidelineUrl: https://cooperation.org/
+                token: '0x0376D26246Eb35FF4F9924cF13E6C05fd0bD7Fb4'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /groups/{id}:
+    put:
+      tags:
+        - default
+      summary: Update Group
+      requestBody:
+        content: {}
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - default
+      summary: Get Group
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '7'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /groups/{id}/newApiKey:
+    post:
+      tags:
+        - default
+      summary: Generate group API Key
+      requestBody:
+        content: {}
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /groups/{groupId}/add-workers:
+    post:
+      tags:
+        - default
+      summary: Add Workers to Group
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                addresses:
+                  - '0xbb5fdE6509c21834f7890C26a8A247b04f205078'
+      parameters:
+        - name: groupId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /groups/{groupId}/jobs:
+    post:
+      tags:
+        - default
+      summary: Create Job
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Test Job
+                description: Test Job description
+                reviewersRequired: 2
+                fundAmount: 1
+                content:
+                  url: >-
+                    https://whatscookin.us/wp-content/uploads/2021/11/wc-social-network-01-01-1-1024x576.png
+                  message: WhatCooking Message
+                  status: Pending
+                  updateHook: contentData.updateHook
+                  imgUrl: >-
+                    https://whatscookin.us/wp-content/uploads/2021/11/wc-social-network-01-01-1-1024x576.png
+                  isThread: false
+                  fullThread: contentData.fullThread
+      parameters:
+        - name: groupId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '12'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /jobs/{id}:
+    get:
+      tags:
+        - default
+      summary: Get Job
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /groups/worker/{workerId}:
+    get:
+      tags:
+        - default
+      summary: Get Group For Worker
+      parameters:
+        - name: workerId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /worker/{workerId}/group/{groupId}/jobs:
+    get:
+      tags:
+        - default
+      summary: Get Group Jobs For Worker
+      parameters:
+        - name: workerId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+        - name: groupId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /jobs/{jobId}/content/{contentId}/review:
+    post:
+      tags:
+        - default
+      summary: Sub Review Status For Content in Job
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                address: '0xa78110C789be2f8c3f10E3D5fD3D84Ef608f28dB'
+                status: Risk
+                risk: true
+                notRisk: false
+      parameters:
+        - name: jobId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+        - name: contentId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /groups/creator/{creatorId}:
+    get:
+      tags:
+        - default
+      summary: Get Groups For Job Creators
+      parameters:
+        - name: creatorId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /send-fortunes:
+    post:
+      tags:
+        - default
+      summary: Send Fortune to Reputation Oracle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - escrowAddress: '0x5c681ecE030C849474939121a2FA5D3F03103129'
+                  chainId: 80001
+                  fortunes:
+                    '0xa78110C789be2f8c3f10E3D5fD3D84Ef608f28dB':
+                      - fortune: Testing
+                        score: true
+                    '0xD05ea1e71dC3e36fa882fDCa104c2B755F88c426':
+                      - fortune: Gram
+                        score: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

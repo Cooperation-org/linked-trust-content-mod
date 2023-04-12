@@ -1,0 +1,61 @@
+openapi: 3.0.0
+info:
+  title: Conten-Moderation
+  version: 1.0.0
+servers:
+  - url: http://localhost:8082/api/
+components:
+  securitySchemes:
+    ApiKeyAuth: # arbitrary name for the security scheme
+      type: apiKey
+      in: header # can be "header", "query" or "cookie"
+      name: X-API-KEY # name of the header, query parameter or cookie
+      required: true
+    responses:
+      UnauthorizedError:
+        description: API key is missing or invalid
+        headers:
+          X-API-KEY:
+            schema:
+              type: string
+# 2) Apply the API key globally to all operations
+security:
+  - ApiKeyAuth: []
+paths:
+  /groups/{groupId}/jobs:
+    post:
+      tags:
+        - jobs
+      summary: Create Job
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                title: Test Job
+                description: Test Job description
+                reviewersRequired: 2
+                fundAmount: 1
+                content:
+                  url: >-
+                    https://whatscookin.us/wp-content/uploads/2021/11/wc-social-network-01-01-1-1024x576.png
+                  message: WhatCooking Message
+                  status: Pending
+                  updateHook: contentData.updateHook
+                  imgUrl: >-
+                    https://whatscookin.us/wp-content/uploads/2021/11/wc-social-network-01-01-1-1024x576.png
+                  isThread: false
+                  fullThread: contentData.fullThread
+      parameters:
+        - name: groupId
+          in: path
+          schema:
+            type: integer
+          required: true
+          example: '12'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

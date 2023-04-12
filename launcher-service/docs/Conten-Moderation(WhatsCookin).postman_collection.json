@@ -1,0 +1,567 @@
+{
+	"info": {
+		"_postman_id": "d38092ab-e9e2-4ecb-810f-b558097772c7",
+		"name": "Conten-Moderation(WhatsCookin)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15917261"
+	},
+	"item": [
+		{
+			"name": "Generate Nonce",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"address\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/auth/nonce",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"auth",
+						"nonce"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Renew JWT Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\":\"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/auth/renewToken",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"auth",
+						"renewToken"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Endpoint for Job Creator and Worker",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"signature\": \"\",\r\n    \"address\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/auth/login",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Job Creator",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Sarthak\",\r\n    \"email\": \"sarthak@gmail.com\",\r\n    \"password\": \"dummy password\",\r\n    \"address\": \"0xbb5fdE6509c21834f7890C26a8A247b04f20509d\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/job-creators",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"job-creators"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Worker",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Sarthak\",\r\n    \"email\": \"sarthak@gmail.com\",\r\n    \"password\": \"dummy password\",\r\n    \"address\": \"0xbb5fdE6509c21834f7890C26a8A247b04f205078\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/workers",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"workers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Group",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Test Group\",\r\n    \"description\": \"Test Group description\",\r\n    \"creatorId\": 1,\r\n    \"funded\": true,\r\n    \"chainId\": 80001,\r\n    \"fundedAmt\": \"2\",\r\n    \"guidelineUrl\": \"https://cooperation.org/\",\r\n    \"token\": \"0x0376D26246Eb35FF4F9924cF13E6C05fd0bD7Fb4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/groups",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Group",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/groups/:id",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"groups",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Group",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/groups/:id",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"groups",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "14"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate group API Key",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/groups/:id/newApiKey",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"groups",
+						":id",
+						"newApiKey"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Workers to Group",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"addresses\": [\"0xbb5fdE6509c21834f7890C26a8A247b04f205078\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/groups/:groupId/add-workers",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"groups",
+						":groupId",
+						"add-workers"
+					],
+					"variable": [
+						{
+							"key": "groupId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Job",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Test Job\",\r\n    \"description\": \"Test Job description\",\r\n    \"reviewersRequired\": 2,\r\n    \"fundAmount\": 1,\r\n    \"content\": {\r\n        \"url\": \"https://whatscookin.us/wp-content/uploads/2021/11/wc-social-network-01-01-1-1024x576.png\",\r\n        \"message\": \"WhatCooking Message\",\r\n        \"status\": \"Pending\",\r\n        \"updateHook\": \"contentData.updateHook\",\r\n        \"imgUrl\": \"https://whatscookin.us/wp-content/uploads/2021/11/wc-social-network-01-01-1-1024x576.png\",\r\n        \"isThread\": false,\r\n        \"fullThread\": \"contentData.fullThread\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}//groups/:groupId/jobs",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"",
+						"groups",
+						":groupId",
+						"jobs"
+					],
+					"variable": [
+						{
+							"key": "groupId",
+							"value": "13"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Job",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/jobs/:id",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"jobs",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Group For Worker",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/groups/worker/:workerId",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"groups",
+						"worker",
+						":workerId"
+					],
+					"variable": [
+						{
+							"key": "workerId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Group Jobs For Worker",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/worker/:workerId/group/:groupId/jobs",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"worker",
+						":workerId",
+						"group",
+						":groupId",
+						"jobs"
+					],
+					"variable": [
+						{
+							"key": "workerId",
+							"value": "1"
+						},
+						{
+							"key": "groupId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sub Review Status For Content in Job",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"address\": \"0xa78110C789be2f8c3f10E3D5fD3D84Ef608f28dB\",\r\n  \"status\": \"Risk\",\r\n  \"risk\": true,\r\n  \"notRisk\": false\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}/jobs/:jobId/content/:contentId/review",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"jobs",
+						":jobId",
+						"content",
+						":contentId",
+						"review"
+					],
+					"variable": [
+						{
+							"key": "jobId",
+							"value": "1"
+						},
+						{
+							"key": "contentId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Job Creators",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/job-creators",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"job-creators"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Groups For Job Creators",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/groups/creator/:creatorId",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"groups",
+						"creator",
+						":creatorId"
+					],
+					"variable": [
+						{
+							"key": "creatorId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send Fortune to Reputation Oracle",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"escrowAddress\": \"0x5c681ecE030C849474939121a2FA5D3F03103129\",\r\n        \"chainId\": 80001,\r\n        \"fortunes\": {\r\n            \"0xa78110C789be2f8c3f10E3D5fD3D84Ef608f28dB\": [\r\n                {\r\n                    \"fortune\": \"Testing\",\r\n                    \"score\": true\r\n                }\r\n            ],\r\n            \"0xD05ea1e71dC3e36fa882fDCa104c2B755F88c426\": [\r\n                {\r\n                    \"fortune\": \"Gram\",\r\n                    \"score\": true\r\n                }\r\n            ]\r\n        }\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3006/send-fortunes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3006",
+					"path": [
+						"send-fortunes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get ALL Jobs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/jobs",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"jobs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Jobs By Escrow Address",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{API_URL}}/job/escrow/0xA286846cf3381D712EAF322Ddd50b25A5b8639B9",
+					"host": [
+						"{{API_URL}}"
+					],
+					"path": [
+						"job",
+						"escrow",
+						"0xA286846cf3381D712EAF322Ddd50b25A5b8639B9"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API_URL",
+			"value": "localhost:8082/api",
+			"type": "string"
+		}
+	]
+}
