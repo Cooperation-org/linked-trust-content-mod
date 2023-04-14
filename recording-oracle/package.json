@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build": "tsc",
-    "start:prod": "ts-node build/src/index.js",
+    "start:prod": "ts-node build/index.js",
     "start": "cross-env NODE_ENV=development ts-node ./src/index.ts",
     "test": "concurrently -k -s first --hide 0 \"hardhat node --port 8547\" \"sleep 10 && RPC_PORT=8547 yarn workspace @human-protocol/core deploy:local && RPC_PORT=8547 vitest --run\""
   },
@@ -44,6 +44,7 @@
     "minio": "^7.0.33",
     "store2": "^2.14.2",
     "ts-node": "^10.9.1",
+    "typescript": "^5.0.4",
     "uuid": "^9.0.0",
     "web3": "^1.8.1"
   },

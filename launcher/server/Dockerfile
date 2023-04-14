@@ -1,11 +1,11 @@
 FROM node:19-alpine
+RUN apk add g++ make python3
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package.json yarn.lock ./
 COPY ./src ./src
-COPY ./tsconfig.json ./
+COPY ./tsconfig.json ./tsconfig.json
 
-RUN apk add python3 make gcc g++
 RUN yarn
 RUN yarn build

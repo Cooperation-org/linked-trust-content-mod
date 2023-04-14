@@ -1,4 +1,5 @@
-import './loadenv.ts';
+import dotenv from 'dotenv';
+dotenv.config();
 import getServer from './server';
 
 process.on('unhandledRejection', (err) => {

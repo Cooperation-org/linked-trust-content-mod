@@ -26,7 +26,9 @@
     "react-router-dom": "^6.10.0",
     "react-scripts": "^5.0.1",
     "remove": "^0.1.5",
+    "serve": "^14.2.0",
     "siwe": "^1.1.6",
+    "typescript": "^5.0.4",
     "wagmi": "^0.12.2",
     "web-vitals": "^3.1.0",
     "web3": "^1.8.1"
