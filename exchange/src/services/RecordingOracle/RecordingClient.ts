@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from './../../config/axiosInterceptor';
 
 const sendFortune = async (
   escrow: string,
@@ -14,7 +14,7 @@ const sendFortune = async (
     chainId,
   };
   const url = recordingOracleUrl.replace(/\/+$/, '');
-  await axios.post(`${url}/send-fortunes`, body);
+  await axiosInstance.post(`${url}/send-fortunes`, body);
   return;
 };
 

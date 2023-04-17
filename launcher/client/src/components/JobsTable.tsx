@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from './../config/axiosInterceptor';
 import {
   Table,
   TableBody,
@@ -55,7 +55,7 @@ const JobTable = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       if (groupId) {
-        const response = await axios.get(
+        const response = await axiosInstance.get(
           `/api/job-creator/groups/${groupId}/jobs`
         );
         const data = response.data;
@@ -73,7 +73,7 @@ const JobTable = () => {
 
   const handleGenerateApiKey = () => {
     // Call API to generate API key
-    axios.post(`/api/groups/${groupId}/newApiKey`).then((response) => {
+    axiosInstance.post(`/api/groups/${groupId}/newApiKey`).then((response) => {
       setApiKey(response.data.apiKey);
       setDialogOpen(true);
     });

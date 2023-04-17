@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Card, CardContent, Typography } from '@mui/material';
-import axios from 'axios';
+import axiosInstance from './../config/axiosInterceptor';
 
 type JobProps = {
   jobId: number;
@@ -28,7 +28,7 @@ const Job = ({ jobId }: JobProps) => {
 
   const getJob = async () => {
     try {
-      const response = await axios.get(`/jobs/${jobId}`);
+      const response = await axiosInstance.get(`/jobs/${jobId}`);
       setJob(response.data);
     } catch (error) {
       console.error(error);
@@ -37,7 +37,7 @@ const Job = ({ jobId }: JobProps) => {
 
   const submitReview = async (risk: boolean) => {
     try {
-      await axios.post(`/jobs/${jobId}/content/${job?.content?.id}/review`, {
+      await axiosInstance.post(`/jobs/${jobId}/content/${job?.content?.id}/review`, {
         risk,
       });
       setReviewed(true);

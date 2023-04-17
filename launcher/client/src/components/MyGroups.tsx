@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import ContentComponent from './ContentComponent';
-import axios from 'axios';
+import axiosInstance from './../config/axiosInterceptor';
 import { useAuth } from 'src/hooks/auth';
 
 interface Job {
@@ -66,7 +66,7 @@ const MyGroups: React.FC = () => {
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const response = await axios.get(`/api/groups/creator/${id}`);
+        const response = await axiosInstance.get(`/api/groups/creator/${id}`);
         const data = response.data;
         setGroups(data);
         setIsLoading(false);

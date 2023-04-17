@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useAccount, useNetwork, useSignMessage, useConnect } from 'wagmi';
 import { SiweMessage } from 'siwe';
 import { RoundedBox } from './RoundedBox';
-import axios from 'axios';
+import axiosInstance from './../config/axiosInterceptor';
 import { useAuth } from 'src/hooks/auth';
 
 export function LoginWithMetamask({
@@ -28,7 +28,7 @@ export function LoginWithMetamask({
 
   const fetchNonce = async (address: any) => {
     try {
-      const nonceRes = await axios.post('/api/auth/nonce', { address });
+      const nonceRes = await axiosInstance.post('/api/auth/nonce', { address });
       const data = nonceRes.data;
       setState((x) => ({ ...x, nonce: data.nonce }));
     } catch (error) {
@@ -72,7 +72,7 @@ export function LoginWithMetamask({
       });
 
       // Verify signature
-      const verifyRes = await axios.post('/api/auth/login', {
+      const verifyRes = await axiosInstance.post('/api/auth/login', {
         message,
         signature,
         role: 'worker',
