@@ -12,11 +12,11 @@ RUN yarn install --silent
 # Copy the rest of the application code to the container
 COPY . .
 
-# Build the React application
-RUN yarn build
+# # Build the React application
+# RUN yarn build
 
-# Serve the application with a static server
-RUN yarn global add serve
+# # Serve the application with a static server
+# RUN yarn global add serve
 
-# Set the command to start the server
-CMD ["serve", "-s", "build"]
+# # Set the command to start the server
+# CMD ["serve", "-s", "build"]
