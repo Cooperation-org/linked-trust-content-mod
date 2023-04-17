@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+
+# N.B. If only .env files supported variable expansion...
+
+if [ -z "${POSTGRES_USER}" ]; then
+    base_postgres_image_default_user='postgres'
+    export POSTGRES_USER="${base_postgres_image_default_user}"
+fi
+
+# Set the PostgreSQL database URL
+export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}"
+
+# Open a Node terminal
+node -e "console.log('Node terminal opened.');"
+
+# Run the script to wait for the database to become available
+echo "Waiting for PostgreSQL database..."
+until psql $DATABASE_URL -c '\q'; do
+  >&2 echo "Postgres is unavailable - sleeping"
+  sleep 1
+done
+
+>&2 echo "Postgres is up - continuing"
+
+
+exec "$@"

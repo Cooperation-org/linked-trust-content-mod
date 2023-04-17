@@ -1,0 +1,81 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    env_file:
+      - './.envs/.production/.postgress'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  launcher-client:
+    image: launcher-client
+    build:
+      context: ./launcher/client
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "80:3000"
+    env_file:
+      - './.envs/.production/.launcher-client'
+    depends_on:
+      - launcher-service
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`xyz.com`)"
+      - "traefik.http.routers.frontend.entrypoints=https"
+      - "traefik.http.routers.frontend.tls=true"
+    networks:
+      - traefik_network
+
+  launcher-service:
+    image: launcher-service
+    build:
+      context: ./launcher-service
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8082:8082"
+    env_file:
+      - './.envs/.production/.launcher-service'
+      - './.envs/.production/.postgress'
+    command: /bin/sh "start"
+    depends_on:
+      - db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`api.xyz.com`)"
+      - "traefik.http.routers.backend.entrypoints=https"
+      - "traefik.http.routers.backend.tls=true"
+    networks:
+      - traefik_network
+
+  traefik:
+    image: traefik:v2.4
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.http.address=:80"
+      - "--entrypoints.https.address=:443"
+      - "--certificatesresolvers.myresolver.acme.email=your_email@xyz.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=false"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - traefik_network
+volumes:
+  db-data:
+
+networks:
+  traefik_network:
+    external:
+      name: traefik_network

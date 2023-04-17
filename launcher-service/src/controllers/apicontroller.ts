@@ -670,7 +670,7 @@ export const getAllJobsForGroup = async (
       },
     });
 
-    const jobReviews = jobs.map((job) => {
+    const jobReviews = jobs.map((job:any) => {
       const reviewCount = job?.content?.reviews?.length;
       const status = reviewCount
         ? reviewCount >= job.reviewersRequired
