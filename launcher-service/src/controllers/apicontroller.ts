@@ -532,7 +532,7 @@ export const submitReviewStatusForContentInJob = async (
 
     res
       .status(201)
-      .send({ message: 'Review submitted successfully.', review, response });
+      .send({ message: 'Review submitted successfully.', review, recordingOracleResponse: response.data });
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: 'Error submitting review status.' });
