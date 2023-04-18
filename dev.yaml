@@ -1,19 +1,35 @@
 version: '3'
 
 services:
+  traefik:
+    image: "traefik:v2.5"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=sarthakvijayvergiya@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+    restart: always
   db:
     image: postgres:latest
-    hostname: localhost
-    ports:
-      - 5432:5432
+    expose: 
+      - 5432
     env_file:
-      - './.envs/.production/.postgress'
+      - './.envs/.production/.postgres'
     volumes:
       - db-data:/var/lib/postgresql/data
 
   minio:
     container_name: minio
-    hostname: localhost
     image: minio/minio:RELEASE.2022-05-26T05-48-41Z
     ports:
       - 9001:9001
@@ -33,7 +49,6 @@ services:
       retries: 3
   minio-mc:
     container_name: minio-mc
-    hostname: localhost
     image: minio/mc
     depends_on:
       minio:
@@ -47,13 +62,12 @@ services:
 
   launcher-server:
     image: public.ecr.aws/m3c7p7e9/launcher-server:latest
-    hostname: localhost
     build:
       context: ./launcher/server
       dockerfile: Dockerfile
     restart: always
-    ports:
-      - "8080:8080"
+    expose: 
+      - 8080
     env_file:
       - './.envs/.production/.launcher-server'
     command: yarn start
@@ -63,42 +77,45 @@ services:
 
   recording-oracle:
     image: public.ecr.aws/m3c7p7e9/recording-oracle:latest
-    hostname: localhost
     build:
       context: ./recording-oracle
       dockerfile: Dockerfile
     restart: always
-    ports:
-      - "3005:3005"
+    expose: 
+      - 3005
     env_file:
       - './.envs/.production/.recording-oracle'
     command: yarn start
   
   reputation-oracle:
     image: public.ecr.aws/m3c7p7e9/reputation-oracle:latest
-    hostname: localhost
     build:
       context: ./reputation-oracle
       dockerfile: Dockerfile
     restart: always
-    ports:
-      - "3006:3006"
+    expose: 
+      - 3006
     env_file:
       - './.envs/.production/.reputation-oracle'
     command: yarn start
 
   launcher-service:
     image: public.ecr.aws/m3c7p7e9/launcher-service:latest
-    hostname: localhost
     build:
       context: ./launcher-service
       dockerfile: Dockerfile
     restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.launcher-service.rule=Host(`api.repute.social`)"
+      - "traefik.http.routers.launcher-service.entrypoints=websecure"
+      - "traefik.http.routers.launcher-service.tls.certresolver=myresolver"
+      - "traefik.http.services.launcher-service.loadbalancer.server.port=8082"
     ports:
       - "8082:8082"
     env_file:
       - './.envs/.production/.launcher-service'
-      - './.envs/.production/.postgress'
+      - './.envs/.production/.postgres'
     command: /bin/sh "start"
     depends_on:
       - db
@@ -106,21 +123,19 @@ services:
       - reputation-oracle
       - recording-oracle
       - launcher-server
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`api.repute.social`)"
-      - "traefik.http.routers.backend.entrypoints=https"
-      - "traefik.http.routers.backend.tls=true"
-    networks:
-      - traefik_network
 
   launcher-client:
     image: public.ecr.aws/m3c7p7e9/launcher-client:latest
-    hostname: localhost
     build:
       context: ./launcher/client
       dockerfile: Dockerfile
     restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.launcher-client.rule=Host(`launcher.repute.social`)"
+      - "traefik.http.routers.launcher-client.entrypoints=websecure"
+      - "traefik.http.routers.launcher-client.tls.certresolver=myresolver"
+      - "traefik.http.services.launcher-client.loadbalancer.server.port=3000"
     ports:
       - "3000:3000"
     env_file:
@@ -128,17 +143,9 @@ services:
     command: yarn start
     depends_on:
       - launcher-service
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`app.repute.social`)"
-      - "traefik.http.routers.frontend.entrypoints=https"
-      - "traefik.http.routers.frontend.tls=true"
-    networks:
-      - traefik_network
 
   exchange-client:
     image: public.ecr.aws/m3c7p7e9/exchange-client:latest
-    hostname: localhost
     build:
       context: ./exchange
       dockerfile: Dockerfile
@@ -151,31 +158,6 @@ services:
     depends_on:
       - launcher-service
 
-  traefik:
-    image: traefik:v2.4
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    command:
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.http.address=:80"
-      - "--entrypoints.https.address=:443"
-      - "--certificatesresolvers.myresolver.acme.email=sarthakvijayvergiya@gmail.com"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.httpchallenge=false"
-    volumes:
-      - "./letsencrypt:/letsencrypt"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    networks:
-      - traefik_network
 
 volumes:
   db-data:
-
-networks:
-  traefik_network:
-    external:
-      name: traefik_network
