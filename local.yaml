@@ -3,6 +3,7 @@ version: '3'
 services:
   db:
     image: postgres:latest
+    hostname: localhost
     ports:
       - 5432:5432
     env_file:
@@ -13,6 +14,7 @@ services:
   minio:
     container_name: minio
     image: minio/minio:RELEASE.2022-05-26T05-48-41Z
+    hostname: localhost
     ports:
       - 9001:9001
       - 9000:9000
@@ -32,6 +34,7 @@ services:
   minio-mc:
     container_name: minio-mc
     image: minio/mc
+    hostname: localhost
     depends_on:
       minio:
         condition: service_healthy
@@ -44,6 +47,7 @@ services:
 
   launcher-server:
     image: public.ecr.aws/m3c7p7e9/launcher-server:latest
+    hostname: localhost
     build:
       context: ./launcher/server
       dockerfile: Dockerfile
@@ -59,6 +63,7 @@ services:
 
   recording-oracle:
     image: public.ecr.aws/m3c7p7e9/recording-oracle:latest
+    hostname: localhost
     build:
       context: ./recording-oracle
       dockerfile: Dockerfile
@@ -71,6 +76,7 @@ services:
   
   reputation-oracle:
     image: public.ecr.aws/m3c7p7e9/reputation-oracle:latest
+    hostname: localhost
     build:
       context: ./reputation-oracle
       dockerfile: Dockerfile
@@ -83,6 +89,7 @@ services:
 
   launcher-service:
     image: public.ecr.aws/m3c7p7e9/launcher-service:latest
+    hostname: localhost
     build:
       context: ./launcher-service
       dockerfile: Dockerfile
@@ -102,6 +109,7 @@ services:
 
   launcher-client:
     image: public.ecr.aws/m3c7p7e9/launcher-client:latest
+    hostname: localhost
     build:
       context: ./launcher/client
       dockerfile: Dockerfile
@@ -116,6 +124,7 @@ services:
 
   exchange-client:
     image: public.ecr.aws/m3c7p7e9/exchange-client:latest
+    hostname: localhost
     build:
       context: ./exchange
       dockerfile: Dockerfile
