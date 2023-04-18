@@ -6,7 +6,7 @@ services:
     expose: 
       - 5432
     env_file:
-      - './.envs/.production/.postgres'
+      - './.envs/.local/.postgres'
     volumes:
       - db-data:/var/lib/postgresql/data
 
@@ -51,7 +51,7 @@ services:
     expose: 
       - 8080
     env_file:
-      - './.envs/.production/.launcher-server'
+      - './.envs/.local/.launcher-server'
     command: yarn start
     depends_on:
       minio:
@@ -66,7 +66,7 @@ services:
     expose: 
       - 3005
     env_file:
-      - './.envs/.production/.recording-oracle'
+      - './.envs/.local/.recording-oracle'
     command: yarn start
   
   reputation-oracle:
@@ -78,7 +78,7 @@ services:
     expose: 
       - 3006
     env_file:
-      - './.envs/.production/.reputation-oracle'
+      - './.envs/.local/.reputation-oracle'
     command: yarn start
 
   launcher-service:
@@ -90,8 +90,8 @@ services:
     ports:
       - "8082:8082"
     env_file:
-      - './.envs/.production/.launcher-service'
-      - './.envs/.production/.postgres'
+      - './.envs/.local/.launcher-service'
+      - './.envs/.local/.postgres'
     command: /bin/sh "start"
     depends_on:
       - db
@@ -109,7 +109,7 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - './.envs/.production/.launcher-client'
+      - './.envs/.local/.launcher-client'
     command: yarn start
     depends_on:
       - launcher-service
@@ -123,7 +123,7 @@ services:
     ports:
       - "3001:3001"
     env_file:
-      - './.envs/.production/.exchange'
+      - './.envs/.local/.exchange'
     command: yarn start
     depends_on:
       - launcher-service
