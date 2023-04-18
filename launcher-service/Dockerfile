@@ -5,8 +5,9 @@ WORKDIR /app
 
 COPY package.json yarn.lock ./
 COPY ./src ./src
-COPY ./tsconfig.json ./
+COPY ./docs ./docs
+COPY ./prisma ./prisma
+COPY ./tsconfig.json ./tsconfig.json
 
 RUN yarn
-RUN yarn build
-
+RUN npx prisma migrate deploy
