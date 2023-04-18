@@ -1,11 +1,12 @@
+# Use an official Node.js runtime as a parent image
 FROM node:19-alpine
-RUN apk add g++ make python3
 
+# Set the working directory to /app
 WORKDIR /app
 
+# Copy the package and lock files and install dependencies using Yarn
 COPY package.json yarn.lock ./
-COPY ./src ./src
-COPY ./tsconfig.json ./tsconfig.json
+RUN yarn install
 
-RUN yarn
-RUN yarn build
+# Copy the rest of the application files
+COPY . .

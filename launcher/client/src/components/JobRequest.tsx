@@ -14,7 +14,7 @@ import {
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
-import axios from 'axios';
+import axiosInstance from './../config/axiosInterceptor';
 import { ethers } from 'ethers';
 import { useState } from 'react';
 import { useAccount, useChainId, useSigner, useSwitchNetwork } from 'wagmi';
@@ -157,7 +157,7 @@ export const JobRequest = ({
         const receipt = await tx.wait();
       }
       onLaunch();
-      const result = await axios.post('/api/groups', data);
+      const result = await axiosInstance.post('/api/groups', data);
       // onSuccess(result.data);
       onSuccess({ escrowAddress: result.data.id, exchangeUrl: '' });
     } catch (err: any) {

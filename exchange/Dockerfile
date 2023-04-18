@@ -1,15 +1,22 @@
 FROM node:19-alpine
 
-RUN apk add python3 make gcc g++
+# Set the working directory to /app
+WORKDIR /app
 
-ARG PUBLIC_URL
-WORKDIR /usr/src/app
-
+# Copy package.json and yarn.lock to the container
 COPY package.json yarn.lock ./
-RUN yarn
 
-COPY public ./public
-COPY src ./src
-COPY tsconfig.json ./
+# Install dependencies
+RUN yarn install --silent
 
-RUN PUBLIC_URL=PUBLIC_URL yarn build
+# Copy the rest of the application code to the container
+COPY . .
+
+# # Build the React application
+# RUN yarn build
+
+# # Serve the application with a static server
+# RUN yarn global add serve
+
+# # Set the command to start the server
+# CMD ["serve", "-s", "build"]

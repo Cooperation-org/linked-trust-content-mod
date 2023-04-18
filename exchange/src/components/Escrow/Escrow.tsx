@@ -3,7 +3,7 @@ import {
   // getContract,
   getProvider,
 } from '@wagmi/core';
-import axios from 'axios';
+import axiosInstance from './../../config/axiosInterceptor';
 // import { ethers } from 'ethers';
 import {
   // useCallback,
@@ -141,7 +141,7 @@ export const Escrow = () => {
 
   const fetchEscrowDetail = async () => {
     const fetchJobUrl = `/api/jobs/escrow/${escrowAddress}`;
-    const response = await axios.get(fetchJobUrl);
+    const response = await axiosInstance.get(fetchJobUrl);
     setJobDetails(response.data);
     setPage('viewJob');
   };
@@ -152,7 +152,7 @@ export const Escrow = () => {
       maxBodyLength: Infinity,
       url: '/api/job/' + jobId + '/content/',
     };
-    axios
+    axiosInstance
       .request(config)
       .then((response) => {
         setMods(response.data);
@@ -183,7 +183,7 @@ export const Escrow = () => {
         risk,
         notRisk,
       };
-      await axios.post(riskUpdateURL, data);
+      await axiosInstance.post(riskUpdateURL, data);
     } else {
       alert('No job detail!!!');
     }

@@ -12,7 +12,7 @@ import {
   CardActions,
   Button,
 } from '@mui/material';
-import axios from 'axios';
+import axiosInstance from './../config/axiosInterceptor';
 import { useAuth } from 'src/hooks/auth';
 
 interface Group {
@@ -39,7 +39,7 @@ const JobDashboard: React.FC<Props> = () => {
 
   useEffect(() => {
     // Fetch all groups on component mount
-    axios.get<Group[]>(`/api/groups/worker/${id}`).then((response) => {
+    axiosInstance.get<Group[]>(`/api/groups/worker/${id}`).then((response) => {
       setGroups(response.data);
     });
   }, []);
@@ -47,7 +47,7 @@ const JobDashboard: React.FC<Props> = () => {
   useEffect(() => {
     // Fetch jobs when a group is selected
     if (selectedGroup) {
-      axios
+      axiosInstance
         .get<Job[]>(`/api/worker/${id}/group/${selectedGroup}/jobs`)
         .then((response) => {
           setJobs(response.data);

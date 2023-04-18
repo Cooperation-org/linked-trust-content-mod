@@ -25,7 +25,7 @@ import {
   CardHeader,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import axios from 'axios';
+import axiosInstance from './../config/axiosInterceptor';
 import { useAuth } from 'src/hooks/auth';
 // import ContentComponent from './ContentComponent';
 
@@ -81,7 +81,7 @@ const JobsDashboard = () => {
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const response = await axios.get(`/api/groups/worker/${1}`);
+        const response = await axiosInstance.get(`/api/groups/worker/${1}`);
         const data = response.data;
         setGroups(data);
       } catch (error) {
