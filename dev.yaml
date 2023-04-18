@@ -36,11 +36,11 @@ services:
       - 9000:9000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.minio.rule=Host(`minio.repute.social`)"
-      - "traefik.http.routers.minio.service=minio"
-      - "traefik.http.services.minio.loadbalancer.server.port=9000"
-      - "traefik.http.routers.minio.entrypoints=websecure"
-      - "traefik.http.routers.minio.tls.certresolver=myresolver"
+      # - "traefik.http.routers.minio.rule=Host(`minio.repute.social`)"
+      # - "traefik.http.routers.minio.service=minio"
+      # - "traefik.http.services.minio.loadbalancer.server.port=9000"
+      # - "traefik.http.routers.minio.entrypoints=websecure"
+      # - "traefik.http.routers.minio.tls.certresolver=myresolver"
       - "traefik.http.routers.minio-console.rule=Host(`minio-console.repute.social`)"
       - "traefik.http.routers.minio-console.service=minio-console"
       - "traefik.http.services.minio-console.loadbalancer.server.port=9001"
