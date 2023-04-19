@@ -15,12 +15,11 @@ import {
   DialogContentText,
   DialogActions,
   CircularProgress,
+  Box,
+  Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-
-import { useParams } from 'react-router-dom';
-import Header from './Header';
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 interface Job {
   id: number;
   status: string;
@@ -42,9 +41,15 @@ const useStyles = makeStyles({
   },
 });
 
-const JobTable = () => {
-  const params = useParams();
-  const groupId = params.groupId;
+interface JobTableProps {
+  activeGroupId: number;
+  onBackButtonClick: () => void;
+}
+
+export const JobTable = ({
+  activeGroupId,
+  onBackButtonClick,
+}: JobTableProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [infoDialogOpen, setInfoDialogOpen] = useState(false);
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -54,18 +59,17 @@ const JobTable = () => {
 
   useEffect(() => {
     const fetchJobs = async () => {
-      if (groupId) {
+      if (activeGroupId) {
         const response = await axiosInstance.get(
-          `/api/job-creator/groups/${groupId}/jobs`
+          `/api/job-creator/groups/${activeGroupId}/jobs`
         );
         const data = response.data;
         setJobs(data);
         setIsLoading(false);
-        console.log(jobs);
       }
     };
     fetchJobs();
-  }, [groupId]);
+  }, [activeGroupId]);
 
   if (isLoading) {
     return <CircularProgress />;
@@ -73,10 +77,12 @@ const JobTable = () => {
 
   const handleGenerateApiKey = () => {
     // Call API to generate API key
-    axiosInstance.post(`/api/groups/${groupId}/newApiKey`).then((response) => {
-      setApiKey(response.data.apiKey);
-      setDialogOpen(true);
-    });
+    axiosInstance
+      .post(`/api/groups/${activeGroupId}/newApiKey`)
+      .then((response) => {
+        setApiKey(response.data.apiKey);
+        setDialogOpen(true);
+      });
   };
 
   const handleCloseDialog = () => {
@@ -97,8 +103,13 @@ const JobTable = () => {
   };
 
   return (
-    <div className={classes.container} style={{ marginTop: '100px' }}>
-      <Header />
+    <div className={classes.container}>
+      <Box>
+        <Button sx={{ marginBottom: '10px' }} onClick={onBackButtonClick}>
+          <ArrowBackIcon />
+          <Typography sx={{ marginLeft: '10px' }}>Back to dashboard</Typography>
+        </Button>
+      </Box>
       <TableContainer component={Paper} className={classes.table}>
         <Table>
           <TableHead>
@@ -133,6 +144,7 @@ const JobTable = () => {
         variant="contained"
         color="primary"
         onClick={handleGenerateApiKey}
+        sx={{ marginRight: '10px' }}
       >
         Generate API Key
       </Button>
@@ -173,5 +185,3 @@ const JobTable = () => {
     </div>
   );
 };
-
-export default JobTable;
