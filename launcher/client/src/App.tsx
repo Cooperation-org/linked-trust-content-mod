@@ -69,7 +69,7 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [lastEscrowAddress, setLastEscrowAddress] = useState('');
   const [status, setStatus] = useState<LauncherStageStatus>(
-    LauncherStageStatus.UNAUTHORIZED
+    LauncherStageStatus.LAUNCH_SUCCESS
   );
 
   const [jobResponse, setJobResponse] = useState<JobLaunchResponse>({
@@ -94,6 +94,12 @@ function App() {
 
   const handleCreateNewEscrow = () => {
     setJobResponse({ escrowAddress: '', exchangeUrl: '' });
+    setStatus(LauncherStageStatus.GROUP_REQUEST);
+  };
+
+  const [groupRequestActiveTab, setGroupRequestActiveTab] = useState(1);
+  const handleGoToJobDashboard = () => {
+    setGroupRequestActiveTab(0);
     setStatus(LauncherStageStatus.GROUP_REQUEST);
   };
 
@@ -228,6 +234,7 @@ function App() {
                   onLaunch={() => setStatus(LauncherStageStatus.LAUNCH)}
                   onSuccess={handleOnSuccess}
                   onFail={handleOnError}
+                  activeTab={groupRequestActiveTab}
                 />
               )}
               {status === LauncherStageStatus.LAUNCH && <FortuneLaunch />}
@@ -235,6 +242,7 @@ function App() {
                 <FortuneLaunchSuccess
                   jobResponse={jobResponse}
                   onCreateNewEscrow={handleCreateNewEscrow}
+                  onGoToDashboard={handleGoToJobDashboard}
                 />
               )}
               {status === LauncherStageStatus.LAUNCH_FAIL && (

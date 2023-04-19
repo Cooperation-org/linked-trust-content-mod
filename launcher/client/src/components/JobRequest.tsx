@@ -40,6 +40,7 @@ type JobRequestProps = {
   onLaunch: () => void;
   onSuccess: (response: JobLaunchResponse) => void;
   onFail: (message: string) => void;
+  activeTab?: number;
 };
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -79,6 +80,7 @@ export const JobRequest = ({
   onLaunch,
   onSuccess,
   onFail,
+  activeTab = 1,
 }: JobRequestProps) => {
   const { id, role } = useAuth();
   const { address } = useAccount();
@@ -169,7 +171,7 @@ export const JobRequest = ({
   };
 
   // material ui basic table
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(activeTab);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
