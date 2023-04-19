@@ -26,8 +26,6 @@ import theme from './theme';
 import './global.css';
 import ContentComponent from './components/ContentComponent';
 import AuthProvider from './hooks/auth';
-import JobTable from './components/JobsTable';
-import Header from './components/Header';
 
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
@@ -103,7 +101,6 @@ root.render(
           <CssBaseline />
           <Routes>
             <Route path="/" element={<App />} />
-            <Route path="/group/:groupId" element={<JobTable />} />
           </Routes>
         </ThemeProvider>
         <ToastContainer />

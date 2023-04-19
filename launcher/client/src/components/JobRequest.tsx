@@ -33,7 +33,6 @@ import {
 } from './types';
 import { FortuneJobRequest } from '.';
 import Dashboard from './Dashboard';
-import JobTable from './JobsTable';
 import { useAuth } from 'src/hooks/auth';
 
 type JobRequestProps = {
@@ -225,13 +224,6 @@ export const JobRequest = ({
             )}
           </Tabs>
         </Box>
-        <TabPanel value={value} index={3}>
-          <section className="flex items-center justify-center absolute top-0 left-0   w-full ">
-            <div className=" bg-[#f6f7fe] mx-[2rem] rounded-[20px] w-full min-h-[100vh] mt-[80px] p-[4rem]">
-              <JobTable />
-            </div>
-          </section>
-        </TabPanel>
         <TabPanel value={value} index={0}>
           <section className="flex items-center justify-center absolute top-0 left-0   w-full ">
             <div className=" bg-[#f6f7fe] mx-[2rem] rounded-[20px] w-full min-h-[100vh] mt-[80px] p-[4rem]">

@@ -56,7 +56,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const MyGroups: React.FC = () => {
+interface MyGroupsProps {
+  onViewGroupDetails: (activeGroupId: number) => void;
+}
+
+const MyGroups = ({ onViewGroupDetails }: MyGroupsProps) => {
   const [groups, setGroups] = useState<Group[]>([]);
   const [jobId, setJobId] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -125,7 +129,7 @@ const MyGroups: React.FC = () => {
                   subheader={`${group?.jobs?.length} Jobs`}
                   className={classes.cardHeader}
                 />
-                
+
                 <CardContent>
                   <Typography
                     sx={{
@@ -154,7 +158,14 @@ const MyGroups: React.FC = () => {
                   ))}
                 </CardContent> */}
                 <CardActions>
-                  <Button size="small">View Details</Button>
+                  <Button
+                    size="small"
+                    onClick={() => {
+                      onViewGroupDetails(group.id);
+                    }}
+                  >
+                    View Details
+                  </Button>
                 </CardActions>
               </Card>
             </Grid>
