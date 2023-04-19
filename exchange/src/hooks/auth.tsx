@@ -74,9 +74,14 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('cmtoken');
-    setId(null);
-    setRole(null);
+    try {
+      localStorage.removeItem('cmtoken');
+    } catch (error) {
+      console.error('Error removing item from local storage:', error);
+    } finally {
+      setId(null);
+      setRole(null);
+    }
   };
 
   return (
