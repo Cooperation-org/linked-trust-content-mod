@@ -27,6 +27,7 @@ services:
       - './.envs/.production/.postgres'
     volumes:
       - db-data:/var/lib/postgresql/data
+    restart: always
 
   minio:
     container_name: minio
@@ -37,9 +38,16 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.minio.rule=Host(`minio.repute.social`)"
+      - "traefik.http.routers.minio.service=minio"
+      - "traefik.http.services.minio.loadbalancer.server.port=9000"
       - "traefik.http.routers.minio.entrypoints=websecure"
       - "traefik.http.routers.minio.tls.certresolver=myresolver"
-      - "traefik.http.services.minio.loadbalancer.server.port=9000"
+      - "traefik.http.routers.minio-console.rule=Host(`minio-console.repute.social`)"
+      - "traefik.http.routers.minio-console.service=minio-console"
+      - "traefik.http.services.minio-console.loadbalancer.server.port=9001"
+      - "traefik.http.routers.minio-console.entrypoints=websecure"
+      - "traefik.http.routers.minio-console.tls.certresolver=myresolver"
+
     environment:
       MINIO_ROOT_USER: ${MINIO_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_PASS}
@@ -53,6 +61,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
+    restart: always
   minio-mc:
     container_name: minio-mc
     image: minio/mc
@@ -61,16 +70,13 @@ services:
         condition: service_healthy
     entrypoint: >
       /bin/sh -c "
-      /usr/bin/mc config host add myminio http://minio:9000 dev devdevdev;
+      /usr/bin/mc config host add myminio https://minio.repute.social dev devdevdev;
       /usr/bin/mc mb myminio/manifests;
       /usr/bin/mc anonymous set public myminio/manifests;
       " 
 
   launcher-server:
     image: public.ecr.aws/m3c7p7e9/launcher-server:latest
-    build:
-      context: ./launcher/server
-      dockerfile: Dockerfile
     restart: always
     expose: 
       - 8080
@@ -83,9 +89,6 @@ services:
 
   recording-oracle:
     image: public.ecr.aws/m3c7p7e9/recording-oracle:latest
-    build:
-      context: ./recording-oracle
-      dockerfile: Dockerfile
     restart: always
     expose: 
       - 3005
@@ -95,9 +98,6 @@ services:
   
   reputation-oracle:
     image: public.ecr.aws/m3c7p7e9/reputation-oracle:latest
-    build:
-      context: ./reputation-oracle
-      dockerfile: Dockerfile
     restart: always
     expose: 
       - 3006
@@ -107,9 +107,6 @@ services:
 
   launcher-service:
     image: public.ecr.aws/m3c7p7e9/launcher-service:latest
-    build:
-      context: ./launcher-service
-      dockerfile: Dockerfile
     restart: always
     labels:
       - "traefik.enable=true"
@@ -132,9 +129,6 @@ services:
 
   launcher-client:
     image: public.ecr.aws/m3c7p7e9/launcher-client:latest
-    build:
-      context: ./launcher/client
-      dockerfile: Dockerfile
     restart: always
     labels:
       - "traefik.enable=true"
@@ -152,9 +146,6 @@ services:
 
   exchange-client:
     image: public.ecr.aws/m3c7p7e9/exchange-client:latest
-    build:
-      context: ./exchange
-      dockerfile: Dockerfile
     restart: always
     labels:
       - "traefik.enable=true"

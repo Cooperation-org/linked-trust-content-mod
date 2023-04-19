@@ -54,3 +54,5 @@ build
 #cache
 cache
 packages/examples/fortune/exchange/.env.development
+build.yaml
+.envs/*
