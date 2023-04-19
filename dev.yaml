@@ -27,6 +27,7 @@ services:
       - './.envs/.production/.postgres'
     volumes:
       - db-data:/var/lib/postgresql/data
+    restart: always
 
   minio:
     container_name: minio
@@ -60,6 +61,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
+    restart: always
   minio-mc:
     container_name: minio-mc
     image: minio/mc
