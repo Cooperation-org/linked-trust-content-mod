@@ -69,7 +69,7 @@ function App() {
   const [showModal, setShowModal] = useState(false);
   const [lastEscrowAddress, setLastEscrowAddress] = useState('');
   const [status, setStatus] = useState<LauncherStageStatus>(
-    LauncherStageStatus.LAUNCH_SUCCESS
+    LauncherStageStatus.UNAUTHORIZED
   );
 
   const [jobResponse, setJobResponse] = useState<JobLaunchResponse>({
