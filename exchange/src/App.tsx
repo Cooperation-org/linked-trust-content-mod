@@ -85,7 +85,7 @@ function App() {
                 <a href="https://www.cooperation.org">Cooperation.org</a>
               </Typography>
               <Typography color="primary" fontWeight={500} variant="h6">
-                Content Moderation
+                Content Moderation Worker Portal
               </Typography>
               <Typography mt={4} color="primary" variant="body2">
                 Content moderation refers to the practice of monitoring

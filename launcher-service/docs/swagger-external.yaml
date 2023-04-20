@@ -3,6 +3,7 @@ info:
   title: Conten-Moderation
   version: 1.0.0
 servers:
+  - url: https://api.repute.social/api/
   - url: http://localhost:8082/api/
 components:
   securitySchemes:

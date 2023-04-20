@@ -42,7 +42,7 @@ export function LoginWithMetamask({
   // to ensure deep linking works for WalletConnect
   // users on iOS when signing the SIWE message
   useEffect(() => {
-    if (address) {
+    if (isConnected && address) {
       fetchNonce(address);
     }
     if (isConnected && walletModalOpen) {
