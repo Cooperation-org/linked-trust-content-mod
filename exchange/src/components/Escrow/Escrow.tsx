@@ -144,11 +144,7 @@ export const Escrow = () => {
         )}
 
         {page === 'viewJob' && jobDetail && (
-          <JobDetail
-            jobDetail={jobDetail}
-            updateRisk={updateRisk}
-            // updatePage={(pageName: string) => setPage(pageName)}
-          />
+          <JobDetail jobDetail={jobDetail} updateRisk={updateRisk} />
         )}
 
         {/* <span>
