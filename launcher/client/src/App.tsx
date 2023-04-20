@@ -97,6 +97,12 @@ function App() {
     setStatus(LauncherStageStatus.GROUP_REQUEST);
   };
 
+  const [groupRequestActiveTab, setGroupRequestActiveTab] = useState(1);
+  const handleGoToJobDashboard = () => {
+    setGroupRequestActiveTab(0);
+    setStatus(LauncherStageStatus.GROUP_REQUEST);
+  };
+
   const handleDisConnectWallet = () => {
     disconnect();
     setStatus(LauncherStageStatus.UNAUTHORIZED);
@@ -228,6 +234,7 @@ function App() {
                   onLaunch={() => setStatus(LauncherStageStatus.LAUNCH)}
                   onSuccess={handleOnSuccess}
                   onFail={handleOnError}
+                  activeTab={groupRequestActiveTab}
                 />
               )}
               {status === LauncherStageStatus.LAUNCH && <FortuneLaunch />}
@@ -235,6 +242,7 @@ function App() {
                 <FortuneLaunchSuccess
                   jobResponse={jobResponse}
                   onCreateNewEscrow={handleCreateNewEscrow}
+                  onGoToDashboard={handleGoToJobDashboard}
                 />
               )}
               {status === LauncherStageStatus.LAUNCH_FAIL && (

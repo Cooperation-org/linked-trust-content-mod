@@ -7,11 +7,13 @@ import { Link } from 'react-router-dom';
 type LaunchSuccessProps = {
   jobResponse: JobLaunchResponse;
   onCreateNewEscrow: () => void;
+  onGoToDashboard: () => void;
 };
 
 export const LaunchSuccess = ({
   jobResponse,
   onCreateNewEscrow,
+  onGoToDashboard,
 }: LaunchSuccessProps) => {
   return (
     <RoundedBox sx={{ py: 20, textAlign: 'center' }}>
@@ -35,8 +37,7 @@ export const LaunchSuccess = ({
         <Button
           sx={{ mt: 5, minWidth: '200px' }}
           variant="contained"
-          component={Link}
-          to={`/group/${jobResponse.escrowAddress}`}
+          onClick={onGoToDashboard}
         >
           Job Dashboard
         </Button>
