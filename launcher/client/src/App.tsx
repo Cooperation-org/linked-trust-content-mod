@@ -59,7 +59,7 @@ function App() {
   }>({});
   const classes = useStyles();
   const { data: signer } = useSigner();
-  const { address, connector, isConnected } = useAccount();
+  const { address, connector, isConnected, isDisconnected } = useAccount();
   const { data: ensAvatar } = useEnsAvatar({ address });
   const { data: ensName } = useEnsName({ address });
   const { connect, connectors, error, isLoading, pendingConnector } =
@@ -105,6 +105,7 @@ function App() {
 
   const handleDisConnectWallet = () => {
     disconnect();
+    handleLogout();
     setStatus(LauncherStageStatus.UNAUTHORIZED);
   };
 
@@ -139,6 +140,12 @@ function App() {
   useEffect(() => {
     fetchLastEscrow(ESCROW_NETWORKS[chainId as ChainId]?.factoryAddress);
   }, [chainId, signer]);
+
+  useEffect(() => {
+    if (isDisconnected) {
+      handleLogout();
+    }
+  }, [isDisconnected]);
 
   const handleDisconnectClick = (
     event: React.MouseEvent<HTMLButtonElement>

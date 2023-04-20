@@ -82,7 +82,13 @@ const JobDashboard: React.FC<Props> = () => {
       </FormControl>
       {selectedGroup && (
         <div>
-          <Typography variant="h5">Jobs for {selectedGroup}</Typography>
+          {jobs.length > 0 ? (
+            <Typography variant="h5">Jobs for {selectedGroup}</Typography>
+          ) : (
+            <Typography variant="h5">
+              No Jobs Published for {selectedGroup}
+            </Typography>
+          )}
           {jobs.map((job) => (
             <Card key={job.id} style={{ margin: '10px', minWidth: '200px' }}>
               <CardHeader title={job.title} />
