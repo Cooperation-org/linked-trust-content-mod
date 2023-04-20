@@ -143,20 +143,6 @@ const MyGroups = ({ onViewGroupDetails }: MyGroupsProps) => {
                     {group.description}
                   </Typography>
                 </CardContent>
-                {/* <CardContent className={classes.cardContent}>
-                  {group?.jobs?.map((job: Job) => (
-                    <Link
-                      key={job.id}
-                      component="button"
-                      underline="none"
-                      color="textPrimary"
-                      className={classes.link}
-                      onClick={() => handleJobClick(job.id)}
-                    >
-                      <Typography variant="subtitle2">{job.title}</Typography>
-                    </Link>
-                  ))}
-                </CardContent> */}
                 <CardActions>
                   <Button
                     size="small"
