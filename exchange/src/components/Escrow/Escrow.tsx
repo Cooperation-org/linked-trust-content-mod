@@ -1,91 +1,16 @@
-// import EscrowABI from '@human-protocol/core/abis/Escrow.json';
-import {
-  // getContract,
-  getProvider,
-} from '@wagmi/core';
 import axiosInstance from './../../config/axiosInterceptor';
-// import { ethers } from 'ethers';
-import {
-  // useCallback,
-  // useEffect,
-  useState,
-} from 'react';
-import { useAccount, useNetwork } from 'wagmi';
-// import sendFortune from '../../services/RecordingOracle/RecordingClient';
+import { useState } from 'react';
+import { useAccount } from 'wagmi';
 import './Escrow.css';
 import { EscrowDetails } from './EscrowDetails';
 import { JobDetail } from './JobDetail';
 import { ModList } from './ModList';
-
-// const statusesMap = [
-//   'Launched',
-//   'Pending',
-//   'Partial',
-//   'Paid',
-//   'Complete',
-//   'Cancelled',
-// ];
-
-interface Content {
-  id: number;
-  url: string;
-  message?: string;
-  jobId: number;
-  status: string;
-  updateHook: string;
-  imgUrl: string;
-  isThread?: boolean | null;
-  fullThread?: string | { [key: string]: any };
-}
-interface JobDetail {
-  id: number;
-  title: string;
-  description: string;
-  groupId: number;
-  contentId: null | number | string;
-  reviewersRequired: number;
-  fundAmount: number;
-  escrowAddress: string;
-  group: { [key: string]: any };
-  content: Content;
-}
-
-interface JobDetail {}
-
-// function parseQuery(qs: any) {
-//   const result: string[] = [];
-//   if (qs.length === 0) {
-//     return {};
-//   }
-
-//   if (qs[0] === '?') {
-//     qs = qs.slice(1);
-//   }
-
-//   const kvs = qs.split('&');
-
-//   for (let kv of kvs) {
-//     const kvArr = kv.split('=');
-
-//     if (kvArr.length > 2) {
-//       continue;
-//     }
-
-//     const key = kvArr[0];
-//     const value = kvArr[1];
-
-//     result[key] = value;
-//   }
-
-//   return result;
-// }
+import { JobDetailProps } from '../../types';
 
 export const Escrow = () => {
   const { address } = useAccount();
-  // const { chain } = useNetwork();
-  // const provider = getProvider();
 
-  const [jobDetail, setJobDetails] = useState<JobDetail>();
+  const [jobDetail, setJobDetails] = useState<JobDetailProps>();
   const [escrowAddress, setEscrowAddress] = useState('');
 
   const [page, setPage] = useState('');
@@ -163,7 +88,7 @@ export const Escrow = () => {
       });
   };
 
-  const updateRisk = async (contentId: string, riskStatus: string) => {
+  const updateRisk = async (contentId: number, riskStatus: string) => {
     if (jobDetail) {
       const riskUpdateURL = `/api/jobs/${jobDetail.id}/content/${contentId}/review/`;
 
@@ -218,12 +143,8 @@ export const Escrow = () => {
           />
         )}
 
-        {page === 'viewJob' && (
-          <JobDetail
-            jobDetail={jobDetail}
-            updateRisk={updateRisk}
-            updatePage={(pageName: string) => setPage(pageName)}
-          />
+        {page === 'viewJob' && jobDetail && (
+          <JobDetail jobDetail={jobDetail} updateRisk={updateRisk} />
         )}
 
         {/* <span>

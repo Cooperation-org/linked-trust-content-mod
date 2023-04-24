@@ -530,9 +530,11 @@ export const submitReviewStatusForContentInJob = async (
     };
     const response = await axios.post(recordingOracleUrl, recOracleData);
 
-    res
-      .status(201)
-      .send({ message: 'Review submitted successfully.', review, recordingOracleResponse: response.data });
+    res.status(201).send({
+      message: 'Review submitted successfully.',
+      review,
+      recordingOracleResponse: response.data,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: 'Error submitting review status.' });
@@ -612,7 +614,11 @@ export const getJobByEscrow = async (
       },
       include: {
         group: true,
-        content: true,
+        content: {
+          include: {
+            reviews: true,
+          },
+        },
       },
     });
 
@@ -670,7 +676,7 @@ export const getAllJobsForGroup = async (
       },
     });
 
-    const jobReviews = jobs.map((job:any) => {
+    const jobReviews = jobs.map((job: any) => {
       const reviewCount = job?.content?.reviews?.length;
       const status = reviewCount
         ? reviewCount >= job.reviewersRequired
