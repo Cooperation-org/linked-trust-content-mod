@@ -2,26 +2,26 @@ version: '3'
 
 services:
   traefik:
-    image: "traefik:v2.5"
+    image: 'traefik:v2.5'
     command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.email=sarthakvijayvergiya@gmail.com"
-      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.web.address=:80'
+      - '--entrypoints.websecure.address=:443'
+      - '--certificatesresolvers.myresolver.acme.tlschallenge=true'
+      - '--certificatesresolvers.myresolver.acme.email=whatscookindev@gmail.com'
+      - '--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json'
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./letsencrypt:/letsencrypt"
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+      - './letsencrypt:/letsencrypt'
     restart: always
   db:
     image: postgres:latest
-    expose: 
+    expose:
       - 5432
     env_file:
       - './.envs/.production/.postgres'
@@ -36,17 +36,17 @@ services:
       - 9001:9001
       - 9000:9000
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.minio.rule=Host(`minio.repute.social`)"
-      - "traefik.http.routers.minio.service=minio"
-      - "traefik.http.services.minio.loadbalancer.server.port=9000"
-      - "traefik.http.routers.minio.entrypoints=websecure"
-      - "traefik.http.routers.minio.tls.certresolver=myresolver"
-      - "traefik.http.routers.minio-console.rule=Host(`minio-console.repute.social`)"
-      - "traefik.http.routers.minio-console.service=minio-console"
-      - "traefik.http.services.minio-console.loadbalancer.server.port=9001"
-      - "traefik.http.routers.minio-console.entrypoints=websecure"
-      - "traefik.http.routers.minio-console.tls.certresolver=myresolver"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.minio.rule=Host(`minio.repute.social`)'
+      - 'traefik.http.routers.minio.service=minio'
+      - 'traefik.http.services.minio.loadbalancer.server.port=9000'
+      - 'traefik.http.routers.minio.entrypoints=websecure'
+      - 'traefik.http.routers.minio.tls.certresolver=myresolver'
+      - 'traefik.http.routers.minio-console.rule=Host(`minio-console.repute.social`)'
+      - 'traefik.http.routers.minio-console.service=minio-console'
+      - 'traefik.http.services.minio-console.loadbalancer.server.port=9001'
+      - 'traefik.http.routers.minio-console.entrypoints=websecure'
+      - 'traefik.http.routers.minio-console.tls.certresolver=myresolver'
 
     environment:
       MINIO_ROOT_USER: ${MINIO_USER}
@@ -54,10 +54,9 @@ services:
     volumes:
       - ./${MANIFEST_FILE}:/tmp/manifests/docker-manifest.json
     entrypoint: 'sh'
-    command:
-      -c "mkdir -p /data/manifests && cp /tmp/manifests/docker-manifest.json /data/manifests/manifest.json && minio server /data --console-address ':9001'"
+    command: -c "mkdir -p /data/manifests && cp /tmp/manifests/docker-manifest.json /data/manifests/manifest.json && minio server /data --console-address ':9001'"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
       interval: 5s
       timeout: 5s
       retries: 3
@@ -73,12 +72,12 @@ services:
       /usr/bin/mc config host add myminio https://minio.repute.social dev devdevdev;
       /usr/bin/mc mb myminio/manifests;
       /usr/bin/mc anonymous set public myminio/manifests;
-      " 
+      "
 
   launcher-server:
-    image: public.ecr.aws/m3c7p7e9/launcher-server:latest
+    image: ${REGISTRY_ADDRESS}/launcher-server:latest
     restart: always
-    expose: 
+    expose:
       - 8080
     env_file:
       - './.envs/.production/.launcher-server'
@@ -88,34 +87,34 @@ services:
         condition: service_healthy
 
   recording-oracle:
-    image: public.ecr.aws/m3c7p7e9/recording-oracle:latest
+    image: ${REGISTRY_ADDRESS}/recording-oracle:latest
     restart: always
-    expose: 
+    expose:
       - 3005
     env_file:
       - './.envs/.production/.recording-oracle'
     command: yarn start
-  
+
   reputation-oracle:
-    image: public.ecr.aws/m3c7p7e9/reputation-oracle:latest
+    image: ${REGISTRY_ADDRESS}/reputation-oracle:latest
     restart: always
-    expose: 
+    expose:
       - 3006
     env_file:
       - './.envs/.production/.reputation-oracle'
     command: yarn start
 
   launcher-service:
-    image: public.ecr.aws/m3c7p7e9/launcher-service:latest
+    image: ${REGISTRY_ADDRESS}/launcher-service:latest
     restart: always
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.launcher-service.rule=Host(`api.repute.social`)"
-      - "traefik.http.routers.launcher-service.entrypoints=websecure"
-      - "traefik.http.routers.launcher-service.tls.certresolver=myresolver"
-      - "traefik.http.services.launcher-service.loadbalancer.server.port=8082"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.launcher-service.rule=Host(`api.repute.social`)'
+      - 'traefik.http.routers.launcher-service.entrypoints=websecure'
+      - 'traefik.http.routers.launcher-service.tls.certresolver=myresolver'
+      - 'traefik.http.services.launcher-service.loadbalancer.server.port=8082'
     ports:
-      - "8082:8082"
+      - '8082:8082'
     env_file:
       - './.envs/.production/.launcher-service'
       - './.envs/.production/.postgres'
@@ -128,16 +127,16 @@ services:
       - launcher-server
 
   launcher-client:
-    image: public.ecr.aws/m3c7p7e9/launcher-client:latest
+    image: ${REGISTRY_ADDRESS}/launcher-client:latest
     restart: always
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.launcher-client.rule=Host(`launcher.repute.social`)"
-      - "traefik.http.routers.launcher-client.entrypoints=websecure"
-      - "traefik.http.routers.launcher-client.tls.certresolver=myresolver"
-      - "traefik.http.services.launcher-client.loadbalancer.server.port=3000"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.launcher-client.rule=Host(`launcher.repute.social`)'
+      - 'traefik.http.routers.launcher-client.entrypoints=websecure'
+      - 'traefik.http.routers.launcher-client.tls.certresolver=myresolver'
+      - 'traefik.http.services.launcher-client.loadbalancer.server.port=3000'
     ports:
-      - "3000:3000"
+      - '3000:3000'
     env_file:
       - './.envs/.production/.launcher-client'
     command: yarn start
@@ -145,22 +144,21 @@ services:
       - launcher-service
 
   exchange-client:
-    image: public.ecr.aws/m3c7p7e9/exchange-client:latest
+    image: ${REGISTRY_ADDRESS}/exchange-client:latest
     restart: always
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.exchange-client.rule=Host(`exchange.repute.social`)"
-      - "traefik.http.routers.exchange-client.entrypoints=websecure"
-      - "traefik.http.routers.exchange-client.tls.certresolver=myresolver"
-      - "traefik.http.services.exchange-client.loadbalancer.server.port=3001"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.exchange-client.rule=Host(`exchange.repute.social`)'
+      - 'traefik.http.routers.exchange-client.entrypoints=websecure'
+      - 'traefik.http.routers.exchange-client.tls.certresolver=myresolver'
+      - 'traefik.http.services.exchange-client.loadbalancer.server.port=3001'
     ports:
-      - "3001:3001"
+      - '3001:3001'
     env_file:
       - './.envs/.production/.exchange'
     command: yarn start
     depends_on:
       - launcher-service
-
 
 volumes:
   db-data:
