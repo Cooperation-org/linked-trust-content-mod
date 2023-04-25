@@ -74,7 +74,7 @@ export const JobDetail = (props: {
           </div>
           {review && (
             <Typography variant="h6" color="primary">
-              You have reviewed this as "{review.status}"
+              You have tag this as "{review.status}"
             </Typography>
           )}
         </div>

@@ -426,6 +426,9 @@ export const getGroupJobsByWorker = async (
     const jobs = await prisma.job.findMany({
       where: {
         groupId: parseInt(req.params.groupId),
+        escrowAddress: {
+          not: null,
+        },
       },
       include: {
         content: {
@@ -502,6 +505,31 @@ export const submitReviewStatusForContentInJob = async (
         .send({ message: 'Worker is not a member of the group for this job.' });
     }
 
+    // Check if the worker has already submitted a review for the content
+    const existingReview = await prisma.review.findFirst({
+      where: {
+        contentId: content.id,
+        reviewerId: worker.id,
+      },
+    });
+
+    if (existingReview) {
+      // A review has already been submitted by this worker for this content
+      return res.status(400).send({
+        message: 'Worker has already submitted a review for this content',
+      });
+    }
+
+    const recordingOracleUrl = `${process.env.REC_ORACLE_URL}/send-fortunes`;
+    const recOracleData = {
+      fortune: status,
+      workerAddress: address,
+      escrowAddress: job.escrowAddress,
+      chainId: isMember.chainId,
+    };
+
+    const response = await axios.post(recordingOracleUrl, recOracleData);
+
     // Create the review record
     const review = await prisma.review.create({
       data: {
@@ -520,15 +548,6 @@ export const submitReviewStatusForContentInJob = async (
         },
       },
     });
-
-    const recordingOracleUrl = `${process.env.REC_ORACLE_URL}/send-fortunes`;
-    const recOracleData = {
-      fortune: review.status,
-      workerAddress: address,
-      escrowAddress: job.escrowAddress,
-      chainId: isMember.chainId,
-    };
-    const response = await axios.post(recordingOracleUrl, recOracleData);
 
     res.status(201).send({
       message: 'Review submitted successfully.',
@@ -668,7 +687,6 @@ export const getAllJobsForGroup = async (
             id: true,
             status: true,
             reviews: {
-              where: { status: 'NoRisk' },
               select: { id: true },
             },
           },

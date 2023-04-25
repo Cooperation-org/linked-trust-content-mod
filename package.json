@@ -13,7 +13,7 @@
     "recording-oracle": "cd recording-oracle && yarn && yarn start",
     "reputation-oracle": "cd reputation-oracle && yarn && yarn start",
     "launcher-service": "cd launcher-service && yarn && yarn dev",
-    "dev": "concurrently --kill-others-on-fail \"yarn launcher-client\" \"yarn launcher-server\" \"yarn launcher-service\" \"yarn dev:docker\"",
+    "dev": "concurrently --kill-others-on-fail \"yarn launcher-client\" \"yarn launcher-server\" \"yarn launcher-service\" \"yarn exchange\" \"yarn recording-oracle\" \"yarn reputation-oracle\" \"yarn dev:docker\"",
     "local": "concurrently --kill-others-on-fail \"yarn launcher-client\" \"yarn launcher-server\" \"yarn launcher-service\" \"yarn recording-oracle\" \"yarn reputation-oracle\" \"yarn exchange\""
   },
   "devDependencies": {
