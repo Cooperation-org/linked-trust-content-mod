@@ -10,7 +10,7 @@ services:
       - '--entrypoints.web.address=:80'
       - '--entrypoints.websecure.address=:443'
       - '--certificatesresolvers.myresolver.acme.tlschallenge=true'
-      - '--certificatesresolvers.myresolver.acme.email=sarthakvijayvergiya@gmail.com'
+      - '--certificatesresolvers.myresolver.acme.email=whatscookindev@gmail.com'
       - '--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json'
     ports:
       - '80:80'
