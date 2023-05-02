@@ -227,27 +227,34 @@ export const JobRequest = ({
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <section className="flex
-            items-center
-            justify-center
-            absolute
-            top-0
-            left-0
-            w-full ">
-            <div className="bg-[#f6f7fe]
-              mx-[2rem]
-              w-full
-              xs:rounded-[16px]
-              sm:rounded-[16px]
-              md:rounded-[24px]
-              lg:rounded-[32px]
-              xl:rounded-[40px]
-              min-h-[100vh]
-              mt-[9.375rem]
-              p-[4rem]">
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              width: '100%',
+              position: 'absolute',
+              top: '0',
+              left: '0',
+            }}>
+            <Box
+              sx={{
+                background: '#f6f7fe',
+                mx: '2rem',
+                width: '100%',
+                minHeight: '100vh',
+                mt: '9.375rem',
+                p: '4rem',
+                borderRadius: {
+                  xs: 16,
+                  sm: 16,
+                  md: 24,
+                  lg: 32,
+                  xl: 40,
+                }
+              }}>
               <Dashboard />
-            </div>
-          </section>
+            </Box>
+          </Box>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <RoundedBox sx={{ p: '50px 140px' }}>
@@ -371,7 +378,7 @@ export const JobRequest = ({
                 mt: 8,
               }}
             >
-              <div className="gap-[2%] flex">
+              <Box sx={{ display: 'flex', gap: '2%' }}>
                 <Button
                   variant="outlined"
                   sx={{ minWidth: '240px', py: 1 }}
@@ -388,17 +395,9 @@ export const JobRequest = ({
                   {isLoading && <CircularProgress size={24} sx={{ mr: 1 }} />}{' '}
                   Fund and Request Group
                 </Button>
-              </div>
+              </Box>
             </Box>
           </RoundedBox>
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <div className="flex items-center justify-center absolute top-0 left-0   w-full ">
-            <div className=" bg-[#f6f7fe] mx-[2rem] rounded-[20px] w-full min-h-[100vh] mt-[80px] p-[4rem]">
-              <h2 className="text-3xl font-bold mb-[1rem]">API KEY</h2>
-              <RandomKey />
-            </div>
-          </div>
         </TabPanel>
       </Box>
     </>
