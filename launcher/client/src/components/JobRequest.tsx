@@ -201,15 +201,11 @@ export const JobRequest = ({
             onChange={handleChange}
             aria-label="basic tabs example"
           >
+            <Tab label="Dashboard" {...a11yProps(0)} />
             <Tab
-              label="DASHBOARD"
-              {...a11yProps(0)}
-              sx={{ fontWeight: 'bold' }}
-            />
-            <Tab
-              label="REQUEST A NEW GROUP"
+              label="Request a new group"
               {...a11yProps(1)}
-              sx={{ margin: '0 4rem', fontWeight: 'bold' }}
+              sx={{ margin: '0 4rem' }}
             />
             {/* It should be popup or in group settings */}
             {/* <Tab
@@ -227,33 +223,8 @@ export const JobRequest = ({
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              width: '100%',
-              position: 'absolute',
-              top: '0',
-              left: '0',
-            }}>
-            <Box
-              sx={{
-                background: '#f6f7fe',
-                mx: '2rem',
-                width: '100%',
-                minHeight: '100vh',
-                mt: '9.375rem',
-                p: '4rem',
-                borderRadius: {
-                  xs: 16,
-                  sm: 16,
-                  md: 24,
-                  lg: 32,
-                  xl: 40,
-                }
-              }}>
-              <Dashboard />
-            </Box>
+          <Box>
+            <Dashboard />
           </Box>
         </TabPanel>
         <TabPanel value={value} index={1}>
