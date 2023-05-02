@@ -227,8 +227,24 @@ export const JobRequest = ({
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <section className="flex items-center justify-center absolute top-0 left-0   w-full ">
-            <div className=" bg-[#f6f7fe] mx-[2rem] rounded-[20px] w-full min-h-[100vh] mt-[80px] p-[4rem]">
+          <section className="flex
+            items-center
+            justify-center
+            absolute
+            top-0
+            left-0
+            w-full ">
+            <div className="bg-[#f6f7fe]
+              mx-[2rem]
+              w-full
+              xs:rounded-[16px]
+              sm:rounded-[16px]
+              md:rounded-[24px]
+              lg:rounded-[32px]
+              xl:rounded-[40px]
+              min-h-[100vh]
+              mt-[9.375rem]
+              p-[4rem]">
               <Dashboard />
             </div>
           </section>
