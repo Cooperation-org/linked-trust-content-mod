@@ -2,12 +2,10 @@ import EscrowFactoryABI from '@human-protocol/core/abis/EscrowFactory.json';
 import Box from '@mui/material/Box';
 import { Grid, Link, Theme, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { IconButton } from '@mui/material';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Button from '@mui/material/Button';
 import { ethers } from 'ethers';
-// import "./global.css"
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   useEnsAvatar,
   useAccount,
@@ -28,10 +26,13 @@ import {
   LauncherStageStatus,
   FundingMethodType,
   JobLaunchResponse,
+  TabsTypes,
 } from 'src/components/types';
 import { useSigner, useChainId } from 'wagmi';
 import { ChainId, ESCROW_NETWORKS } from './constants';
 import { useAuth } from './hooks/auth';
+import { AppContext } from 'src/state';
+import { goToTab } from 'src/state/actions';
 
 const useStyles = makeStyles((theme: Theme) => ({
   button: {
@@ -72,6 +73,8 @@ function App() {
     LauncherStageStatus.UNAUTHORIZED
   );
 
+  const { dispatch } = useContext(AppContext);
+
   const [jobResponse, setJobResponse] = useState<JobLaunchResponse>({
     escrowAddress: '',
     exchangeUrl: '',
@@ -97,9 +100,8 @@ function App() {
     setStatus(LauncherStageStatus.GROUP_REQUEST);
   };
 
-  const [groupRequestActiveTab, setGroupRequestActiveTab] = useState(1);
   const handleGoToJobDashboard = () => {
-    setGroupRequestActiveTab(0);
+    dispatch(goToTab(TabsTypes.DASHBOARD));
     setStatus(LauncherStageStatus.GROUP_REQUEST);
   };
 
@@ -152,22 +154,7 @@ function App() {
   ) => {
     disconnect();
   };
-  // Fetch user when:
-  // useEffect(() => {
-  //   const handler = async () => {
-  //     try {
-  //       const res = await fetch('http://localhost:8082/auth/me');
-  //       const json = await res.json();
-  //       setState((x) => ({ ...x, address: json.address }));
-  //     } catch (_error) {}
-  //   };
-  //   // 1. page loads
-  //   handler();
 
-  //   // 2. window is focused (in case user logs out of another window)
-  //   window.addEventListener('focus', handler);
-  //   return () => window.removeEventListener('focus', handler);
-  // }, []);
   return (
     <Box sx={{ px: { xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }, pt: 10 }}>
       <Box
@@ -208,11 +195,7 @@ function App() {
               <Link
                 href="#"
                 sx={{ textDecoration: 'none', mt: 1, display: 'block' }}
-              >
-                {/* <Typography color="primary" fontWeight={600} variant="body2">
-                  Blog Article
-                </Typography> */}
-              </Link>
+              ></Link>
             </Grid>
           )}
           <Grid
@@ -241,7 +224,6 @@ function App() {
                   onLaunch={() => setStatus(LauncherStageStatus.LAUNCH)}
                   onSuccess={handleOnSuccess}
                   onFail={handleOnError}
-                  activeTab={groupRequestActiveTab}
                 />
               )}
               {status === LauncherStageStatus.LAUNCH && <FortuneLaunch />}
@@ -262,32 +244,6 @@ function App() {
           </Grid>
         </Grid>
       </Box>
-
-      {/* <div>
-        {id ? (
-          <div>
-            <IconButton
-              className={classes.button}
-              style={{
-                border: '1px solid #320A8D',
-                cursor: 'pointer',
-                position: 'fixed',
-                bottom: '2%',
-                right: '2%',
-                top: '10%',
-              }}
-              onClick={async () => {
-                // clear jwt token
-                handleLogout();
-              }}
-            >
-              <ExitToAppIcon />
-            </IconButton>
-          </div>
-        ) : (
-          ''
-        )}
-      </div> */}
       {isConnected && (
         <div className="fixed  z-[100] top-[2%] right-[2%] p-[0.5rem] gap-[2%] rounded-[100px] w-[300px] flex justify-end">
           <div className="fixed left-4 top-[1%] p-[0.5rem] w-[250px]  rounded-[100px] text-center">

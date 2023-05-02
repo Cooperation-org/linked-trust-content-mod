@@ -16,7 +16,7 @@ import Tab from '@mui/material/Tab';
 
 import axiosInstance from './../config/axiosInterceptor';
 import { ethers } from 'ethers';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useAccount, useChainId, useSigner, useSwitchNetwork } from 'wagmi';
 import {
   ChainId,
@@ -26,21 +26,18 @@ import {
 } from '../constants';
 import RandomKey from './APIKey';
 import { RoundedBox } from './RoundedBox';
-import {
-  FortuneJobRequestType,
-  FundingMethodType,
-  JobLaunchResponse,
-} from './types';
-import { FortuneJobRequest } from '.';
+import { FortuneJobRequestType, JobLaunchResponse, TabsTypes } from './types';
+// import { FortuneJobRequest } from '.';
 import Dashboard from './Dashboard';
 import { useAuth } from 'src/hooks/auth';
+import { AppContext } from 'src/state';
+import { goToTab } from 'src/state/actions';
 
 type JobRequestProps = {
   onBack: () => void;
   onLaunch: () => void;
   onSuccess: (response: JobLaunchResponse) => void;
   onFail: (message: string) => void;
-  activeTab?: number;
 };
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -80,7 +77,6 @@ export const JobRequest = ({
   onLaunch,
   onSuccess,
   onFail,
-  activeTab = 1,
 }: JobRequestProps) => {
   const { id, role } = useAuth();
   const { address } = useAccount();
@@ -170,14 +166,16 @@ export const JobRequest = ({
     setIsLoading(false);
   };
 
-  // material ui basic table
-  const [value, setValue] = useState(activeTab);
+  const {
+    state: { activeTab },
+    dispatch,
+  } = useContext(AppContext);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const handleChange = (event: React.SyntheticEvent, newActiveTab: number) => {
+    event.preventDefault();
+    dispatch(goToTab(newActiveTab));
   };
 
-  // end
   return (
     <>
       <Box sx={{ width: '100%' }}>
@@ -197,7 +195,7 @@ export const JobRequest = ({
           }}
         >
           <Tabs
-            value={value}
+            value={activeTab}
             onChange={handleChange}
             aria-label="basic tabs example"
           >
@@ -226,14 +224,14 @@ export const JobRequest = ({
             )}
           </Tabs>
         </Box>
-        <TabPanel value={value} index={0}>
+        <TabPanel value={activeTab} index={TabsTypes.DASHBOARD}>
           <section className="flex items-center justify-center absolute top-0 left-0   w-full ">
             <div className=" bg-[#f6f7fe] mx-[2rem] rounded-[20px] w-full min-h-[100vh] mt-[80px] p-[4rem]">
               <Dashboard />
             </div>
           </section>
         </TabPanel>
-        <TabPanel value={value} index={1}>
+        <TabPanel value={activeTab} index={TabsTypes.REQUEST_A_GROUP}>
           <RoundedBox sx={{ p: '50px 140px' }}>
             <Typography variant="body2" color="primary" mb={4}>
               Group Setup
@@ -376,7 +374,7 @@ export const JobRequest = ({
             </Box>
           </RoundedBox>
         </TabPanel>
-        <TabPanel value={value} index={2}>
+        <TabPanel value={activeTab} index={2}>
           <div className="flex items-center justify-center absolute top-0 left-0   w-full ">
             <div className=" bg-[#f6f7fe] mx-[2rem] rounded-[20px] w-full min-h-[100vh] mt-[80px] p-[4rem]">
               <h2 className="text-3xl font-bold mb-[1rem]">API KEY</h2>
