@@ -95,7 +95,7 @@ const MyGroups = ({ onViewGroupDetails }: MyGroupsProps) => {
     <Box mt={3}>
       <Grid container spacing={3}>
         {isLoading ? (
-          <CircularProgress />
+          <CircularProgress sx={{ mx: 'auto' }} />
         ) : groups.length === 0 ? (
           <Typography variant="h5">
             You haven't created any groups yet.
