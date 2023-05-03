@@ -70,12 +70,12 @@ function App() {
             lg: '32px',
             xl: '40px',
           },
-          padding: {
-            xs: '24px 16px',
-            md: '42px 54px',
-            lg: '56px 72px',
-            xl: '70px 90px',
-          },
+          // padding: {
+          //   xs: '24px 16px',
+          //   md: '42px 54px',
+          //   lg: '56px 72px',
+          //   xl: '70px 90px',
+          // },
         }}
       >
         <Grid container spacing={4}>
@@ -125,7 +125,7 @@ function App() {
       </Box>
 
       {isConnected && (
-        <div className="fixed  z-[100] top-[2%] right-[2%] p-[0.5rem] gap-[2%] rounded-[100px] w-[300px] flex justify-end">
+        <div className="fixed  z-[100] top-[2%] right-[2%] p-[0.5rem] gap-[2%] rounded-[100px] w-[100px] flex justify-end">
           <div className="fixed left-4 top-[1%] p-[0.5rem] w-[250px]  rounded-[100px] text-center">
             {/* <div>Connected to </div> */}
           </div>
