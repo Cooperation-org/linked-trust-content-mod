@@ -169,10 +169,11 @@ function App() {
   //   return () => window.removeEventListener('focus', handler);
   // }, []);
   return (
-    <Box sx={{ px: { xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }, pt: 10 }}>
+    <Box sx={{ px: { xs: 1, sm: 2, md: 3, lg: 4, xl: 5 } }}>
       <Box
         sx={{
           background: '#f6f7fe',
+          marginTop: '9.375rem',
           borderRadius: {
             xs: '16px',
             sm: '16px',
@@ -222,9 +223,6 @@ function App() {
             md={status === LauncherStageStatus.UNAUTHORIZED ? 7 : 12}
             lg={status === LauncherStageStatus.UNAUTHORIZED ? 7 : 12}
           >
-            {status === LauncherStageStatus.GROUP_REQUEST && (
-              <FortuneStages status={status} />
-            )}
             <Box mt={3}>
               {status === LauncherStageStatus.UNAUTHORIZED && (
                 <LoginWithMetamask
