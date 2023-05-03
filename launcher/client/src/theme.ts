@@ -1,6 +1,7 @@
+import { Shadows } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 
-const theme = createTheme({
+let theme = createTheme({
   palette: {
     primary: {
       main: '#320a8d',
@@ -56,7 +57,24 @@ const theme = createTheme({
         },
       },
     },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          textTransform: 'capitalize',
+          fontWeight: 'bold',
+        },
+      },
+    },
   },
 });
 
-export default theme;
+const customShadow =
+  '0px 3px 1px -2px #E9EBFA, 0px 2px 2px rgba(233, 235, 250, 0.5), 0px 1px 5px rgba(233, 235, 250, 0.2)';
+const newShadows = [...theme.shadows] as Shadows;
+newShadows.splice(1, 0, customShadow);
+
+const theme2 = createTheme(theme, {
+  shadows: newShadows,
+});
+
+export default theme2;
