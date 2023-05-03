@@ -223,9 +223,6 @@ function App() {
             md={status === LauncherStageStatus.UNAUTHORIZED ? 7 : 12}
             lg={status === LauncherStageStatus.UNAUTHORIZED ? 7 : 12}
           >
-            {status === LauncherStageStatus.GROUP_REQUEST && (
-              <FortuneStages status={status} />
-            )}
             <Box mt={3}>
               {status === LauncherStageStatus.UNAUTHORIZED && (
                 <LoginWithMetamask
