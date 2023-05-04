@@ -171,7 +171,10 @@ export const JobRequest = ({
     dispatch,
   } = useContext(AppContext);
 
-  const handleChange = (event: React.SyntheticEvent, newActiveTab: number) => {
+  const handleTabChange = (
+    event: React.SyntheticEvent,
+    newActiveTab: number
+  ) => {
     event.preventDefault();
     dispatch(goToTab(newActiveTab));
   };
@@ -196,7 +199,7 @@ export const JobRequest = ({
         >
           <Tabs
             value={activeTab}
-            onChange={handleChange}
+            onChange={handleTabChange}
             aria-label="basic tabs example"
           >
             <Tab label="Dashboard" {...a11yProps(0)} />
