@@ -62,11 +62,11 @@ export const Dashboard = ({}) => {
             borderBottom: 1,
             borderColor: 'divider',
             position: 'fixed',
-            left: '20%',
+            left: '0%',
             top: 0,
             padding: '1rem',
             background: 'white',
-            width: '50%',
+            width: '100%',
             display: 'flex',
             justifyContent: 'center',
             zIndex: 20,
@@ -87,8 +87,8 @@ export const Dashboard = ({}) => {
         </Box>
         <Box display="flex" justifyContent="center">
           <TabPanel value={value} index={0}>
-            <section className="flex items-center justify-center absolute top-0 left-0   w-full ">
-              <div className=" bg-[#f6f7fe] mx-[2rem] rounded-[20px] w-full min-h-[100vh] mt-[80px] p-[4rem]">
+            <section className="flex items-center justify-center absolute top-10 left-0   w-full ">
+              <div className=" bg-[#f6f7fe] mx-[2rem] rounded-[20px] w-full mt-[80px] p-[4rem]">
                 <JobDashboard />
               </div>
             </section>
