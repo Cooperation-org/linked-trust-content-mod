@@ -6,6 +6,15 @@ export enum LauncherStageStatus {
   LAUNCH_FAIL,
 }
 
+export enum TabsTypes {
+  DASHBOARD,
+  REQUEST_A_GROUP,
+}
+
+export enum AppStateType {
+  ACTIVE_TAB = 'ACTIVE_TAB',
+}
+
 export type FundingMethodType = 'crypto' | 'fiat';
 
 export type FortuneJobRequestType = {

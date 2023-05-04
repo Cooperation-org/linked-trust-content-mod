@@ -2,7 +2,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { WagmiConfig, createClient, configureChains, Chain } from 'wagmi';
@@ -16,16 +15,14 @@ import {
   skaleHumanProtocol,
 } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import theme from './theme';
 import './global.css';
-import ContentComponent from './components/ContentComponent';
 import AuthProvider from './hooks/auth';
+import { AppStateProvider } from './state';
 
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
@@ -95,17 +92,19 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <AuthProvider>
-    <BrowserRouter>
-      <WagmiConfig client={client}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Routes>
-            <Route path="/" element={<App />} />
-          </Routes>
-        </ThemeProvider>
-        <ToastContainer />
-      </WagmiConfig>
-    </BrowserRouter>
+    <AppStateProvider>
+      <BrowserRouter>
+        <WagmiConfig client={client}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Routes>
+              <Route path="/" element={<App />} />
+            </Routes>
+          </ThemeProvider>
+          <ToastContainer />
+        </WagmiConfig>
+      </BrowserRouter>
+    </AppStateProvider>
   </AuthProvider>
 );
 
