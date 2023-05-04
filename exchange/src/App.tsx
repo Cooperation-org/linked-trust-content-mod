@@ -59,7 +59,7 @@ function App() {
   }, [isDisconnected]);
 
   return (
-    <Box sx={{ px: { xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }, pt: 10 }}>
+    <Box sx={{ px: { xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }, pt: 10, mt:5 }}>
       <Box
         sx={{
           background: '#f6f7fe',
@@ -70,12 +70,13 @@ function App() {
             lg: '32px',
             xl: '40px',
           },
-          // padding: {
-          //   xs: '24px 16px',
-          //   md: '42px 54px',
-          //   lg: '56px 72px',
-          //   xl: '70px 90px',
-          // },
+          padding: {
+            xs: '24px 16px',
+            md: '42px 54px',
+            lg: '56px 72px',
+            xl: '70px 90px',
+          },
+          
         }}
       >
         <Grid container spacing={4}>
@@ -101,7 +102,7 @@ function App() {
               ></Link>
             </Grid>
           )}
-          <Grid item xs={12} sm={12} md={id ? 12 : 7} lg={id ? 12 : 7}>
+          <Grid item xs={12} sm={12} md={id ? 12 : 7} lg={id ? 12 : 7} >
             <Box mt={3}>
               {!isConnected && (
                 <>
