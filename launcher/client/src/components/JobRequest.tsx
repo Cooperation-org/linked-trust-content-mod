@@ -199,15 +199,11 @@ export const JobRequest = ({
             onChange={handleChange}
             aria-label="basic tabs example"
           >
+            <Tab label="Dashboard" {...a11yProps(0)} />
             <Tab
-              label="DASHBOARD"
-              {...a11yProps(0)}
-              sx={{ fontWeight: 'bold' }}
-            />
-            <Tab
-              label="REQUEST A NEW GROUP"
+              label="Request a new group"
               {...a11yProps(1)}
-              sx={{ margin: '0 4rem', fontWeight: 'bold' }}
+              sx={{ margin: '0 4rem' }}
             />
             {/* It should be popup or in group settings */}
             {/* <Tab
@@ -225,11 +221,9 @@ export const JobRequest = ({
           </Tabs>
         </Box>
         <TabPanel value={activeTab} index={TabsTypes.DASHBOARD}>
-          <section className="flex items-center justify-center absolute top-0 left-0   w-full ">
-            <div className=" bg-[#f6f7fe] mx-[2rem] rounded-[20px] w-full min-h-[100vh] mt-[80px] p-[4rem]">
-              <Dashboard />
-            </div>
-          </section>
+          <Box>
+            <Dashboard />
+          </Box>
         </TabPanel>
         <TabPanel value={activeTab} index={TabsTypes.REQUEST_A_GROUP}>
           <RoundedBox sx={{ p: '50px 140px' }}>
@@ -353,7 +347,7 @@ export const JobRequest = ({
                 mt: 8,
               }}
             >
-              <div className="gap-[2%] flex">
+              <Box sx={{ display: 'flex', gap: '2%' }}>
                 <Button
                   variant="outlined"
                   sx={{ minWidth: '240px', py: 1 }}
@@ -370,17 +364,9 @@ export const JobRequest = ({
                   {isLoading && <CircularProgress size={24} sx={{ mr: 1 }} />}{' '}
                   Fund and Request Group
                 </Button>
-              </div>
+              </Box>
             </Box>
           </RoundedBox>
-        </TabPanel>
-        <TabPanel value={activeTab} index={2}>
-          <div className="flex items-center justify-center absolute top-0 left-0   w-full ">
-            <div className=" bg-[#f6f7fe] mx-[2rem] rounded-[20px] w-full min-h-[100vh] mt-[80px] p-[4rem]">
-              <h2 className="text-3xl font-bold mb-[1rem]">API KEY</h2>
-              <RandomKey />
-            </div>
-          </div>
         </TabPanel>
       </Box>
     </>

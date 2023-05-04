@@ -44,9 +44,6 @@ interface Group {
 }
 
 const useStyles = makeStyles(() => ({
-  cardHeader: {
-    backgroundColor: '#F0F0F0',
-  },
   cardContent: {
     height: '150px',
     overflowY: 'scroll',
@@ -92,14 +89,22 @@ const MyGroups = ({ onViewGroupDetails }: MyGroupsProps) => {
   };
 
   return (
-    <Box mt={3}>
-      <Grid container spacing={3}>
+    <Box mt={3} display="flex">
+      <Grid container spacing={3} sx={{ justifyContent: 'center' }}>
         {isLoading ? (
-          <CircularProgress />
+          <CircularProgress sx={{ mx: 'auto' }} />
         ) : groups.length === 0 ? (
-          <Typography variant="h5">
-            You haven't created any groups yet.
-          </Typography>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              textAlign: 'center',
+            }}
+          >
+            <Typography variant="h5">
+              You haven't created any groups yet.
+            </Typography>
+          </Box>
         ) : jobId < 1 ? (
           groups.map((group) => (
             <Grid item xs={12} md={4} key={group.id}>
@@ -114,6 +119,7 @@ const MyGroups = ({ onViewGroupDetails }: MyGroupsProps) => {
                       className={classes.link}
                     >
                       <Typography
+                        variant="h6"
                         sx={{
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
@@ -127,11 +133,11 @@ const MyGroups = ({ onViewGroupDetails }: MyGroupsProps) => {
                     </Link>
                   }
                   subheader={`${group?.jobs?.length} Jobs`}
-                  className={classes.cardHeader}
                 />
 
                 <CardContent>
                   <Typography
+                    variant="body2"
                     sx={{
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
