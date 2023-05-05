@@ -185,6 +185,18 @@ const escrowPlugin: FastifyPluginAsync = async (server) => {
   server.decorate('escrow', new Escrow());
 };
 
+export const getEscrow = () => {
+  const validate = ajv.compile(ConfigSchema);
+  const valid = validate(process.env);
+  if (!valid) {
+    throw new Error(
+      '.env file validation failed - ' +
+        JSON.stringify(validate.errors, null, 2)
+    );
+  }
+  return new Escrow();
+};
+
 declare module 'fastify' {
   interface FastifyInstance {
     escrow: Escrow;

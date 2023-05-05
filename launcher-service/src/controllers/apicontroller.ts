@@ -1,3 +1,4 @@
+import amqplib from 'amqplib';
 import { Request, Response, NextFunction } from 'express';
 import { prisma } from '../db';
 import crypto from 'crypto';
@@ -267,9 +268,12 @@ export const createJob = async (
     }
 
     if (process.env.ESCROW_CREATION_ENABLED) {
-      const launcherServerEscrowUrl = `${process.env.LAUNCHER_SERVER_URL}/escrow`;
+      const queue = 'CREATE_ESCROW';
+      const rabbitMQconnection = await amqplib.connect('amqp://localhost');
+      const rabbitMQchannel = await rabbitMQconnection.createChannel();
+      await rabbitMQchannel.assertQueue(queue);
 
-      const response = await axios.post(launcherServerEscrowUrl, {
+      const data = {
         chainId: job.group.chainId,
         description,
         fortunesRequired: reviewersRequired,
@@ -277,20 +281,11 @@ export const createJob = async (
         jobRequester: job.group.creator.address,
         title,
         token: job.group.token,
-      });
-
-      const { escrowAddress } = response.data;
-
-      await prisma.job.update({
-        where: {
-          id: job.id,
-        },
-        data: {
-          escrowAddress,
-        },
-      });
-
-      return res.status(201).json({ job, content, escrowAddress });
+        jobId: job.id,
+      };
+      rabbitMQchannel.sendToQueue(queue, Buffer.from(JSON.stringify(data)));
+      await rabbitMQchannel.close();
+      await rabbitMQconnection.close();
     }
 
     res.status(201).json({ job, content });

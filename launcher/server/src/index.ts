@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 import getServer from './server';
+import { consumeRabbitMQmsgs } from './rabbitmq';
 
 process.on('unhandledRejection', (err) => {
   // eslint-disable-next-line no-console
@@ -13,6 +14,7 @@ const startServer = async () => {
   const port = +server.config.API_PORT;
   const host = server.config.API_HOST;
   await server.listen({ host, port });
+  await consumeRabbitMQmsgs();
 
   for (const signal of ['SIGINT', 'SIGTERM']) {
     process.on(signal, () =>
