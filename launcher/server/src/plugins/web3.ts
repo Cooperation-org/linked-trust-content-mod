@@ -46,19 +46,6 @@ const web3Plugin: FastifyPluginAsync = async (server) => {
   server.decorate('web3', new Web3Client());
 };
 
-export const getWeb3Client = () => {
-  const validate = ajv.compile(ConfigSchema);
-  const valid = validate(process.env);
-  if (!valid) {
-    throw new Error(
-      '.env file validation failed - ' +
-        JSON.stringify(validate.errors, null, 2)
-    );
-  }
-
-  return new Web3Client();
-};
-
 declare module 'fastify' {
   interface FastifyInstance {
     web3: Web3Client;

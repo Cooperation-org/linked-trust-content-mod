@@ -126,18 +126,6 @@ const stripePlugin: FastifyPluginAsync = async (server) => {
   server.decorate('stripe', new StripeClient());
 };
 
-export const getStripeClient = () => {
-  const validate = ajv.compile(ConfigSchema);
-  const valid = validate(process.env);
-  if (!valid) {
-    throw new Error(
-      '.env file validation failed - ' +
-        JSON.stringify(validate.errors, null, 2)
-    );
-  }
-  return new StripeClient();
-};
-
 declare module 'fastify' {
   interface FastifyInstance {
     stripe: StripeClient;

@@ -17,10 +17,6 @@ const currencyPlugin: FastifyPluginAsync = async (server) => {
   server.decorate('currency', new Currency());
 };
 
-export const getCurrency = () => {
-  return new Currency();
-};
-
 declare module 'fastify' {
   interface FastifyInstance {
     currency: Currency;

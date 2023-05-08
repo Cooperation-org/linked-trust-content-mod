@@ -70,18 +70,6 @@ const s3Plugin: FastifyPluginAsync = async (server) => {
   server.decorate('s3', new S3Client());
 };
 
-export const getS3 = () => {
-  const validate = ajv.compile(ConfigSchema);
-  const valid = validate(process.env);
-  if (!valid) {
-    throw new Error(
-      '.env file validation failed - ' +
-        JSON.stringify(validate.errors, null, 2)
-    );
-  }
-  return new S3Client();
-};
-
 declare module 'fastify' {
   interface FastifyInstance {
     s3: S3Client;
