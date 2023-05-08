@@ -274,13 +274,6 @@ export const createJob = async (
       await rabbitMQchannel.assertQueue(queue);
 
       const data = {
-        chainId: job.group.chainId,
-        description,
-        fortunesRequired: reviewersRequired,
-        fundAmount,
-        jobRequester: job.group.creator.address,
-        title,
-        token: job.group.token,
         jobId: job.id,
       };
       rabbitMQchannel.sendToQueue(queue, Buffer.from(JSON.stringify(data)));
