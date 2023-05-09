@@ -4,6 +4,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import { authRoutes, apiRoutes } from './routes';
 import cors from 'cors';
 import logger from 'morgan';
+import { consumeRabbitMQmsgs } from './rabbitmq';
 
 const port = process.env.PORT || 8082;
 
@@ -46,5 +47,6 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
 });
 
 app.listen(port, async () => {
+  await consumeRabbitMQmsgs();
   console.log(`Running on port ${port}`);
 });
