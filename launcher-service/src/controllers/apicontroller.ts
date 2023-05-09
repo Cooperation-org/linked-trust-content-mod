@@ -228,7 +228,9 @@ export const createJob = async (
   next: NextFunction
 ) => {
   try {
-    const { groupId } = req.params;
+    const { groupOwner } = req;
+    if (!groupOwner) return res.status(401).json({ message: 'Unauthorized' });
+
     const { title, description, reviewersRequired, fundAmount } = req.body;
 
     const contentData = req.body.content;
@@ -240,7 +242,7 @@ export const createJob = async (
         description,
         reviewersRequired,
         fundAmount,
-        group: { connect: { id: parseInt(groupId) } },
+        group: { connect: { id: groupOwner.id } },
       },
       include: {
         group: {

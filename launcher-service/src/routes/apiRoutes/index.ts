@@ -29,7 +29,7 @@ const router = Router();
 router.get('/job-creators', getJobCreators);
 router.post('/job-creators', createJobCreator);
 router.post('/workers', createWorker);
-router.post('/groups', createGroup);
+router.post('/groups', apiKeyAccess, createGroup);
 router.put('/groups/:id', updateGroup);
 router.get('/groups/:id', getGroup);
 router.post('/groups/:groupId/add-workers', addWorkersToGroup);
