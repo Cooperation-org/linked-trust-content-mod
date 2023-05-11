@@ -1,9 +1,5 @@
 import { Router } from 'express';
-import {
-  groupOwnerAccess,
-  apiKeyAccess,
-  moderatorAccess,
-} from '../../middleware';
+import { apiKeyAccess } from '../../middleware';
 
 import {
   addWorkersToGroup,
