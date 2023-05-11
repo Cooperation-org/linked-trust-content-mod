@@ -22,18 +22,18 @@ export const apiKeyAccess = async (
       .update(apiKey)
       .digest('hex');
 
-    const groupOwner = await prisma.group.findFirst({
+    const group = await prisma.group.findFirst({
       where: {
         apiKey: hashedApiKey,
       },
     });
 
-    if (!groupOwner) {
+    if (!group) {
       const err = new createHttpError.Unauthorized();
       throw err;
     }
 
-    req.groupOwner = groupOwner;
+    req.group = group;
 
     next();
   } catch (err) {

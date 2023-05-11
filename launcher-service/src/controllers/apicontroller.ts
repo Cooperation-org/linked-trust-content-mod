@@ -228,12 +228,22 @@ export const createJob = async (
   next: NextFunction
 ) => {
   try {
-    const { groupOwner } = req;
-    if (!groupOwner) return res.status(401).json({ message: 'Unauthorized' });
+    const { group } = req;
+    if (!group) return res.status(401).json({ message: 'Unauthorized' });
 
-    const { title, description, reviewersRequired, fundAmount } = req.body;
+    const { groupId } = req.params;
+    const groupIdAsNum = parseInt(groupId);
 
-    const contentData = req.body.content;
+    if (group.id !== groupIdAsNum)
+      return res.status(401).json({ message: 'Unauthorized' });
+
+    const {
+      title,
+      description,
+      reviewersRequired,
+      fundAmount,
+      content: contentData,
+    } = req.body;
 
     // Create a new job in the specified group
     const job = await prisma.job.create({
@@ -242,7 +252,7 @@ export const createJob = async (
         description,
         reviewersRequired,
         fundAmount,
-        group: { connect: { id: groupOwner.id } },
+        group: { connect: { id: groupIdAsNum } },
       },
       include: {
         group: {
@@ -577,17 +587,20 @@ export const generateApiKey = async (
     const apiKey = buffer.toString('hex');
 
     // Generate a new apiKey for the group
-    const newApiKey = crypto.createHash('sha256').update(apiKey).digest('hex');
+    const hashedApiKey = crypto
+      .createHash('sha256')
+      .update(apiKey)
+      .digest('hex');
 
     // Save the new apiKey to the database
     await prisma.group.update({
       where: { id: Number(id) },
-      data: { apiKey: newApiKey },
+      data: { apiKey: hashedApiKey },
     });
 
     res.status(200).send({
       message: 'New apiKey generated successfully.',
-      apiKey: newApiKey,
+      apiKey,
     });
   } catch (error) {
     console.error(error);
