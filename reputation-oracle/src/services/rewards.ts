@@ -24,7 +24,7 @@ export function filterAddressesToReward(
   Object.keys(fortunesEntries).forEach((workerAddress) => {
     fortunesEntries[workerAddress].forEach((fortuneEntry) => {
       const { fortune, score } = fortuneEntry;
-      if (tmpHashMap[fortune] || checkBadWords(fortune)) {
+      if (checkBadWords(fortune)) {
         reputationValues.push({ workerAddress, reputation: -1 });
         if (score) {
           errorRecordingOracle = true;

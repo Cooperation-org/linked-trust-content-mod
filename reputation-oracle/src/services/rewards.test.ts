@@ -1,11 +1,15 @@
-const Web3 = require('web3');
-const { filterAddressesToReward } = require('./rewards');
+import Web3 from 'web3';
+import { FortuneEntry, filterAddressesToReward } from './rewards';
+
+interface WorkerFortunes {
+  [key: string]: FortuneEntry [];
+}
 
 const worker1 = '0x90F79bf6EB2c4f870365E785982E1f101E93b906';
 const worker2 = '0xcd3B766CCDd6AE721141F452C550Ca635964ce71';
 const worker3 = '0x146D35a6485DbAFF357fB48B3BbA31fCF9E9c787';
 const recOracle = '0x634316ea0ee79c701c6f67c53a4c54cbafd2316d';
-const fortunes = {};
+const fortunes: WorkerFortunes = {};
 
 describe('Rewards', () => {
   it('Filter duplicated fortune', async () => {
@@ -30,6 +34,30 @@ describe('Rewards', () => {
     const result = filterAddressesToReward(new Web3(), fortunes, recOracle);
 
     expect(result.workerAddresses).toStrictEqual([worker1, worker3]);
+  });
+
+  it('Reward all fortunes', async () => {
+    fortunes[worker1] = [
+      {
+        score: true,
+        fortune: 'fortune',
+      },
+    ];
+    fortunes[worker2] = [
+      {
+        score: false,
+        fortune: 'fortune',
+      },
+    ];
+    fortunes[worker3] = [
+      {
+        score: true,
+        fortune: 'fortune1',
+      },
+    ];
+    const result = filterAddressesToReward(new Web3(), fortunes, recOracle);
+
+    expect(result.workerAddresses).toStrictEqual([worker1, worker2, worker3]);
   });
 
   it('Check fortune bad words', async () => {
