@@ -1,9 +1,5 @@
 import { Router } from 'express';
-import {
-  groupOwnerAccess,
-  apiKeyAccess,
-  moderatorAccess,
-} from '../../middleware';
+import { apiKeyAccess } from '../../middleware';
 
 import {
   addWorkersToGroup,
@@ -33,7 +29,7 @@ router.post('/groups', createGroup);
 router.put('/groups/:id', updateGroup);
 router.get('/groups/:id', getGroup);
 router.post('/groups/:groupId/add-workers', addWorkersToGroup);
-router.post('/groups/:groupId/jobs', createJob);
+router.post('/groups/:groupId/jobs', apiKeyAccess, createJob);
 router.post('/groups/:id/newApiKey', generateApiKey);
 router.get('/jobs/:id', getJob);
 router.get('/groups/worker/:workerId', getGroupByWorker);
