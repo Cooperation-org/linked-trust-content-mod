@@ -111,26 +111,19 @@ const MyGroups = ({ onViewGroupDetails }: MyGroupsProps) => {
               <Card>
                 <CardHeader
                   title={
-                    <Link
-                      component={RouterLink}
-                      to={`/group/${group.id}`}
-                      underline="none"
-                      color="textPrimary"
-                      className={classes.link}
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        cursor: 'default',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        display: '-webkit-box',
+                        WebkitLineClamp: '2',
+                        WebkitBoxOrient: 'vertical',
+                      }}
                     >
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          display: '-webkit-box',
-                          WebkitLineClamp: '2',
-                          WebkitBoxOrient: 'vertical',
-                        }}
-                      >
-                        {group.name}
-                      </Typography>
-                    </Link>
+                      {group.name}
+                    </Typography>
                   }
                   subheader={`${group?.jobs?.length} Jobs`}
                 />

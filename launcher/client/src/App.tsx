@@ -193,10 +193,6 @@ function App() {
                 platform's community guidelines, terms of service, or applicable
                 laws.
               </Typography>
-              <Link
-                href="#"
-                sx={{ textDecoration: 'none', mt: 1, display: 'block' }}
-              ></Link>
             </Grid>
           )}
           <Grid
