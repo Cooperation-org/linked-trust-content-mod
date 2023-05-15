@@ -1,4 +1,4 @@
 import { apiKeyAccess } from './apikeyaccess';
-import { verifyJWTAndReturnfromPrisma } from './verifyJWTAndReturnfromPrisma';
+import { jwtDBAuth } from './jwtDBAuth';
 
-export { apiKeyAccess, verifyJWTAndReturnfromPrisma };
+export { apiKeyAccess, jwtDBAuth };
