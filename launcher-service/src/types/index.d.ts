@@ -1,4 +1,4 @@
-import { Group } from '@prisma/client';
+import { Group, JobCreator, Worker } from '@prisma/client';
 export {};
 
 declare global {
@@ -11,6 +11,8 @@ declare global {
   namespace Express {
     interface Request {
       group?: Group;
+      jobCreator?: JobCreator;
+      worker?: Worker;
     }
   }
 }
