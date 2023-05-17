@@ -143,7 +143,7 @@ export function LoginWithMetamask({
           >
             <img src="/images/fortune-fiat.png" alt="fiat" />
             <Typography variant="body2" color="primary" mt={8}>
-              Sign
+              Sign in
             </Typography>
             <Button
               variant="outlined"
