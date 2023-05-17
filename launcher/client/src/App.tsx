@@ -180,7 +180,7 @@ function App() {
           {status === LauncherStageStatus.UNAUTHORIZED && (
             <Grid item xs={12} sm={12} md={5} lg={4}>
               <Typography color="primary" fontWeight={600} variant="h4">
-                <a href="https://repute.social/" target="_blank">Repute.social</a>
+                <a href="https://repute.social/" target="_blank">Repute.Social</a>
               </Typography>
               <Typography color="primary" fontWeight={500} variant="h6">
                 Content Moderation
