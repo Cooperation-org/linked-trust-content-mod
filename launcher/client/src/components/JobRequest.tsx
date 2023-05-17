@@ -6,6 +6,8 @@ import {
   FormControl,
   Grid,
   InputLabel,
+  InputAdornment,
+  OutlinedInput,
   MenuItem,
   Select,
   TextField,
@@ -24,7 +26,7 @@ import {
   HM_TOKEN_DECIMALS,
   SUPPORTED_CHAIN_IDS,
 } from '../constants';
-import RandomKey from './APIKey';
+// import RandomKey from './APIKey';
 import { RoundedBox } from './RoundedBox';
 import { FortuneJobRequestType, JobLaunchResponse, TabsTypes } from './types';
 // import { FortuneJobRequest } from '.';
@@ -268,7 +270,7 @@ export const JobRequest = ({
                   <Grid item xs={12} sm={12} md={6}>
                     <FormControl fullWidth>
                       <TextField
-                        placeholder="Group Title"
+                        label="Project Name"
                         name="name"
                         value={jobRequest.name}
                         onChange={(e) =>
@@ -285,7 +287,11 @@ export const JobRequest = ({
                   <TextField
                     label="Group Description"
                     name="description"
+                    placeholder="Describe the type of content to be moderated (text, images, videos, live chat, feed of [Social handle x],etc...) and guidelines to be followed. Standard or Custom+[doc title with custom guidelines]."
                     value={jobRequest.description}
+                    minRows={4}
+                    maxRows={4}
+                    multiline
                     onChange={(e) =>
                       handleJobRequestFormFieldChange(
                         'description',
@@ -328,8 +334,15 @@ export const JobRequest = ({
                 </Box>
                 <FormControl>
                   <FormControl>
-                    <TextField
-                      placeholder="Amount"
+                    <InputLabel>Amount</InputLabel>
+                    <OutlinedInput
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <span>HMT</span>
+                        </InputAdornment>
+                      }
+                      // placeholder="Amount"
+                      label="Amount"
                       value={jobRequest.fundedAmt}
                       onChange={(e) =>
                         handleJobRequestFormFieldChange(
@@ -364,7 +377,9 @@ export const JobRequest = ({
                   onClick={handleLaunch}
                   // disabled={isLoading}
                 >
-                  {isLoading && <CircularProgress size={24} sx={{ mr: 1 }} />}{' '}
+                  {isLoading && (
+                    <CircularProgress color="info" size={24} sx={{ mr: 1 }} />
+                  )}{' '}
                   Fund and Request Group
                 </Button>
               </Box>
