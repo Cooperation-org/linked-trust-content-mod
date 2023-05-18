@@ -4,7 +4,6 @@ import bodyParser from 'body-parser';
 import Web3 from 'web3';
 import {
   bulkPayOut,
-  bulkPaid,
   getBalance,
   getEscrowManifestUrl,
 } from './services/escrow';
@@ -29,6 +28,7 @@ app.use(bodyParser.json());
 
 app.post('/send-fortunes', async (req, res) => {
   try {
+    console.log('Entered send-fortunes');
     const errorMessage: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     req.body.forEach((escrow: any) => {
@@ -70,6 +70,7 @@ app.post('/send-fortunes', async (req, res) => {
       const account = web3.eth.accounts.privateKeyToAccount(`0x${privKey}`);
       web3.eth.accounts.wallet.add(account);
       web3.eth.defaultAccount = account.address;
+
       const manifestUrl = await getEscrowManifestUrl(
         web3,
         escrow.escrowAddress
@@ -82,29 +83,33 @@ app.post('/send-fortunes', async (req, res) => {
         fortunes,
         recordingOracleAddress
       );
+
       await updateReputations(
         web3,
         network.reputationAddress,
         reputationValues
       );
+
       const rewards = await calculateRewardForWorker(
         web3,
         network.reputationAddress,
         balance.toString(),
         workerAddresses
       );
+
       // TODO calculate the URL hash(?)
       const resultsUrl = await uploadResults(escrow, escrow.escrowAddress);
       const resultHash = resultsUrl;
-      await bulkPayOut(
-        web3,
-        escrow.escrowAddress,
-        workerAddresses,
-        rewards,
-        resultsUrl,
-        resultHash
-      );
-      if (!(await bulkPaid(web3, escrow.escrowAddress))) {
+      try {
+        await bulkPayOut(
+          web3,
+          escrow.escrowAddress,
+          workerAddresses,
+          rewards,
+          resultsUrl,
+          resultHash
+        );
+      } catch {
         errorMessage.push(
           `Escrow ${escrow.escrowAddress} payout couldn't be done`
         );
