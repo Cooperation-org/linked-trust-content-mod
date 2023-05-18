@@ -1730,10 +1730,10 @@
     "@ethersproject/properties" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
 
-"@human-protocol/core@1.0.41":
-  version "1.0.41"
-  resolved "https://registry.yarnpkg.com/@human-protocol/core/-/core-1.0.41.tgz#e0094c86d27297082ad58735c1dbabf604223b8d"
-  integrity sha512-NZ/QYHDCQ7/NXTaB7KDk+EPPiNQ/BJG5H5/xELpECCyoiFS0vsKXSkasqejw2iKa9wIhn2tk7p8gJLFkbObepQ==
+"@human-protocol/core@1.0.45":
+  version "1.0.45"
+  resolved "https://registry.yarnpkg.com/@human-protocol/core/-/core-1.0.45.tgz#3a906c6d0e6dee9c6670883f32b166d7291272e8"
+  integrity sha512-TpOQCTNGiS2k0Ujb0aqqamTpPDSOyDh0IGhyJzkgj64ywIEyFH6klkB7ywOVPoXWQf7t3ZoEKbPxiCDTW7W0qw==
 
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
