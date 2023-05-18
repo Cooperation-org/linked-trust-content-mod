@@ -28,7 +28,6 @@ app.use(bodyParser.json());
 
 app.post('/send-fortunes', async (req, res) => {
   try {
-    console.log('Entered send-fortunes');
     const errorMessage: string[] = [];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     req.body.forEach((escrow: any) => {
