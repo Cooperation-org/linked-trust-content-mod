@@ -44,6 +44,7 @@ model Group {
   apiKey        String?    @unique
   chainId       Int
   token         String
+  rules         String?
 }
 
 model Job {

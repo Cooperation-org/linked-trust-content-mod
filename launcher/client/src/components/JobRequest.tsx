@@ -98,6 +98,7 @@ export const JobRequest = ({
     guidelineUrl: 'https://corporation.org',
     creatorId: id,
     funded: true,
+    rules: '',
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -269,6 +270,7 @@ export const JobRequest = ({
                     <FormControl fullWidth>
                       <TextField
                         placeholder="Group Title"
+                        required
                         name="name"
                         value={jobRequest.name}
                         onChange={(e) =>
@@ -284,6 +286,7 @@ export const JobRequest = ({
                 <FormControl fullWidth>
                   <TextField
                     label="Group Description"
+                    required
                     name="description"
                     value={jobRequest.description}
                     onChange={(e) =>
@@ -291,6 +294,17 @@ export const JobRequest = ({
                         'description',
                         e.target.value
                       )
+                    }
+                  />
+                </FormControl>
+                <FormControl fullWidth>
+                  <TextField
+                    label="Link to Group Rules"
+                    placeholder="Enter a valid URL (e.g., https://www.example.com)"
+                    name="rules"
+                    value={jobRequest.rules}
+                    onChange={(e) =>
+                      handleJobRequestFormFieldChange('rules', e.target.value)
                     }
                   />
                 </FormControl>

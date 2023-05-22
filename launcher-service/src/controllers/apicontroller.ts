@@ -77,6 +77,7 @@ export const createGroup = async (
     guidelineUrl,
     chainId,
     token,
+    rules,
   } = req.body;
 
   try {
@@ -90,6 +91,7 @@ export const createGroup = async (
         guideline_url: guidelineUrl,
         chainId,
         token,
+        rules,
       },
       include: {
         creator: true,
