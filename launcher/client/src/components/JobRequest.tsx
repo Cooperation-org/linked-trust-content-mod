@@ -58,11 +58,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -270,6 +266,7 @@ export const JobRequest = ({
                   <Grid item xs={12} sm={12} md={6}>
                     <FormControl fullWidth>
                       <TextField
+                        autoFocus
                         label="Project Name"
                         name="name"
                         value={jobRequest.name}
@@ -285,9 +282,10 @@ export const JobRequest = ({
                 </Grid>
                 <FormControl fullWidth>
                   <TextField
+                    InputLabelProps={{ shrink: true }}
                     label="Group Description"
                     name="description"
-                    placeholder="Describe the type of content to be moderated (text, images, videos, live chat, feed of [Social handle x],etc...) and guidelines to be followed. Standard or Custom+[doc title with custom guidelines]."
+                    placeholder="Please provide information about your group and the type of content to be moderated, i.e., text, images, videos, live chat, and feeds of specific social handles."
                     value={jobRequest.description}
                     minRows={4}
                     maxRows={4}
@@ -338,10 +336,11 @@ export const JobRequest = ({
                     <OutlinedInput
                       startAdornment={
                         <InputAdornment position="start">
-                          <span>HMT</span>
+                          <Typography color={'primary'} variant="body2">
+                            HMT
+                          </Typography>
                         </InputAdornment>
                       }
-                      // placeholder="Amount"
                       label="Amount"
                       value={jobRequest.fundedAmt}
                       onChange={(e) =>
@@ -375,11 +374,9 @@ export const JobRequest = ({
                   variant="contained"
                   sx={{ minWidth: '240px', py: 1 }}
                   onClick={handleLaunch}
-                  // disabled={isLoading}
+                  disabled={isLoading}
                 >
-                  {isLoading && (
-                    <CircularProgress color="info" size={24} sx={{ mr: 1 }} />
-                  )}{' '}
+                  {isLoading && <CircularProgress size={24} sx={{ mr: 1 }} />}{' '}
                   Fund and Request Group
                 </Button>
               </Box>
