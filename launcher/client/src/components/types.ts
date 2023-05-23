@@ -13,6 +13,7 @@ export enum TabsTypes {
 
 export enum AppStateType {
   ACTIVE_TAB = 'ACTIVE_TAB',
+  ACTIVE_LAUNCHER_STATUS = 'ACTIVE_LAUNCHER_STATUS',
 }
 
 export type FundingMethodType = 'crypto' | 'fiat';
