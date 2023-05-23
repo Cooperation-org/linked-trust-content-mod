@@ -167,7 +167,7 @@ export const JobRequest = ({
   };
 
   const {
-    state: { activeTab, launcherStatus},
+    state: { activeTab, launcherStatus },
     dispatch,
   } = useContext(AppContext);
 
@@ -176,8 +176,7 @@ export const JobRequest = ({
     newActiveTab: number
   ) => {
     event.preventDefault();
-    const a = goToTab(newActiveTab)
-    dispatch(a);
+    dispatch(goToTab(newActiveTab));
   };
 
   return (
