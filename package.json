@@ -10,7 +10,7 @@
     "exchange": "cd exchange && yarn && yarn start",
     "launcher-client": "cd launcher/client && yarn && yarn start",
     "launcher-server": "cd launcher/server && yarn && yarn start",
-    "recording-oracle": "cd recording-oracle && yarn && yarn start",
+    "recording-oracle": "cd recording-oracle && yarn && yarn dev",
     "reputation-oracle": "cd reputation-oracle && yarn && yarn dev",
     "launcher-service": "cd launcher-service && yarn && yarn migrate:dev && yarn dev",
     "dev": "concurrently --kill-others-on-fail \"yarn launcher-client\" \"yarn launcher-server\" \"yarn launcher-service\" \"yarn exchange\" \"yarn recording-oracle\" \"yarn reputation-oracle\" \"yarn dev:docker\"",

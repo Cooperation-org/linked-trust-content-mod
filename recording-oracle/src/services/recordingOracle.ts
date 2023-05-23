@@ -34,43 +34,6 @@ function isFortunesRequestedDone(escrow: IEscrowStorage): boolean {
   return true;
 }
 
-function getFortunesContent(escrow: IEscrowStorage): string[] {
-  const data = Object.values(escrow.fortunes);
-  return data.map((item) => item[0].fortune);
-}
-
-async function isValidFortune(
-  plugins: IPlugin,
-  fortune: IFortuneRequest,
-  escrow: IEscrowStorage
-): Promise<boolean> {
-  const fortunesContent = getFortunesContent(escrow);
-
-  if (
-    plugins.curses.isProfane(fortune.fortune) ||
-    !plugins.uniqueness.isUnique(fortune.fortune, fortunesContent)
-  ) {
-    escrow = plugins.storage.addFortune(
-      fortune.escrowAddress,
-      fortune.workerAddress,
-      fortune.fortune,
-      false
-    );
-
-    const fortuneResults = {
-      escrowAddress: fortune.escrowAddress,
-      chainId: escrow.chainId,
-      fortunes: escrow.fortunes,
-    };
-
-    await saveFortuneResults(plugins, fortuneResults);
-    // returning true for every case to bypass this logic
-    return true;
-  }
-
-  return true;
-}
-
 export async function processFortunes(
   plugins: IPlugin,
   fortune: IFortuneRequest
@@ -144,37 +107,22 @@ export async function processFortunes(
     fortune.workerAddress
   );
 
-  if (Array.isArray(fortunesStored) && fortunesStored.length > 0) {
-    const fortuneStored = fortunesStored[0];
-
-    if (!fortuneStored.score) {
-      const isValid = await isValidFortune(plugins, fortune, escrow);
-      if (!isValid) throw new Error('Fortune is not unique or contains curses');
-
-      escrow = plugins.storage.addFortune(
-        fortune.escrowAddress,
-        fortune.workerAddress,
-        fortune.fortune,
-        true
-      );
-    } else {
-      throw new Error(
-        `${fortune.workerAddress} already submitted correct a fortune`
-      );
-    }
-  } else {
-    const isValid = await isValidFortune(plugins, fortune, escrow);
-    if (!isValid) {
-      throw new Error('Fortune is not unique or contains curses');
-    }
-
-    escrow = plugins.storage.addFortune(
-      fortune.escrowAddress,
-      fortune.workerAddress,
-      fortune.fortune,
-      true
+  if (
+    Array.isArray(fortunesStored) &&
+    fortunesStored.length > 0 &&
+    fortunesStored[0].score
+  ) {
+    throw new Error(
+      `${fortune.workerAddress} already submitted a correct fortune`
     );
   }
+
+  escrow = plugins.storage.addFortune(
+    fortune.escrowAddress,
+    fortune.workerAddress,
+    fortune.fortune,
+    true
+  );
 
   const fortuneResults = {
     escrowAddress: fortune.escrowAddress,
