@@ -21,6 +21,8 @@ import {
   Stack,
   Chip,
   InputAdornment,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -66,10 +68,9 @@ export const JobTable = ({
   const classes = useStyles();
   const [openAddWorkerPopup, setOpenAddWorkerPopup] = useState(false);
   const [workerAddress, setWorkerAddress] = useState('');
-  const [workerLoading, setwWorkerLoading] = useState(false);
+  const [workerLoading, setWorkerLoading] = useState(false);
   const swaggerUrl = `${process.env.REACT_APP_JOB_LAUNCHER_SERVER_URL}/api-docs`;
   const [chips, setChips] = useState<ChipData[]>([]);
-  const [addressUpdated, setAddressUpdated] = useState(false);
 
   useEffect(() => {
     const fetchJobs = async () => {
@@ -84,12 +85,6 @@ export const JobTable = ({
     };
     fetchJobs();
   }, [activeGroupId]);
-
-  useEffect(() => {
-    if (!addressUpdated) {
-      setAddressUpdated(true);
-    }
-  }, [chips]);
 
   const handleGenerateApiKey = () => {
     // Call API to generate API key
@@ -114,29 +109,30 @@ export const JobTable = ({
     setOpenAddWorkerPopup(true);
   };
   const handleCloseAddWorkerPopup = () => setOpenAddWorkerPopup(false);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    'success' | 'error' | ''
+  >('');
 
-  const handleAddWorker = async () => {
-    setwWorkerLoading(true);
+  const handleSubmitWorkers = async () => {
+    setWorkerLoading(true);
     try {
       const workerAddresses: string[] = [];
       chips.forEach((chip) => workerAddresses.push(chip.label));
-      const response = await axiosInstance.post(
-        `/api/groups/${activeGroupId}/add-workers/`,
-        {
-          addresses: workerAddresses,
-        }
-      );
+      await axiosInstance.post(`/api/groups/${activeGroupId}/add-workers/`, {
+        addresses: workerAddresses,
+      });
 
-      if (response.status === 200) {
-        alert('Worker added successfully');
-      } else {
-        alert('Failed to add worker');
-      }
+      setSnackbarMessage('Worker added successfully');
+      setShowSnackbar(true);
+      setSnackbarSeverity('success');
     } catch (error) {
-      console.error(error);
-      alert('Failed to add worker');
+      setSnackbarMessage('Failed to add workers! Please try again later.');
+      setShowSnackbar(true);
+      setSnackbarSeverity('error');
     } finally {
-      setwWorkerLoading(false);
+      setWorkerLoading(false);
       setOpenAddWorkerPopup(false);
       setWorkerAddress('');
     }
@@ -188,7 +184,12 @@ export const JobTable = ({
 
   const handleChipDelete = (currentChip: string) => {
     setChips(chips.filter((item) => item.label !== currentChip));
-    console.log(currentChip);
+  };
+
+  const handleSnackbarClose = () => {
+    setShowSnackbar(false);
+    setSnackbarMessage('');
+    setSnackbarSeverity('');
   };
 
   return (
@@ -347,26 +348,51 @@ export const JobTable = ({
                 flexWrap="wrap"
                 sx={{ mt: 2 }}
               >
-                {addressUpdated
-                  ? chips.map((chip) => {
-                      return (
-                        <Chip
-                          sx={{ fontSize: 16 }}
-                          label={chip.label}
-                          onDelete={() => handleChipDelete(chip.label)}
-                        />
-                      );
-                    })
-                  : ''}
+                {chips &&
+                  chips.map((chip) => {
+                    return (
+                      <Chip
+                        sx={{ fontSize: 16 }}
+                        label={chip.label}
+                        onDelete={() => handleChipDelete(chip.label)}
+                      />
+                    );
+                  })}
               </Stack>
             </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseAddWorkerPopup}>Cancel</Button>
-              <Button onClick={handleAddWorker} color="primary">
-                {workerLoading ? <CircularProgress size={24} /> : 'Submit'}
+            <DialogActions sx={{ px: 3, pb: 2.5 }}>
+              <Button
+                sx={{ minWidth: '120px', py: 1 }}
+                onClick={handleCloseAddWorkerPopup}
+                variant="outlined"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSubmitWorkers}
+                variant="contained"
+                color="primary"
+                sx={{ minWidth: '120px', py: 1 }}
+                disabled={workerLoading}
+              >
+                {workerLoading && <CircularProgress size={24} sx={{ mr: 1 }} />}
+                Submit
               </Button>
             </DialogActions>
           </Dialog>
+          <Snackbar
+            open={showSnackbar}
+            autoHideDuration={6000}
+            onClose={handleSnackbarClose}
+          >
+            <Alert
+              onClose={handleSnackbarClose}
+              variant="filled"
+              severity={snackbarSeverity || undefined}
+            >
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
         </div>
       )}
     </>
