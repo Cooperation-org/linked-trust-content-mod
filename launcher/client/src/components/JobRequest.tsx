@@ -6,6 +6,8 @@ import {
   FormControl,
   Grid,
   InputLabel,
+  InputAdornment,
+  OutlinedInput,
   MenuItem,
   Select,
   TextField,
@@ -24,7 +26,7 @@ import {
   HM_TOKEN_DECIMALS,
   SUPPORTED_CHAIN_IDS,
 } from '../constants';
-import RandomKey from './APIKey';
+// import RandomKey from './APIKey';
 import { RoundedBox } from './RoundedBox';
 import { FortuneJobRequestType, JobLaunchResponse, TabsTypes } from './types';
 // import { FortuneJobRequest } from '.';
@@ -56,11 +58,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -269,8 +267,9 @@ export const JobRequest = ({
                   <Grid item xs={12} sm={12} md={6}>
                     <FormControl fullWidth>
                       <TextField
-                        placeholder="Group Title"
                         required
+                        autoFocus
+                        label="Project Name"
                         name="name"
                         value={jobRequest.name}
                         onChange={(e) =>
@@ -285,10 +284,15 @@ export const JobRequest = ({
                 </Grid>
                 <FormControl fullWidth>
                   <TextField
+                    InputLabelProps={{ shrink: true }}
                     label="Group Description"
                     required
                     name="description"
+                    placeholder="Please provide information about your group and the type of content to be moderated, i.e., text, images, videos, live chat, and feeds of specific social handles."
                     value={jobRequest.description}
+                    minRows={4}
+                    maxRows={4}
+                    multiline
                     onChange={(e) =>
                       handleJobRequestFormFieldChange(
                         'description',
@@ -342,8 +346,16 @@ export const JobRequest = ({
                 </Box>
                 <FormControl>
                   <FormControl>
-                    <TextField
-                      placeholder="Amount"
+                    <InputLabel>Amount</InputLabel>
+                    <OutlinedInput
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <Typography color={'primary'} variant="body2">
+                            HMT
+                          </Typography>
+                        </InputAdornment>
+                      }
+                      label="Amount"
                       value={jobRequest.fundedAmt}
                       onChange={(e) =>
                         handleJobRequestFormFieldChange(
@@ -376,7 +388,7 @@ export const JobRequest = ({
                   variant="contained"
                   sx={{ minWidth: '240px', py: 1 }}
                   onClick={handleLaunch}
-                  // disabled={isLoading}
+                  disabled={isLoading}
                 >
                   {isLoading && <CircularProgress size={24} sx={{ mr: 1 }} />}{' '}
                   Fund and Request Group
