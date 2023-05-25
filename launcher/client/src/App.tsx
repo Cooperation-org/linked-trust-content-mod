@@ -32,7 +32,7 @@ import { useSigner, useChainId } from 'wagmi';
 import { ChainId, ESCROW_NETWORKS } from './constants';
 import { useAuth } from './hooks/auth';
 import { AppContext } from 'src/state';
-import { goToTab } from 'src/state/actions';
+import { goToTab, changeLauncerStatus } from 'src/state/actions';
 
 const useStyles = makeStyles((theme: Theme) => ({
   button: {
@@ -69,11 +69,13 @@ function App() {
   const chainId = useChainId();
   const [showModal, setShowModal] = useState(false);
   const [lastEscrowAddress, setLastEscrowAddress] = useState('');
-  const [status, setStatus] = useState<LauncherStageStatus>(
-    LauncherStageStatus.UNAUTHORIZED
-  );
-
-  const { dispatch } = useContext(AppContext);
+  // const [status, setStatus] = useState<LauncherStageStatus>(
+  //   LauncherStageStatus.UNAUTHORIZED
+  // );
+  const {
+    state: { launcherStatus },
+    dispatch,
+  } = useContext(AppContext);
 
   const [jobResponse, setJobResponse] = useState<JobLaunchResponse>({
     escrowAddress: '',
@@ -83,37 +85,50 @@ function App() {
   const [showLog, setShowLog] = useState(false);
 
   const handleChangeStage = (method: FundingMethodType) => {
-    setStatus(LauncherStageStatus.GROUP_REQUEST);
+    // setStatus(LauncherStageStatus.GROUP_REQUEST);
+    dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST));
   };
-
+////////////////////////
   const handleBack = () => {
-    setStatus(status > 0 ? status - 1 : 0);
+    // console.log(launcherStatus)
+    dispatch(changeLauncerStatus(launcherStatus > 0 ? launcherStatus - 1 : 0));
   };
 
   const handleOnSuccess = (data: JobLaunchResponse) => {
     setJobResponse(data);
-    setStatus(LauncherStageStatus.LAUNCH_SUCCESS);
+    // console.log(launcherStatus)
+    dispatch(changeLauncerStatus(LauncherStageStatus.LAUNCH_SUCCESS));
   };
 
   const handleCreateNewEscrow = () => {
     setJobResponse({ escrowAddress: '', exchangeUrl: '' });
-    setStatus(LauncherStageStatus.GROUP_REQUEST);
+    // setStatus(LauncherStageStatus.GROUP_REQUEST);
+    // console.log(launcherStatus)
+    dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST));
   };
 
   const handleGoToJobDashboard = () => {
     dispatch(goToTab(TabsTypes.DASHBOARD));
-    setStatus(LauncherStageStatus.GROUP_REQUEST);
+    dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST))
+    // setStatus(LauncherStageStatus.GROUP_REQUEST);
   };
 
+  const printstatus = () => {
+    console.log("Launcher status:", LauncherStageStatus[launcherStatus]); // Logging the value of launcherStatus 
+  }
   const handleDisConnectWallet = () => {
     disconnect();
     handleLogout();
-    setStatus(LauncherStageStatus.UNAUTHORIZED);
+    // setStatus(LauncherStageStatus.UNAUTHORIZED);
+    // console.log(launcherStatus)
+    dispatch(changeLauncerStatus(LauncherStageStatus.UNAUTHORIZED))
   };
 
   const handleOnError = (message: string) => {
     setErrorMessage(message);
-    setStatus(LauncherStageStatus.LAUNCH_FAIL);
+    // setStatus(LauncherStageStatus.LAUNCH_FAIL);
+    // console.log(launcherStatus)
+    dispatch(changeLauncerStatus(LauncherStageStatus.LAUNCH_FAIL))
   };
 
   const handleLogout = () => {
@@ -133,9 +148,12 @@ function App() {
 
   useEffect(() => {
     if (id) {
-      setStatus(LauncherStageStatus.GROUP_REQUEST);
+
+      // setStatus(LauncherStageStatus.GROUP_REQUEST);
+      dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST))
     } else {
-      setStatus(LauncherStageStatus.UNAUTHORIZED);
+      // setStatus(LauncherStageStatus.UNAUTHORIZED);
+      dispatch(changeLauncerStatus(LauncherStageStatus.UNAUTHORIZED))
     }
   }, [id]);
 
@@ -177,7 +195,7 @@ function App() {
         }}
       >
         <Grid container spacing={4}>
-          {status === LauncherStageStatus.UNAUTHORIZED && (
+          {launcherStatus === LauncherStageStatus.UNAUTHORIZED && (
             <Grid item xs={12} sm={12} md={5} lg={4}>
               <Typography color="primary" fontWeight={600} variant="h4">
                 <a href="https://repute.social/" target="_blank">Repute.Social</a>
@@ -186,7 +204,7 @@ function App() {
                 Content Moderation
               </Typography>
               <Typography mt={4} color="primary" variant="body2">
-                Content moderation refers to the practice of monitoring
+                {LauncherStageStatus[launcherStatus]} Content moderation refers to the practice of monitoring
                 user-generated content (UGC) on online platforms, such as social
                 media websites, forums, and other online communities. The goal
                 of content moderation is to ensure that UGC does not violate the
@@ -199,11 +217,11 @@ function App() {
             item
             xs={12}
             sm={12}
-            md={status === LauncherStageStatus.UNAUTHORIZED ? 7 : 12}
-            lg={status === LauncherStageStatus.UNAUTHORIZED ? 7 : 12}
+            md={launcherStatus === LauncherStageStatus.UNAUTHORIZED ? 7 : 12}
+            lg={launcherStatus === LauncherStageStatus.UNAUTHORIZED ? 7 : 12}
           >
             <Box mt={3}>
-              {status === LauncherStageStatus.UNAUTHORIZED && (
+              {launcherStatus === LauncherStageStatus.UNAUTHORIZED && (
                 <LoginWithMetamask
                   onSuccess={({ address }) =>
                     setState((x) => ({ ...x, address }))
@@ -212,26 +230,26 @@ function App() {
                   onLogin={handleChangeStage}
                 />
               )}
-              {status === LauncherStageStatus.GROUP_REQUEST && (
+              {launcherStatus === LauncherStageStatus.GROUP_REQUEST && (
                 <FortuneJobRequest
                   onBack={handleBack}
-                  onLaunch={() => setStatus(LauncherStageStatus.LAUNCH)}
+                  onLaunch={() => dispatch(changeLauncerStatus(LauncherStageStatus.LAUNCH))}
                   onSuccess={handleOnSuccess}
                   onFail={handleOnError}
                 />
               )}
-              {status === LauncherStageStatus.LAUNCH && <FortuneLaunch />}
-              {status === LauncherStageStatus.LAUNCH_SUCCESS && (
+              {launcherStatus === LauncherStageStatus.LAUNCH && <FortuneLaunch />}
+              {launcherStatus === LauncherStageStatus.LAUNCH_SUCCESS && (
                 <FortuneLaunchSuccess
                   jobResponse={jobResponse}
                   onCreateNewEscrow={handleCreateNewEscrow}
                   onGoToDashboard={handleGoToJobDashboard}
                 />
               )}
-              {status === LauncherStageStatus.LAUNCH_FAIL && (
+              {launcherStatus === LauncherStageStatus.LAUNCH_FAIL && (
                 <FortuneLaunchFail
                   message={errorMessage}
-                  onBack={() => setStatus(LauncherStageStatus.GROUP_REQUEST)}
+                  onBack={() => dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST))}
                 />
               )}
             </Box>
@@ -248,6 +266,8 @@ function App() {
             </div>
             <div>Connected to {connector?.name}</div>
           </div>
+          <Button variant="outlined" onClick={() => printstatus()}>asdfasdf</Button>
+
           <Button
             variant="outlined"
             startIcon={<ExitToAppIcon />}

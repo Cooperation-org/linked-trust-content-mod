@@ -6,13 +6,37 @@ export enum LauncherStageStatus {
   LAUNCH_FAIL,
 }
 
-export enum TabsTypes {
-  DASHBOARD,
-  REQUEST_A_GROUP,
-}
+type ActionMap<M extends { [index: string]: any }> = {
+  [Key in keyof M]: M[Key] extends undefined
+    ? {
+        type: Key;
+      }
+    : {
+        type: Key;
+        payload: M[Key];
+      };
+};
 
 export enum AppStateType {
   ACTIVE_TAB = 'ACTIVE_TAB',
+  ACTIVE_LAUNCHER_STATUS = 'ACTIVE_LAUNCHER_STATUS',
+}
+
+type AppStatePayload = {
+  [AppStateType.ACTIVE_TAB]: {
+    activeTab: TabsTypes;
+  };
+  [AppStateType.ACTIVE_LAUNCHER_STATUS]: {
+    launcherStatus: LauncherStageStatus;
+  };
+};
+
+export type AppActions =
+  ActionMap<AppStatePayload>[keyof ActionMap<AppStatePayload>];
+
+export enum TabsTypes {
+  DASHBOARD,
+  REQUEST_A_GROUP,
 }
 
 export type FundingMethodType = 'crypto' | 'fiat';
