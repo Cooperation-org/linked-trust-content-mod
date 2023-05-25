@@ -29,6 +29,7 @@ export type FortuneJobRequestType = {
   paymentId?: string;
   creatorId: number | null;
   funded: boolean;
+  rules?: string;
 };
 
 export type CreatePaymentType = {
