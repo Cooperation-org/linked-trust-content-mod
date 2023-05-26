@@ -69,9 +69,7 @@ function App() {
   const chainId = useChainId();
   const [showModal, setShowModal] = useState(false);
   const [lastEscrowAddress, setLastEscrowAddress] = useState('');
-  // const [status, setStatus] = useState<LauncherStageStatus>(
-  //   LauncherStageStatus.UNAUTHORIZED
-  // );
+  
   const {
     state: { launcherStatus },
     dispatch,
@@ -85,49 +83,35 @@ function App() {
   const [showLog, setShowLog] = useState(false);
 
   const handleChangeStage = (method: FundingMethodType) => {
-    // setStatus(LauncherStageStatus.GROUP_REQUEST);
     dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST));
   };
-////////////////////////
   const handleBack = () => {
-    // console.log(launcherStatus)
     dispatch(changeLauncerStatus(launcherStatus > 0 ? launcherStatus - 1 : 0));
   };
 
   const handleOnSuccess = (data: JobLaunchResponse) => {
     setJobResponse(data);
-    // console.log(launcherStatus)
     dispatch(changeLauncerStatus(LauncherStageStatus.LAUNCH_SUCCESS));
   };
 
   const handleCreateNewEscrow = () => {
     setJobResponse({ escrowAddress: '', exchangeUrl: '' });
-    // setStatus(LauncherStageStatus.GROUP_REQUEST);
-    // console.log(launcherStatus)
     dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST));
   };
 
   const handleGoToJobDashboard = () => {
     dispatch(goToTab(TabsTypes.DASHBOARD));
     dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST))
-    // setStatus(LauncherStageStatus.GROUP_REQUEST);
   };
 
-  const printstatus = () => {
-    console.log("Launcher status:", LauncherStageStatus[launcherStatus]); // Logging the value of launcherStatus 
-  }
   const handleDisConnectWallet = () => {
     disconnect();
     handleLogout();
-    // setStatus(LauncherStageStatus.UNAUTHORIZED);
-    // console.log(launcherStatus)
     dispatch(changeLauncerStatus(LauncherStageStatus.UNAUTHORIZED))
   };
 
   const handleOnError = (message: string) => {
     setErrorMessage(message);
-    // setStatus(LauncherStageStatus.LAUNCH_FAIL);
-    // console.log(launcherStatus)
     dispatch(changeLauncerStatus(LauncherStageStatus.LAUNCH_FAIL))
   };
 
@@ -149,10 +133,8 @@ function App() {
   useEffect(() => {
     if (id) {
 
-      // setStatus(LauncherStageStatus.GROUP_REQUEST);
       dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST))
     } else {
-      // setStatus(LauncherStageStatus.UNAUTHORIZED);
       dispatch(changeLauncerStatus(LauncherStageStatus.UNAUTHORIZED))
     }
   }, [id]);
@@ -204,7 +186,7 @@ function App() {
                 Content Moderation
               </Typography>
               <Typography mt={4} color="primary" variant="body2">
-                {LauncherStageStatus[launcherStatus]} Content moderation refers to the practice of monitoring
+                Content moderation refers to the practice of monitoring
                 user-generated content (UGC) on online platforms, such as social
                 media websites, forums, and other online communities. The goal
                 of content moderation is to ensure that UGC does not violate the
@@ -266,8 +248,6 @@ function App() {
             </div>
             <div>Connected to {connector?.name}</div>
           </div>
-          <Button variant="outlined" onClick={() => printstatus()}>asdfasdf</Button>
-
           <Button
             variant="outlined"
             startIcon={<ExitToAppIcon />}
