@@ -23,6 +23,7 @@ import theme from './theme';
 import './global.css';
 import AuthProvider from './hooks/auth';
 import { AppStateProvider } from './state';
+import OnboardingMod from './components/OnboardingMod';
 
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
@@ -99,6 +100,7 @@ root.render(
             <CssBaseline />
             <Routes>
               <Route path="/" element={<App />} />
+              <Route path="/onboarding" element={<OnboardingMod />} />
             </Routes>
           </ThemeProvider>
           <ToastContainer />
