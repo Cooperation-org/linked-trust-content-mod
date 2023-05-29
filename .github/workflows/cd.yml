@@ -27,7 +27,6 @@ jobs:
         run: |
           ssh -i "$SSH_PRIVATE_KEY" "$SSH_USERNAME"@"$SSH_HOST" <<EOF
             cd /app
-            git pull origin main 
             docker-compose pull
             docker-compose up -d
             exit
