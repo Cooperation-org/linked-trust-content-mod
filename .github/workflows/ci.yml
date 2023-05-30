@@ -1,4 +1,4 @@
-name: Docker
+name: Build Docker containers
 
 on:
   push:
