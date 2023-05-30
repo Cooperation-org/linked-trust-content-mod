@@ -24,6 +24,7 @@ import './global.css';
 import AuthProvider from './hooks/auth';
 import { AppStateProvider } from './state';
 import OnboardingMod from './components/OnboardingMod';
+import OnboardDash from './components/OnboardDash';
 
 window.Buffer = window.Buffer || require('buffer').Buffer;
 
@@ -101,6 +102,7 @@ root.render(
             <Routes>
               <Route path="/" element={<App />} />
               <Route path="/onboarding" element={<OnboardingMod />} />
+              <Route path="/onboarddash" element={<OnboardDash />} />
             </Routes>
           </ThemeProvider>
           <ToastContainer />

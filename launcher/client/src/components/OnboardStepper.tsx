@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { makeStyles, withStyles } from '@mui/styles';
 import { Step, Stepper, StepLabel, Button, Box, StepConnector } from '@mui/material';
 import Onboard2 from './Onboard2';
+import Onboard3 from './Onboard3';
+import Onboard4 from './Onboard4';
+import Onboard5 from './Onboard5';
+import { Link } from 'react-router-dom';
 
 const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
 
@@ -10,9 +14,9 @@ function getStepContent(step: number): any {
     case 0:
       return <Onboard2 />;
     case 1:
-      return 'Step 2 Content...';
+      return <Onboard3 />;
     case 2:
-      return 'Step 3 Content...';
+      return <Onboard4/>
     default:
       return 'Unknown step';
   }
@@ -98,6 +102,7 @@ export default function CustomStepper() {
         {getStepContent(activeStep)}
        
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+       
           <Button
             disabled={activeStep === 0}
             onClick={handleReset}
@@ -106,11 +111,11 @@ export default function CustomStepper() {
             Reset
           </Button>
         <div style={{position:'absolute',left:0, width:'100%',display:'flex', padding:'1rem',alignItems:'center', justifyContent:'center'}}>
-        <Button
+        {activeStep === steps.length - 1? <Link to='/onboarddash'><Button
             variant="contained"
             color="primary"
             onClick={handleNext}
-
+           
           sx={{
             background: "#007aff",
             color: "white",
@@ -124,8 +129,28 @@ export default function CustomStepper() {
            
           }}
           >
-            {activeStep === steps.length - 1? 'Go to dashboard': 'Next'}
-          </Button>
+           Go to Dashboard
+          </Button></Link> :  <Button
+            variant="contained"
+            color="primary"
+            onClick={handleNext}
+           
+          sx={{
+            background: "#007aff",
+            color: "white",
+            padding: "0.5rem 3rem",
+            "&:hover": {
+              borderColor: "#007aff",
+              borderWidth: "2px",
+              borderStyle: "solid",
+              color: "#007aff",
+            },
+           
+          }}
+          >
+           Next
+          </Button>}
+       
         </div>
         </Box>
       </Box>
