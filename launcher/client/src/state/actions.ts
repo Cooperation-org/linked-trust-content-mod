@@ -11,7 +11,8 @@ export const goToTab = (tab: TabsTypes): AppActions => {
     payload: { activeTab: tab },
   };
 };
-export const changeLauncerStatus = (
+
+export const changeLauncherStatus = (
   status: LauncherStageStatus
 ): AppActions => {
   return {

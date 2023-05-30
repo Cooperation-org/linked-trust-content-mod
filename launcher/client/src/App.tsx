@@ -101,18 +101,18 @@ function App() {
 
   const handleGoToJobDashboard = () => {
     dispatch(goToTab(TabsTypes.DASHBOARD));
-    dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST))
+    dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST));
   };
 
   const handleDisConnectWallet = () => {
     disconnect();
     handleLogout();
-    dispatch(changeLauncerStatus(LauncherStageStatus.UNAUTHORIZED))
+    dispatch(changeLauncerStatus(LauncherStageStatus.UNAUTHORIZED));
   };
 
   const handleOnError = (message: string) => {
     setErrorMessage(message);
-    dispatch(changeLauncerStatus(LauncherStageStatus.LAUNCH_FAIL))
+    dispatch(changeLauncerStatus(LauncherStageStatus.LAUNCH_FAIL));
   };
 
   const handleLogout = () => {
@@ -133,9 +133,9 @@ function App() {
   useEffect(() => {
     if (id) {
 
-      dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST))
+      dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST));
     } else {
-      dispatch(changeLauncerStatus(LauncherStageStatus.UNAUTHORIZED))
+      dispatch(changeLauncerStatus(LauncherStageStatus.UNAUTHORIZED));
     }
   }, [id]);
 
