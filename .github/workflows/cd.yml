@@ -1,9 +1,11 @@
 name: Update Containers
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows:
+      - Build Docker containers
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
@@ -24,6 +26,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
+        if: github.event.workflow_run.conclusion == 'success'
         run: |
           ssh -i "$SSH_PRIVATE_KEY" "$SSH_USERNAME"@"$SSH_HOST" <<EOF
             cd linked-trust-content-mod 
