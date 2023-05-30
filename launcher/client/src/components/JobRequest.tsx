@@ -18,7 +18,7 @@ import Tab from '@mui/material/Tab';
 
 import axiosInstance from './../config/axiosInterceptor';
 import { ethers } from 'ethers';
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useAccount, useChainId, useSigner, useSwitchNetwork } from 'wagmi';
 import {
   ChainId,
@@ -35,6 +35,28 @@ import { useAuth } from 'src/hooks/auth';
 import { AppContext } from 'src/state';
 import { goToTab } from 'src/state/actions';
 
+interface Job {
+  id: number;
+  status: string;
+  createdAt: string;
+  fundAmount: number;
+  description: string;
+  reviewCount: string;
+  reviewersRequired: number;
+  title: string;
+  escrowAddress: string;
+}
+
+interface Group {
+  id: number;
+  name?: string;
+  platform?: string;
+  group_id_in_platform?: string;
+  owner_id: number;
+  jobs?: Job[];
+  description: string;
+}
+
 type JobRequestProps = {
   onBack: () => void;
   onLaunch: () => void;
@@ -45,6 +67,12 @@ interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
+}
+
+interface JobEscrowAddress {
+  groupName: string;
+  jobId: number;
+  escrowAddress: string;
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -100,6 +128,29 @@ export const JobRequest = ({
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [jobsData, setJobsData] = useState<Job[]>([]);
+  const [jobEscrowAddresses, setJobEscrowAddresses] = useState<
+    JobEscrowAddress[]
+  >([]);
+
+  useEffect(() => {
+    let ids: number[] = [];
+    let escrows: string[] = [];
+    jobsData.forEach((job) => {
+      let { id, escrowAddress } = job;
+      ids.push(id);
+      escrows.push(escrowAddress);
+    });
+    const mappedJobs = jobEscrowAddresses.map((item, index) => {
+      return {
+        ...item,
+        groupName: '',
+        jobId: ids[index],
+        escrowAddress: escrows[index],
+      };
+    });
+    setJobEscrowAddresses(mappedJobs);
+  }, [jobsData]);
 
   const handleJobRequestFormFieldChange = (
     fieldName: keyof FortuneJobRequestType,
@@ -207,6 +258,7 @@ export const JobRequest = ({
               {...a11yProps(1)}
               sx={{ margin: '0 4rem' }}
             />
+            <Tab label="History" {...a11yProps(2)} />
             {/* It should be popup or in group settings */}
             {/* <Tab
               label="REQUEST A NEW API KEY"
@@ -224,7 +276,11 @@ export const JobRequest = ({
         </Box>
         <TabPanel value={activeTab} index={TabsTypes.DASHBOARD}>
           <Box>
-            <Dashboard />
+            <Dashboard
+              onJobDataChange={(childData: Job[]) => {
+                setJobsData(childData);
+              }}
+            />
           </Box>
         </TabPanel>
         <TabPanel value={activeTab} index={TabsTypes.REQUEST_A_GROUP}>
@@ -408,6 +464,38 @@ export const JobRequest = ({
                 </Box>
               </Box>
             </RoundedBox>
+          </Box>
+        </TabPanel>
+        <TabPanel value={activeTab} index={TabsTypes.HISTORY}>
+          <Box sx={{ disply: 'flex', flexDirection: 'column' }}>
+            <Box
+              maxWidth="md"
+              sx={{
+                margin: '0 auto',
+                display: 'flex',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Typography variant="h6">Group Name</Typography>
+              <Typography variant="h6">Job Id</Typography>
+              <Typography variant="h6">Escrow Address</Typography>
+            </Box>
+            {jobEscrowAddresses.map((addr) => {
+              return (
+                <Box
+                  maxWidth="md"
+                  sx={{
+                    margin: '0 auto',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Typography variant="body1">{addr.groupName}</Typography>
+                  <Typography variant="body1">{addr.jobId}</Typography>
+                  <Typography variant="body1">{addr.escrowAddress}</Typography>
+                </Box>
+              );
+            })}
           </Box>
         </TabPanel>
       </Box>

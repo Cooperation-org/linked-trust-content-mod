@@ -49,6 +49,7 @@ const useStyles = makeStyles({
 
 interface JobTableProps {
   activeGroupId: number;
+  onDataUpdate: (jobsData: Job[]) => void;
   onBackButtonClick: () => void;
 }
 
@@ -58,6 +59,7 @@ interface ChipData {
 
 export const JobTable = ({
   activeGroupId,
+  onDataUpdate,
   onBackButtonClick,
 }: JobTableProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -79,6 +81,8 @@ export const JobTable = ({
           `/api/job-creator/groups/${activeGroupId}/jobs`
         );
         const data = response.data;
+        onDataUpdate(data);
+        console.log(`data updated in JobsTable with data: ${data[0].title}`);
         setJobs(data);
         setIsLoading(false);
       }
