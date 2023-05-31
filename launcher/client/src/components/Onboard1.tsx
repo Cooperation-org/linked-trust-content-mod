@@ -9,8 +9,10 @@ import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-
-const Onboard1 = () => {
+interface Updateprops{
+  view:(newvalue:boolean)=>void
+}
+const Onboard1:React.FC<Updateprops> = ({view}) => {
   const [checked, setChecked] = React.useState(true);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -135,11 +137,11 @@ const Onboard1 = () => {
               </FormControl>
             </Stack>
           
-        <Box sx={{width:'90%',margin:'auto',}}>
+        <Box sx={{width:'100%',margin:'auto',}}>
         <Typography sx={{fontSize:'14px'}}>
-        To start moderating your items in 5-minutes you are required to use our Standard Guidelines. These guidelines have been created by industry experts and aligns with industry standards.  (link to standard guidelines needs to be here)  
+        To start moderating your items in 5-minutes you are required to use our Standard Guidelines. These guidelines have been created by industry experts and aligns with industry standards. <span style={{color:'#EE814D',fontWeight:'bolder'}}>LINK</span>
         </Typography>
-        <div style={{marginLeft:'2rem',marginBottom:'4rem',marginTop:'1rem'}}>
+        <div style={{marginBottom:'4rem',marginTop:'1rem'}}>
         <FormControlLabel
         style={{fontSize:'14px'}}
             control={
@@ -173,22 +175,25 @@ const Onboard1 = () => {
                   color: "#EE814D",
                 },
               }}
+              onClick={()=>view(true)}
             >
               Get Started
             </Button>
         </div>
         <Typography sx={{fontSize:'14px',textAlign:'center',fontWeight:'bold', margin:'2rem 0'}}>
-        By clicking Get Started Now! you agree to our TOS (we need to write TOS)
+        By clicking Get Started Now! you agree to our  <span style={{color:'#EE814D',fontWeight:'bolder'}}>TOS</span>
         </Typography>
         
         <Typography sx={{fontSize:'14px'}}>
-        Need more customization or custom integration?  This will require a call with our “head tech” 
+        Need more customization, custom integration, or custom guidelines?  
+
         </Typography>
       <Typography sx={{fontSize:'14px',margin:'1rem 0'}}>
-        Need Custom guidelines?  (It will require a Call with out Policy Expert to implement it)
+      This will require a call with our “Team” 
         </Typography>
         <Typography sx={{fontSize:'14px',margin:'1rem 0'}}>
-        Do you need any of the above? Or, confused and don’t know where to Start? <span style={{color:'#EE814D'}}>Fill out form our contact us page and we will set up a call and audit of your moderation needs</span>
+        Do you need any of the above? Or, confused and don’t know where to Start? <br />
+         <span style={{fontWeight:'bolder'}}>Fill out  <span style={{color:'#EE814D',}}>this form </span> and we will set up a call and audit of your moderation needs</span>
         </Typography>
         </Box>
           </Box>
