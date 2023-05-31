@@ -85,11 +85,11 @@ export default function CustomStepper() {
 
   return (
     <div style={{ position: 'relative' }}>
-      <Box sx={{ width: '50%', padding: '2rem', paddingBottom: 0, border: '1px solid #4169E1', margin: 'auto', marginTop: '6rem', borderRadius: '10px' }}>
+      <Box sx={{ width: '50%', padding: '2rem', paddingBottom: 0, background:'rgba(238, 129, 77, 0.05)', border: '1px solid #EE814D', margin: 'auto', marginTop: '6rem', borderRadius: '10px' }}>
         <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
           {steps.map((label) => (
             <Step key={label}>
-              <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
+              <StepLabel StepIconComponent={ColorlibStepIcon}>{label} 1</StepLabel>
             </Step>
           ))}
         </Stepper>

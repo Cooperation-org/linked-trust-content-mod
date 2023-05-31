@@ -5,25 +5,25 @@ const Onboard4 = () => {
   return (
     <div>
         <div>
-        <FormControl sx={{ width: "27ch" }} style={{ marginTop: '2rem' }}>
+        <FormControl sx={{ width: "100%" }} style={{ marginTop: '2rem' }}>
                 <label htmlFor="">Webhook endpoint for finished jobs </label>
                 <OutlinedInput
                   placeholder="Please enter text"
                   sx={{
-                    borderColor: "#007aff",
+                    borderColor: "grey",
                     borderWidth: "1px",
                     borderStyle: "solid",
                   }}
                 />
               </FormControl>
         </div>
-             <div>
-             <FormControl sx={{ width: "27ch" }} style={{ marginTop: '2rem' }}>
+             <div style={{marginBottom:'1rem'}}>
+             <FormControl sx={{ width: "100%" }} style={{ marginTop: '2rem' }}>
                 <label htmlFor="">Get API Key </label>
                 <OutlinedInput
                   placeholder="Please enter text"
                   sx={{
-                    borderColor: "#007aff",
+                    borderColor: "grey",
                     borderWidth: "1px",
                     borderStyle: "solid",
                   }}
