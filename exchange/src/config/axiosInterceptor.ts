@@ -8,7 +8,7 @@ const axiosInstance = axios.create({
 
 // Add an interceptor for requests
 axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('cmatoken');
+  const token = localStorage.getItem('cmtoken');
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
