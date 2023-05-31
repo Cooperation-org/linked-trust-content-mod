@@ -160,5 +160,12 @@ services:
     depends_on:
       - launcher-service
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
 volumes:
   db-data:
+  rabbitmq_data:
