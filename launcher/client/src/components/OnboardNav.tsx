@@ -12,7 +12,7 @@ const OnboardNav = () => {
                 Repute.Social
               </Typography>
               <ul>
-                <Typography variant='h6' sx={{fontWeight:'bold'}}>
+                <Typography variant='h6' sx={{fontWeight:'bold', color:'#EE814D'}}>
                   <a href="#">Login/Register</a>
                 </Typography>
               </ul>

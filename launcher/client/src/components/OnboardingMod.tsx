@@ -9,8 +9,8 @@ const OnboardingMod = () => {
       return (
         <Box sx={{ height: "100vh", background: "white" }}>
          <OnboardNav />
-           {/* <Onboard1 /> */}
-           <HorizontalNonLinearStepper />
+           <Onboard1 />
+           {/* <HorizontalNonLinearStepper /> */}
         </Box>
       );
     };

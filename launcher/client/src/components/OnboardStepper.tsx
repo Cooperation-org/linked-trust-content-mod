@@ -9,14 +9,14 @@ import { Link } from 'react-router-dom';
 
 const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
 
-function getStepContent(step: number): any {
+function getStepContent(step:number):any{
   switch (step) {
     case 0:
       return <Onboard2 />;
     case 1:
       return <Onboard3 />;
     case 2:
-      return <Onboard4/>
+      return <Onboard4 />;
     default:
       return 'Unknown step';
   }
@@ -29,7 +29,7 @@ const ColorlibConnector = withStyles({
   active: {
     '& $line': {
       background: ' #4169E1',
-      border:'#4169E1'
+      border: '#4169E1',
     },
   },
   line: {
@@ -37,8 +37,8 @@ const ColorlibConnector = withStyles({
     border: 0,
     backgroundColor: '#eaeaf0',
     borderRadius: '10px',
-    width:'50%',
-    margin:'0.2rem auto'
+    width: '50%',
+    margin: '0.2rem auto',
   },
 })(StepConnector);
 
@@ -63,16 +63,12 @@ const useColorlibStepIconStyles = makeStyles({
   },
 });
 
-function ColorlibStepIcon(props: {completed: boolean, active: boolean, icon: React.ReactNode}) {
+function ColorlibStepIcon(props:{completed: boolean, active: boolean, icon: React.ReactNode}) {
   const classes = useColorlibStepIconStyles();
   const { active, completed } = props;
 
   return (
-    <div
-      className={`${classes.root} ${active ? classes.active : ''} ${completed ? classes.completed : ''}`}
-    >
-     
-    </div>
+    <div className={`${classes.root} ${active ? classes.active : ''} ${completed ? classes.completed : ''}`}></div>
   );
 }
 
@@ -88,29 +84,23 @@ export default function CustomStepper() {
   };
 
   return (
- 
-   <div style={{position:'relative'}} >
-     <Box sx={{ width: '50%',padding:"2rem",paddingBottom:0,border:'1px solid #4169E1', margin:'auto',marginTop:'6rem', borderRadius:'10px' }}>
-      <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
-        {steps.map((label) => (
-          <Step key={label}>
-            <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
-      <Box sx={{ mt: 2 }}>
-        {getStepContent(activeStep)}
-       
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-       
-          <Button
-            disabled={activeStep === 0}
-            onClick={handleReset}
-            sx={{display:'none'}}
-          >
-            Reset
-          </Button>
-        <div style={{position:'absolute',left:0, width:'100%',display:'flex', padding:'1rem',alignItems:'center', justifyContent:'center'}}>
+    <div style={{ position: 'relative' }}>
+      <Box sx={{ width: '50%', padding: '2rem', paddingBottom: 0, border: '1px solid #4169E1', margin: 'auto', marginTop: '6rem', borderRadius: '10px' }}>
+        <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+        <Box sx={{ mt: 2 }}>
+          {getStepContent(activeStep)}
+
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+            <Button disabled={activeStep === 0} onClick={handleReset} sx={{ display: 'none' }}>
+              Reset
+            </Button>
+            <div style={{ position: 'absolute', left: 0, width: '100%', display: 'flex', padding:'1rem',alignItems:'center', justifyContent:'center'}}>
         {activeStep === steps.length - 1? <Link to='/onboarddash'><Button
             variant="contained"
             color="primary"
