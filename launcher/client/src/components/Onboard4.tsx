@@ -6,7 +6,7 @@ const Onboard4 = () => {
     <div>
         <div>
         <FormControl sx={{ width: "100%" }} style={{ marginTop: '2rem' }}>
-                <label htmlFor="">Webhook endpoint for finished jobs </label>
+                <label htmlFor="">Webhook endpoint for finished jobs <span style={{color:'red'}}>*</span></label>
                 <OutlinedInput
                   placeholder="Please enter text"
                   sx={{
@@ -16,10 +16,11 @@ const Onboard4 = () => {
                   }}
                 />
               </FormControl>
+              <p style={{color:'#EE814D',fontSize:'14px'}}>Instructions for using Web-hook</p>
         </div>
              <div style={{marginBottom:'1rem'}}>
              <FormControl sx={{ width: "100%" }} style={{ marginTop: '2rem' }}>
-                <label htmlFor="">Get API Key </label>
+                <label htmlFor="">Get API Key <span style={{color:'red'}}>*</span></label>
                 <OutlinedInput
                   placeholder="Please enter text"
                   sx={{
@@ -28,6 +29,7 @@ const Onboard4 = () => {
                     borderStyle: "solid",
                   }}
                 />
+                <p style={{color:'#EE814D',fontSize:'14px'}}>Instructions for using API</p>
               </FormControl>
              </div>
     </div>
