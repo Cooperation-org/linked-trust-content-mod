@@ -2,7 +2,7 @@ name: Build Docker containers
 
 on:
   push:
-    branches: [main]
+    branches: [main, sami-taiga152]
 
 jobs:
   build:
