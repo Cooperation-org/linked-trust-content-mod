@@ -5,18 +5,6 @@ import Container from '@mui/material/Container';
 import MyGroups from './MyGroups';
 import { JobTable } from './JobsTable';
 
-interface Job {
-  id: number;
-  status: string;
-  createdAt: string;
-  fundAmount: number;
-  description: string;
-  reviewCount: string;
-  reviewersRequired: number;
-  title: string;
-  escrowAddress: string;
-}
-
 function Copyright(props: any) {
   return (
     <Typography
@@ -33,15 +21,13 @@ function Copyright(props: any) {
   );
 }
 
-export default function Dashboard({ onJobDataChange }: any) {
+export default function Dashboard() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
   const [activeGroupId, setActiveGroupId] = React.useState<number>();
-
-  const [jobsData, setJobsData] = React.useState<Job[]>([]);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -56,9 +42,6 @@ export default function Dashboard({ onJobDataChange }: any) {
         {activeGroupId && (
           <JobTable
             activeGroupId={activeGroupId}
-            onDataUpdate={(childData: Job[]) => {
-              setJobsData(childData);
-            }}
             onBackButtonClick={() => {
               setActiveGroupId(undefined);
             }}

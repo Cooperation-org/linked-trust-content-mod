@@ -12,6 +12,13 @@ import {
   Select,
   TextField,
   Typography,
+  Paper,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableBody,
+  TableCell,
 } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -35,28 +42,6 @@ import { useAuth } from 'src/hooks/auth';
 import { AppContext } from 'src/state';
 import { goToTab } from 'src/state/actions';
 
-interface Job {
-  id: number;
-  status: string;
-  createdAt: string;
-  fundAmount: number;
-  description: string;
-  reviewCount: string;
-  reviewersRequired: number;
-  title: string;
-  escrowAddress: string;
-}
-
-interface Group {
-  id: number;
-  name?: string;
-  platform?: string;
-  group_id_in_platform?: string;
-  owner_id: number;
-  jobs?: Job[];
-  description: string;
-}
-
 type JobRequestProps = {
   onBack: () => void;
   onLaunch: () => void;
@@ -67,12 +52,6 @@ interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
-}
-
-interface JobEscrowAddress {
-  groupName: string;
-  jobId: number;
-  escrowAddress: string;
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -128,29 +107,7 @@ export const JobRequest = ({
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [jobsData, setJobsData] = useState<Job[]>([]);
-  const [jobEscrowAddresses, setJobEscrowAddresses] = useState<
-    JobEscrowAddress[]
-  >([]);
-
-  useEffect(() => {
-    let ids: number[] = [];
-    let escrows: string[] = [];
-    jobsData.forEach((job) => {
-      let { id, escrowAddress } = job;
-      ids.push(id);
-      escrows.push(escrowAddress);
-    });
-    const mappedJobs = jobEscrowAddresses.map((item, index) => {
-      return {
-        ...item,
-        groupName: '',
-        jobId: ids[index],
-        escrowAddress: escrows[index],
-      };
-    });
-    setJobEscrowAddresses(mappedJobs);
-  }, [jobsData]);
+  const [jobsData, setJobsData] = useState<any[]>([]);
 
   const handleJobRequestFormFieldChange = (
     fieldName: keyof FortuneJobRequestType,
@@ -221,6 +178,16 @@ export const JobRequest = ({
     dispatch,
   } = useContext(AppContext);
 
+  useEffect(() => {
+    setJobsData([]);
+    const fetchAllJobs = async () => {
+      const response = await axiosInstance.get(`/api/jobs`);
+      const data = response.data;
+      setJobsData(data);
+    };
+    fetchAllJobs();
+  }, [activeTab === 2]);
+
   const handleTabChange = (
     event: React.SyntheticEvent,
     newActiveTab: number
@@ -276,11 +243,7 @@ export const JobRequest = ({
         </Box>
         <TabPanel value={activeTab} index={TabsTypes.DASHBOARD}>
           <Box>
-            <Dashboard
-              onJobDataChange={(childData: Job[]) => {
-                setJobsData(childData);
-              }}
-            />
+            <Dashboard />
           </Box>
         </TabPanel>
         <TabPanel value={activeTab} index={TabsTypes.REQUEST_A_GROUP}>
@@ -467,36 +430,36 @@ export const JobRequest = ({
           </Box>
         </TabPanel>
         <TabPanel value={activeTab} index={TabsTypes.HISTORY}>
-          <Box sx={{ disply: 'flex', flexDirection: 'column' }}>
-            <Box
-              maxWidth="md"
-              sx={{
-                margin: '0 auto',
-                display: 'flex',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Typography variant="h6">Group Name</Typography>
-              <Typography variant="h6">Job Id</Typography>
-              <Typography variant="h6">Escrow Address</Typography>
-            </Box>
-            {jobEscrowAddresses.map((addr) => {
-              return (
-                <Box
-                  maxWidth="md"
-                  sx={{
-                    margin: '0 auto',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <Typography variant="body1">{addr.groupName}</Typography>
-                  <Typography variant="body1">{addr.jobId}</Typography>
-                  <Typography variant="body1">{addr.escrowAddress}</Typography>
-                </Box>
-              );
-            })}
-          </Box>
+          {!jobsData && <CircularProgress />}
+          {jobsData && (
+            <TableContainer component={Paper} sx={{ marginBottom: '30px' }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Group Id</TableCell>
+                    <TableCell>Group Name</TableCell>
+
+                    <TableCell>Job Id</TableCell>
+                    <TableCell>Job Title</TableCell>
+                    <TableCell>Escrow Address</TableCell>
+                    <TableCell>Status</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {jobsData.map((addr) => (
+                    <TableRow key={addr.id}>
+                      <TableCell>{addr.groupId}</TableCell>
+                      <TableCell>{addr.group.name}</TableCell>
+                      <TableCell>{addr.id}</TableCell>
+                      <TableCell>{addr.title}</TableCell>
+                      <TableCell>{addr.escrowAddress}</TableCell>
+                      <TableCell>{addr.content.status}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
         </TabPanel>
       </Box>
     </>
