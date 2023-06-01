@@ -11,47 +11,23 @@ export interface ReputationEntry {
   reputation: number;
 }
 
+// Tech Debt: This is a temporary solution. Because the fortune example doesn't fit our cases.
+// We will have to refactor it later with our reputation models. Currently we don't have any reputation models
 export function filterAddressesToReward(
   web3: Web3,
   fortunesEntries: { [key: string]: FortuneEntry[] },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   recordingOracleAddress: string
 ) {
   const filteredWorkers: string[] = [];
   const reputationValues: ReputationEntry[] = [];
-  const tmpHashMap: Record<string, boolean> = {};
-  let errorRecordingOracle = false;
 
   Object.keys(fortunesEntries).forEach((workerAddress) => {
-    fortunesEntries[workerAddress].forEach((fortuneEntry) => {
-      const { fortune, score } = fortuneEntry;
-      if (tmpHashMap[fortune] || checkBadWords(fortune)) {
-        reputationValues.push({ workerAddress, reputation: -1 });
-        if (score) {
-          errorRecordingOracle = true;
-        }
-        return;
-      } else if (!tmpHashMap[fortune] && !checkBadWords(fortune) && !score) {
-        errorRecordingOracle = true;
-      }
-
-      tmpHashMap[fortune] = true;
-      reputationValues.push({ workerAddress, reputation: 1 });
-      if (!filteredWorkers.includes(workerAddress))
-        filteredWorkers.push(workerAddress);
-    });
+    filteredWorkers.push(workerAddress);
+    reputationValues.push({ workerAddress, reputation: 1 });
   });
+
   const workerAddresses = filteredWorkers.map(web3.utils.toChecksumAddress);
-  if (errorRecordingOracle) {
-    reputationValues.push({
-      workerAddress: recordingOracleAddress,
-      reputation: -1,
-    });
-  } else {
-    reputationValues.push({
-      workerAddress: recordingOracleAddress,
-      reputation: 1,
-    });
-  }
   return { workerAddresses, reputationValues };
 }
 

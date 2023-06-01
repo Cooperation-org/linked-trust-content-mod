@@ -11,6 +11,7 @@
     "build": "tsc",
     "start:prod": "ts-node build/index.js",
     "start": "cross-env NODE_ENV=development ts-node ./src/index.ts",
+    "dev": "dotenv -e .env.development -- nodemon",
     "test": "concurrently -k -s first --hide 0 \"hardhat node --port 8547\" \"sleep 10 && RPC_PORT=8547 yarn workspace @human-protocol/core deploy:local && RPC_PORT=8547 vitest --run\""
   },
   "repository": {
@@ -51,7 +52,9 @@
   "devDependencies": {
     "@aws-sdk/types": "^3.226.0",
     "@types/uuid": "^9.0.0",
+    "dotenv-cli": "^7.2.1",
     "esbuild": "^0.14.54",
+    "nodemon": "^2.0.22",
     "pino-pretty": "^8.1.0",
     "tsx": "^3.12.1",
     "vitest": "^0.25.8"
