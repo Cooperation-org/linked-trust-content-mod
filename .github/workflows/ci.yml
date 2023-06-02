@@ -17,11 +17,13 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-west-1
+          aws-region: us-east-1
 
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          registry-type: public
 
       - name: Launcher client docker build and push
         uses: docker/build-push-action@v2
@@ -29,44 +31,44 @@ jobs:
           context: ./launcher/client
           file: ./launcher/client/Dockerfile
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/launcher-client
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO_NAME }}/launcher-client:latest
 
       - name: Launcher server docker build and push
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./launcher/server
           file: ./launcher/server/Dockerfile
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/launcher-server
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO_NAME }}/launcher-server:latest
 
       - name: Exchange docker build and push Docker
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./exchange
           file: ./exchange/Dockerfile
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/exchange-client:latest
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO_NAME }}/exchange-client:latest
 
       - name: Launcher service docker build and push
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./launcher-service
           file: ./launcher-service/Dockerfile
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/launcher-service:latest
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO_NAME }}/launcher-service:latest
 
       - name: Recording oracle docker build and push
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./recording-oracle
           file: ./recording-oracle/Dockerfile
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/recording-oracle:latest
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO_NAME }}/recording-oracle:latest
 
       - name: Reputation oracle docker build and push
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./reputation-oracle
           file: ./reputation-oracle/Dockerfile
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/reputation-oracle:latest
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO_NAME }}/reputation-oracle:latest
