@@ -37,7 +37,7 @@ jobs:
           context: .
           file: ./launcher/server/Dockerfile
           push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/launcher-server:latest
+          tags: ${{ steps.login-ecr.outputs.registry }}/launcher-server
 
       - name: Exchange docker build and push Docker
         uses: docker/build-push-action@v2
