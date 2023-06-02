@@ -26,7 +26,7 @@ jobs:
       - name: Launcher client docker build and push
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: ./launcher/client
           file: ./launcher/client/Dockerfile
           push: true
           tags: ${{ steps.login-ecr.outputs.registry }}/launcher-client
