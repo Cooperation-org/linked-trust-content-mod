@@ -125,6 +125,7 @@ services:
       - reputation-oracle
       - recording-oracle
       - launcher-server
+      - rabbitmq
 
   launcher-client:
     image: ${REGISTRY_ADDRESS}/launcher-client:latest
@@ -160,5 +161,15 @@ services:
     depends_on:
       - launcher-service
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+
 volumes:
   db-data:
+  rabbitmq_data:
