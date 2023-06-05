@@ -283,7 +283,8 @@ export const createJob = async (
 
     if (process.env.ESCROW_CREATION_ENABLED) {
       const queue = 'CREATE_ESCROW';
-      const rabbitMQconnection = await amqplib.connect('amqp://localhost');
+      const RABBITMQ_URL = process.env.RABBITMQ_URL;
+      const rabbitMQconnection = await amqplib.connect(RABBITMQ_URL as string);
       const rabbitMQchannel = await rabbitMQconnection.createChannel();
       await rabbitMQchannel.assertQueue(queue);
 
