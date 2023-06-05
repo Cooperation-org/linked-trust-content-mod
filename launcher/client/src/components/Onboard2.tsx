@@ -16,7 +16,7 @@ const Onboard2 :FC = () => {
  
 
   return (
-    <Box sx={{  background: "white" }}>
+    <Box sx={{  background: "white", color:'black' }}>
       
 
       <Box

@@ -3,7 +3,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 
 const Onboard4 = () => {
   return (
-    <div>
+    <div style={{color:'black'}}>
         <div>
         <FormControl sx={{ width: "100%" }} style={{ marginTop: '2rem' }}>
                 <label htmlFor="">Webhook endpoint for finished jobs <span style={{color:'red'}}>*</span></label>

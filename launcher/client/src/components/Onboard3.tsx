@@ -11,7 +11,7 @@ const Onboard3 = () => {
     },
   ];
   return (
-    <div>
+    <div style={{color:'black'}}>
       <div className="mac">
         <FormControl sx={{ width: '25ch' }}>
           <label htmlFor="" style={{ fontSize: '14px' }}>

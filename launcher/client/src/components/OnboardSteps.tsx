@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Stepper, Step, StepLabel, Button, Box, Modal } from '@mui/material';
+import { Stepper, Step, StepLabel, Button, Box, Modal, Stack } from '@mui/material';
 import Onboard2 from './Onboard2';
 import Onboard3 from './Onboard3';
 import Onboard4 from './Onboard4';
@@ -13,8 +13,7 @@ const CustomStepper: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false); // State to control modal visibility
 
   const handleNext = () => {
-    setCompletedSteps([...completedSteps, activeStep]);
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    handleModalOpen()
   };
 
   const handleBack = () => {
@@ -32,7 +31,9 @@ const CustomStepper: React.FC = () => {
 
   const handleModalClose = () => {
     setModalOpen(false);
-    handleNext(); // Call handleNext when closing the modal
+   if(activeStep !== steps.length - 1){
+    setActiveStep((prevActiveStep) => prevActiveStep + 1); 
+   } // Call handleNext when closing the modal
   };
 
   const getStepContent = (step: number): JSX.Element | null => {
@@ -52,16 +53,73 @@ const CustomStepper: React.FC = () => {
     switch (step) {
       case 0:
         return (
-          <div>
-            <h2>Step 1 Confirmation</h2>
-            <p>Confirmation content for Step 1...</p>
-          </div>
+          <Box sx={{borderRadius:'30px', color:'black',padding:'1rem'}}>
+            <h2 style={{fontSize:'30px', fontWeight:'bold',marginBottom:'1rem'}}> Authentication</h2>
+            <p>in order to create an organisation you need to connect a wallet and authenticate it off chain  <b> by signing a standard message</b> </p>
+           <Stack direction='row' sx={{justifyContent:'space-between',alignItems:'flex-start',marginTop:'2rem'}}>
+           <ol style={{listStyle:'number'}}>
+            <li style={{marginBottom:'1rem'}}> Select your wallet address</li>
+            <li>sign in with your wallet address</li>
+           </ol>
+            <div>
+            <Button  variant="contained"
+                        sx={{
+                          background: '#EE814D',
+                          padding: '0.5rem 2rem',
+                          '&:hover': {
+                            borderColor: '#EE814D',
+                            borderWidth: '2px',
+                            borderStyle: 'solid',
+                            background: 'white',
+                            color: '#EE814D',
+                          },
+                        }} onClick={handleModalClose}> Connect </Button> <br />
+            <Button  variant="contained"
+                        sx={{
+                          padding: '0.5rem 2.2rem',
+                            borderColor: '#EE814D',
+                            borderWidth: '2px',
+                            borderStyle: 'solid',
+                            background: 'white',
+                            color: '#EE814D',
+                            margin:'1rem 0',
+                            '&:hover': {
+                              borderColor: '#EE814D',
+                              borderWidth: '2px',
+                              borderStyle: 'solid',
+                              background: 'white',
+                              color: '#EE814D',
+                            },
+                       
+                        }} onClick={handleModalClose}> Sign In </Button>
+            </div>
+           </Stack>
+          </Box>
         );
       case 1:
         return (
-          <div>
-            <h2>Step 2 Confirmation</h2>
-            <p>Confirmation content for Step 2...</p>
+          <div style={{textAlign:'center', width:'60%',margin:'auto' }}>
+            <h2 style={{fontSize:'25px', color:'black',fontWeight:'bold',marginBottom:'2rem'}}>Are you sure you want to add
+XYZ Fund Amount</h2>
+          
+            <Button variant="contained"
+                        sx={{
+                          padding: '0.5rem 2.2rem',
+                            borderColor: '#EE814D',
+                            borderWidth: '2px',
+                            borderStyle: 'solid',
+                            background: 'white',
+                            color: '#EE814D',
+                            margin:'1rem 0',
+                            '&:hover': {
+                              borderColor: '#EE814D',
+                              borderWidth: '2px',
+                              borderStyle: 'solid',
+                              background: 'white',
+                              color: '#EE814D',
+                            },
+                       
+                        }} onClick={handleModalClose}> Continue</Button>
           </div>
         );
       case 2:
@@ -69,6 +127,9 @@ const CustomStepper: React.FC = () => {
           <div>
             <h2>Step 3 Confirmation</h2>
             <p>Confirmation content for Step 3...</p>
+
+
+            <Button onClick={handleModalClose}>Close Modal</Button>
           </div>
         );
       default:
@@ -150,7 +211,7 @@ const CustomStepper: React.FC = () => {
                         },
                       }}
                     >
-                      {activeStep === 1 ? 'Open Modal' : 'Next'}
+                    next
                     </Button>
                   )}
                 </div>
@@ -174,7 +235,6 @@ const CustomStepper: React.FC = () => {
           }}
         >
           {getModalContent(activeStep)}
-          <Button onClick={handleModalClose}>Close Modal</Button>
         </div>
       </Modal>
     </div>
