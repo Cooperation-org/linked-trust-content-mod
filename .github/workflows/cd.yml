@@ -30,7 +30,8 @@ jobs:
         run: |
           ssh -i "$SSH_PRIVATE_KEY" "$SSH_USERNAME"@"$SSH_HOST" <<EOF
             cd linked-trust-content-mod 
-            docker compose -f dev.yaml pull
-            source .env.development && docker compose -f dev.yaml up -d
+            git pull origin main 
+            docker compose -f dev.yaml --env-file .env.development pull
+            docker compose -f dev.yaml --env-file .env.development up -d
             exit
           EOF
