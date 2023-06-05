@@ -2,9 +2,17 @@ import amqplib from 'amqplib';
 import { prisma } from './db';
 import axios from 'axios';
 
+const RABBITMQ_URL = process.env.RABBITMQ_URL;
+
 export const consumeRabbitMQmsgs = async () => {
+  if (!RABBITMQ_URL) {
+    // eslint-disable-next-line no-console
+    console.error('RabbitMQ_URL not set in environment');
+    process.exit(1);
+  }
+
   const queue = 'CREATE_ESCROW';
-  const rabbitMQconnection = await amqplib.connect('amqp://localhost');
+  const rabbitMQconnection = await amqplib.connect(RABBITMQ_URL);
   const rabbitMQchannel = await rabbitMQconnection.createChannel();
   await rabbitMQchannel.assertQueue(queue);
 
