@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Stepper, Step, StepLabel, Button, Box } from '@mui/material';
+import { Stepper, Step, StepLabel, Button, Box, Modal } from '@mui/material';
 import Onboard2 from './Onboard2';
 import Onboard3 from './Onboard3';
 import Onboard4 from './Onboard4';
@@ -8,9 +8,9 @@ import { Link } from 'react-router-dom';
 const steps = ['', '', ''];
 
 const CustomStepper: React.FC = () => {
-    
   const [activeStep, setActiveStep] = useState<number>(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const [modalOpen, setModalOpen] = useState<boolean>(false); // State to control modal visibility
 
   const handleNext = () => {
     setCompletedSteps([...completedSteps, activeStep]);
@@ -26,6 +26,15 @@ const CustomStepper: React.FC = () => {
     setCompletedSteps([]);
   };
 
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    handleNext(); // Call handleNext when closing the modal
+  };
+
   const getStepContent = (step: number): JSX.Element | null => {
     switch (step) {
       case 0:
@@ -36,6 +45,34 @@ const CustomStepper: React.FC = () => {
         return <Onboard4 />;
       default:
         return null;
+    }
+  };
+
+  const getModalContent = (step: number): JSX.Element => {
+    switch (step) {
+      case 0:
+        return (
+          <div>
+            <h2>Step 1 Confirmation</h2>
+            <p>Confirmation content for Step 1...</p>
+          </div>
+        );
+      case 1:
+        return (
+          <div>
+            <h2>Step 2 Confirmation</h2>
+            <p>Confirmation content for Step 2...</p>
+          </div>
+        );
+      case 2:
+        return (
+          <div>
+            <h2>Step 3 Confirmation</h2>
+            <p>Confirmation content for Step 3...</p>
+          </div>
+        );
+      default:
+        return <div></div>;
     }
   };
 
@@ -79,29 +116,28 @@ const CustomStepper: React.FC = () => {
                 </Button>
                 <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                   {activeStep === steps.length - 1 ? (
-                   <Link to='/onboarddash'>
-                    <Button
-                      variant="contained"
-                      
-                      sx={{
-                        background: '#EE814D',
-                        padding: '0.5rem 3rem',
-                        '&:hover': {
-                          borderColor: '#EE814D',
-                          borderWidth: '2px',
-                          borderStyle: 'solid',
-                          background: 'white',
-                          color: '#EE814D',
-                        },
-                      }}
-                    >
-                      Go to Dashboard
-                    </Button>
-                   </Link>
+                    <Link to="/onboarddash">
+                      <Button
+                        variant="contained"
+                        sx={{
+                          background: '#EE814D',
+                          padding: '0.5rem 3rem',
+                          '&:hover': {
+                            borderColor: '#EE814D',
+                            borderWidth: '2px',
+                            borderStyle: 'solid',
+                            background: 'white',
+                            color: '#EE814D',
+                          },
+                        }}
+                      >
+                        Go to Dashboard
+                      </Button>
+                    </Link>
                   ) : (
                     <Button
                       variant="contained"
-                      onClick={handleNext}
+                      onClick={activeStep === 1 ? handleModalOpen : handleNext}
                       sx={{
                         background: '#EE814D',
                         padding: '0.5rem 3rem',
@@ -114,7 +150,7 @@ const CustomStepper: React.FC = () => {
                         },
                       }}
                     >
-                      Next
+                      {activeStep === 1 ? 'Open Modal' : 'Next'}
                     </Button>
                   )}
                 </div>
@@ -123,6 +159,24 @@ const CustomStepper: React.FC = () => {
           )}
         </div>
       </Box>
+      {/* Modal */}
+      <Modal open={modalOpen} onClose={handleModalClose}>
+        {/* Modal content */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '50%',
+            background: 'white',
+            padding: '2rem',
+          }}
+        >
+          {getModalContent(activeStep)}
+          <Button onClick={handleModalClose}>Close Modal</Button>
+        </div>
+      </Modal>
     </div>
   );
 };
