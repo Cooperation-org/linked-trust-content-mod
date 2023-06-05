@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { apiKeyAccess } from '../../middleware';
+import { apiKeyAccess, jwtDBAuth } from '../../middleware';
 
 import {
   addWorkersToGroup,
@@ -22,26 +22,31 @@ import {
 } from '../../controllers';
 const router = Router();
 
-router.get('/job-creators', getJobCreators);
-router.post('/job-creators', createJobCreator);
-router.post('/workers', createWorker);
-router.post('/groups', createGroup);
-router.put('/groups/:id', updateGroup);
-router.get('/groups/:id', getGroup);
-router.post('/groups/:groupId/add-workers', addWorkersToGroup);
-router.post('/groups/:groupId/jobs', apiKeyAccess, createJob);
-router.post('/groups/:id/newApiKey', generateApiKey);
-router.get('/jobs/:id', getJob);
-router.get('/groups/worker/:workerId', getGroupByWorker);
-router.get('/groups/creator/:creatorId', getGroupByJobCreator);
-router.get('/worker/:workerId/group/:groupId/jobs', getGroupJobsByWorker);
+router.get('/job-creators', jwtDBAuth, getJobCreators);
+router.post('/job-creators', jwtDBAuth, createJobCreator);
+router.post('/workers', jwtDBAuth, createWorker);
+router.post('/groups', jwtDBAuth, createGroup);
+router.put('/groups/:id', jwtDBAuth, updateGroup);
+router.get('/groups/:id', jwtDBAuth, getGroup);
+router.post('/groups/:groupId/add-workers', jwtDBAuth, addWorkersToGroup);
+router.post('/groups/:groupId/jobs', jwtDBAuth, apiKeyAccess, createJob);
+router.post('/groups/:id/newApiKey', jwtDBAuth, generateApiKey);
+router.get('/jobs/:id', jwtDBAuth, getJob);
+router.get('/groups/worker/:workerId', jwtDBAuth, getGroupByWorker);
+router.get('/groups/creator/:creatorId', jwtDBAuth, getGroupByJobCreator);
+router.get(
+  '/worker/:workerId/group/:groupId/jobs',
+  jwtDBAuth,
+  getGroupJobsByWorker
+);
 router.post(
   '/jobs/:jobId/content/:contentId/review',
+  jwtDBAuth,
   submitReviewStatusForContentInJob
 );
 
-router.get('/jobs/escrow/:address', getJobByEscrow);
-router.get('/jobs', getAllJobs);
-router.get('/job-creator/groups/:groupId/jobs', getAllJobsForGroup);
+router.get('/jobs/escrow/:address', jwtDBAuth, getJobByEscrow);
+router.get('/jobs', jwtDBAuth, getAllJobs);
+router.get('/job-creator/groups/:groupId/jobs', jwtDBAuth, getAllJobsForGroup);
 
 export default router;
