@@ -150,14 +150,17 @@ const JobDashboard: React.FC<Props> = () => {
                   No Jobs Published for {selectedGroup}
                 </Typography>
               )}
-              <Grid item xs={6} md={3} key={selectedGroup}>
+             
+              <Grid container spacing={2} key={selectedGroup}>
                 {jobs.map((job) => (
-                  <Card key={job.id}>
+                <Grid item xs={12} sm={6} md={4} key={job.id}>
+                  <Card >
                     {/* <Card key={job.id}> */}
                     <CardHeader
-                      title={<Typography>{job.title}</Typography>}
+                      title={<Typography variant="h6" sx={{ fontWeight: 'bold' }}>{job.title}</Typography>}
                       sx={{
-                        backgroundColor: '#F0F0F0',
+                        // backgroundColor: '#F0F0F0',
+                        backgroundColor: '#ffffff',
                       }}
                     />
                     <CardContent>
@@ -180,6 +183,7 @@ const JobDashboard: React.FC<Props> = () => {
                       </Button>
                     </CardActions>
                   </Card>
+               </Grid>
                 ))}
               </Grid>
             </div>
