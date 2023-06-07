@@ -16,22 +16,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.0
+      - name: SSH into Server and Deploy
+        uses: appleboy/ssh-action@master
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Update Containers
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
-        if: github.event.workflow_run.conclusion == 'success'
-        run: |
-          ssh -i "$SSH_PRIVATE_KEY" "$SSH_USERNAME"@"$SSH_HOST" <<EOF
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
             cd linked-trust-content-mod 
             git pull origin main 
             docker compose -f dev.yaml --env-file .env.development pull
             docker compose -f dev.yaml --env-file .env.development up -d
-            exit
-          EOF
