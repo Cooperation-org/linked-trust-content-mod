@@ -10,7 +10,7 @@ export const createJobCreator = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { name, email, password, address } = req.body;
+  const { name, email, password, address, isAdmin } = req.body;
 
   try {
     // Create a new job creator
@@ -20,6 +20,7 @@ export const createJobCreator = async (
         email,
         password,
         address,
+        isAdmin,
       },
     });
 

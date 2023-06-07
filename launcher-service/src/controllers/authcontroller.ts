@@ -75,7 +75,7 @@ export const login = async (
   next: NextFunction
 ) => {
   try {
-    const { message, signature, role } = req.body;
+    const { message, signature, role, isAdmin } = req.body;
     const siweMessage = new SiweMessage(message);
 
     const fields = await siweMessage.validate(signature);
@@ -121,7 +121,7 @@ export const login = async (
     // Generate a new JWT token with the user ID and role
 
     const token = jwt.sign(
-      { id: user?.id, role: role },
+      { id: user?.id, role: role, isAdmin: isAdmin },
       process.env.JWT_SECRET,
       {
         expiresIn: '5m', // Expires in 5 min
