@@ -12,13 +12,20 @@ import {
   Select,
   TextField,
   Typography,
+  Paper,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableBody,
+  TableCell,
 } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 import axiosInstance from './../config/axiosInterceptor';
 import { ethers } from 'ethers';
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useAccount, useChainId, useSigner, useSwitchNetwork } from 'wagmi';
 import {
   ChainId,
@@ -100,6 +107,7 @@ export const JobRequest = ({
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [jobsData, setJobsData] = useState<any[]>([]);
 
   const handleJobRequestFormFieldChange = (
     fieldName: keyof FortuneJobRequestType,
@@ -170,6 +178,16 @@ export const JobRequest = ({
     dispatch,
   } = useContext(AppContext);
 
+  useEffect(() => {
+    setJobsData([]);
+    const fetchAllJobs = async () => {
+      const response = await axiosInstance.get(`/api/jobs`);
+      const data = response.data;
+      setJobsData(data);
+    };
+    fetchAllJobs();
+  }, [activeTab === 2]);
+
   const handleTabChange = (
     event: React.SyntheticEvent,
     newActiveTab: number
@@ -207,6 +225,7 @@ export const JobRequest = ({
               {...a11yProps(1)}
               sx={{ margin: '0 4rem' }}
             />
+            <Tab label="History" {...a11yProps(2)} />
             {/* It should be popup or in group settings */}
             {/* <Tab
               label="REQUEST A NEW API KEY"
@@ -409,6 +428,38 @@ export const JobRequest = ({
               </Box>
             </RoundedBox>
           </Box>
+        </TabPanel>
+        <TabPanel value={activeTab} index={TabsTypes.HISTORY}>
+          {!jobsData && <CircularProgress />}
+          {jobsData && (
+            <TableContainer component={Paper} sx={{ marginBottom: '30px' }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Group Id</TableCell>
+                    <TableCell>Group Name</TableCell>
+
+                    <TableCell>Job Id</TableCell>
+                    <TableCell>Job Title</TableCell>
+                    <TableCell>Escrow Address</TableCell>
+                    <TableCell>Status</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {jobsData.map((addr) => (
+                    <TableRow key={addr.id}>
+                      <TableCell>{addr.groupId}</TableCell>
+                      <TableCell>{addr.group.name}</TableCell>
+                      <TableCell>{addr.id}</TableCell>
+                      <TableCell>{addr.title}</TableCell>
+                      <TableCell>{addr.escrowAddress}</TableCell>
+                      <TableCell>{addr.content.status}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
         </TabPanel>
       </Box>
     </>

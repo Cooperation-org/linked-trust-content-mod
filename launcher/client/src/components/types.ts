@@ -9,6 +9,7 @@ export enum LauncherStageStatus {
 export enum TabsTypes {
   DASHBOARD,
   REQUEST_A_GROUP,
+  HISTORY,
 }
 
 export enum AppStateType {
