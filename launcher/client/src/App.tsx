@@ -32,7 +32,7 @@ import { useSigner, useChainId } from 'wagmi';
 import { ChainId, ESCROW_NETWORKS } from './constants';
 import { useAuth } from './hooks/auth';
 import { AppContext } from 'src/state';
-import { goToTab, changeLauncerStatus } from 'src/state/actions';
+import { goToTab, changeLauncherStatus } from 'src/state/actions';
 
 const useStyles = makeStyles((theme: Theme) => ({
   button: {
@@ -83,36 +83,36 @@ function App() {
   const [showLog, setShowLog] = useState(false);
 
   const handleChangeStage = (method: FundingMethodType) => {
-    dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST));
+    dispatch(changeLauncherStatus(LauncherStageStatus.GROUP_REQUEST));
   };
   const handleBack = () => {
-    dispatch(changeLauncerStatus(launcherStatus > 0 ? launcherStatus - 1 : 0));
+    dispatch(changeLauncherStatus(launcherStatus > 0 ? launcherStatus - 1 : 0));
   };
 
   const handleOnSuccess = (data: JobLaunchResponse) => {
     setJobResponse(data);
-    dispatch(changeLauncerStatus(LauncherStageStatus.LAUNCH_SUCCESS));
+    dispatch(changeLauncherStatus(LauncherStageStatus.LAUNCH_SUCCESS));
   };
 
   const handleCreateNewEscrow = () => {
     setJobResponse({ escrowAddress: '', exchangeUrl: '' });
-    dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST));
+    dispatch(changeLauncherStatus(LauncherStageStatus.GROUP_REQUEST));
   };
 
   const handleGoToJobDashboard = () => {
     dispatch(goToTab(TabsTypes.DASHBOARD));
-    dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST));
+    dispatch(changeLauncherStatus(LauncherStageStatus.GROUP_REQUEST));
   };
 
   const handleDisConnectWallet = () => {
     disconnect();
     handleLogout();
-    dispatch(changeLauncerStatus(LauncherStageStatus.UNAUTHORIZED));
+    dispatch(changeLauncherStatus(LauncherStageStatus.UNAUTHORIZED));
   };
 
   const handleOnError = (message: string) => {
     setErrorMessage(message);
-    dispatch(changeLauncerStatus(LauncherStageStatus.LAUNCH_FAIL));
+    dispatch(changeLauncherStatus(LauncherStageStatus.LAUNCH_FAIL));
   };
 
   const handleLogout = () => {
@@ -133,9 +133,9 @@ function App() {
   useEffect(() => {
     if (id) {
 
-      dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST));
+      dispatch(changeLauncherStatus(LauncherStageStatus.GROUP_REQUEST));
     } else {
-      dispatch(changeLauncerStatus(LauncherStageStatus.UNAUTHORIZED));
+      dispatch(changeLauncherStatus(LauncherStageStatus.UNAUTHORIZED));
     }
   }, [id]);
 
@@ -215,7 +215,7 @@ function App() {
               {launcherStatus === LauncherStageStatus.GROUP_REQUEST && (
                 <FortuneJobRequest
                   onBack={handleBack}
-                  onLaunch={() => dispatch(changeLauncerStatus(LauncherStageStatus.LAUNCH))}
+                  onLaunch={() => dispatch(changeLauncherStatus(LauncherStageStatus.LAUNCH))}
                   onSuccess={handleOnSuccess}
                   onFail={handleOnError}
                 />
@@ -231,7 +231,7 @@ function App() {
               {launcherStatus === LauncherStageStatus.LAUNCH_FAIL && (
                 <FortuneLaunchFail
                   message={errorMessage}
-                  onBack={() => dispatch(changeLauncerStatus(LauncherStageStatus.GROUP_REQUEST))}
+                  onBack={() => dispatch(changeLauncherStatus(LauncherStageStatus.GROUP_REQUEST))}
                 />
               )}
             </Box>

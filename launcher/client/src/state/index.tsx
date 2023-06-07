@@ -24,7 +24,7 @@ const appReducer = (state: AppState, action: AppActions) => {
   switch (action.type) {
     case AppStateType.ACTIVE_TAB:
       return { ...state, activeTab: action.payload.activeTab };
-      case AppStateType.ACTIVE_LAUNCHER_STATUS:
+    case AppStateType.ACTIVE_LAUNCHER_STATUS:
       return { ...state, launcherStatus: action.payload.launcherStatus };
     default:
       return state;
