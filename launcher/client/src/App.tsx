@@ -69,7 +69,7 @@ function App() {
   const chainId = useChainId();
   const [showModal, setShowModal] = useState(false);
   const [lastEscrowAddress, setLastEscrowAddress] = useState('');
-  
+
   const {
     state: { launcherStatus },
     dispatch,
@@ -132,7 +132,6 @@ function App() {
 
   useEffect(() => {
     if (id) {
-
       dispatch(changeLauncherStatus(LauncherStageStatus.GROUP_REQUEST));
     } else {
       dispatch(changeLauncherStatus(LauncherStageStatus.UNAUTHORIZED));
@@ -180,7 +179,9 @@ function App() {
           {launcherStatus === LauncherStageStatus.UNAUTHORIZED && (
             <Grid item xs={12} sm={12} md={5} lg={4}>
               <Typography color="primary" fontWeight={600} variant="h4">
-                <a href="https://repute.social/" target="_blank">Repute.Social</a>
+                <a href="https://repute.social/" target="_blank">
+                  Repute.Social
+                </a>
               </Typography>
               <Typography color="primary" fontWeight={500} variant="h6">
                 Content Moderation
@@ -215,12 +216,16 @@ function App() {
               {launcherStatus === LauncherStageStatus.GROUP_REQUEST && (
                 <FortuneJobRequest
                   onBack={handleBack}
-                  onLaunch={() => dispatch(changeLauncherStatus(LauncherStageStatus.LAUNCH))}
+                  onLaunch={() =>
+                    dispatch(changeLauncherStatus(LauncherStageStatus.LAUNCH))
+                  }
                   onSuccess={handleOnSuccess}
                   onFail={handleOnError}
                 />
               )}
-              {launcherStatus === LauncherStageStatus.LAUNCH && <FortuneLaunch />}
+              {launcherStatus === LauncherStageStatus.LAUNCH && (
+                <FortuneLaunch />
+              )}
               {launcherStatus === LauncherStageStatus.LAUNCH_SUCCESS && (
                 <FortuneLaunchSuccess
                   jobResponse={jobResponse}
@@ -231,7 +236,11 @@ function App() {
               {launcherStatus === LauncherStageStatus.LAUNCH_FAIL && (
                 <FortuneLaunchFail
                   message={errorMessage}
-                  onBack={() => dispatch(changeLauncherStatus(LauncherStageStatus.GROUP_REQUEST))}
+                  onBack={() =>
+                    dispatch(
+                      changeLauncherStatus(LauncherStageStatus.GROUP_REQUEST)
+                    )
+                  }
                 />
               )}
             </Box>
