@@ -78,6 +78,8 @@ export const createGroup = async (
     chainId,
     token,
     rules,
+    contactPersonName,
+    contactPersonEmail,
   } = req.body;
 
   try {
@@ -92,6 +94,8 @@ export const createGroup = async (
         chainId,
         token,
         rules,
+        contactPersonName,
+        contactPersonEmail,
       },
       include: {
         creator: true,
