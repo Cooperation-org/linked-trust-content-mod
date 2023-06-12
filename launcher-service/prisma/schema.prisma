@@ -45,6 +45,8 @@ model Group {
   chainId       Int
   token         String
   rules         String?
+  contactPersonName   String?
+  contactPersonEmail  String?
 }
 
 model Job {
