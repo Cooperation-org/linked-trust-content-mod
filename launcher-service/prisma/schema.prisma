@@ -40,23 +40,24 @@ model Worker {
 }
 
 model Group {
-  id            Int        @id @default(autoincrement())
-  name          String
-  description   String?
-  creator       JobCreator @relation(fields: [createdById], references: [id])
-  createdById   Int
-  jobs          Job[]
-  members       Worker[]   @relation("Members")
-  funded        Boolean    @default(false)
-  funded_amt    Int
-  used_amt      Float?
-  guideline_url String
-  apiKey        String?    @unique
-  chainId       Int
-  token         String
-  rules         String?
-  contactPersonName   String?
-  contactPersonEmail  String?
+  id                 Int        @id @default(autoincrement())
+  name               String
+  description        String?
+  creator            JobCreator @relation(fields: [createdById], references: [id])
+  createdById        Int
+  jobs               Job[]
+  members            Worker[]   @relation("Members")
+  funded             Boolean    @default(false)
+  funded_amt         Int
+  used_amt           Float?
+  guideline_url      String
+  apiKey             String?    @unique
+  chainId            Int
+  token              String
+  rules              String?
+  webhook            String?
+  contactPersonName  String?
+  contactPersonEmail String?
 }
 
 model Job {

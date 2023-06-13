@@ -615,6 +615,37 @@ export const generateApiKey = async (
   }
 };
 
+export const createWebHook = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { webHook } = req.body;
+    const { id } = req.params;
+    const group = await prisma.group.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!group) {
+      return res.status(404).send({ message: 'Group not found.' });
+    }
+
+    await prisma.group.update({
+      where: { id: Number(id) },
+      data: { webhook: webHook },
+    });
+
+    res.status(200).send({
+      message: 'New webhook created successfully.',
+      webHook,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'Error creating webhook.' });
+  }
+};
+
 export const getJobCreators = async (
   req: Request,
   res: Response,
