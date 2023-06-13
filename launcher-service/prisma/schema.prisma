@@ -45,6 +45,7 @@ model Group {
   chainId       Int
   token         String
   rules         String?
+  webhook       String?
 }
 
 model Job {
