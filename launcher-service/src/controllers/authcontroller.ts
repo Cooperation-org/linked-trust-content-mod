@@ -75,7 +75,14 @@ export const login = async (
   next: NextFunction
 ) => {
   try {
-    const { message, signature, role } = req.body;
+    const {
+      message,
+      signature,
+      role,
+      companyName,
+      companySize,
+      avgMonthlyVolume,
+    } = req.body;
     const siweMessage = new SiweMessage(message);
 
     const fields = await siweMessage.validate(signature);
@@ -101,6 +108,16 @@ export const login = async (
 
       if (!user) {
         user = await prisma.jobCreator.create({ data: { address } });
+
+        if (companyName && companySize && avgMonthlyVolume) {
+          await prisma.company.create({
+            data: {
+              name: companyName,
+              size: companySize,
+              avgMonthlyVolume,
+            },
+          });
+        }
       }
     } else if (role === 'worker') {
       user = await prisma.worker.findUnique({ where: { address } });

@@ -10,13 +10,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Company {
+  id               Int          @id @default(autoincrement())
+  name             String       @unique
+  size             Int?
+  avgMonthlyVolume Int?
+  JobCreator       JobCreator[]
+}
+
 model JobCreator {
-  id       Int     @id @default(autoincrement())
-  name     String?
-  email    String?
-  password String?
-  address  String  @unique
-  groups   Group[]
+  id        Int      @id @default(autoincrement())
+  name      String?
+  email     String?
+  password  String?
+  address   String   @unique
+  groups    Group[]
+  company   Company? @relation(fields: [companyId], references: [id])
+  companyId Int?
 }
 
 model Worker {
