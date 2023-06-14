@@ -25,7 +25,7 @@ jobs:
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       - name: Build Docker images
-        run: docker compose -f dev.yaml build
+        run: docker compose -f build.yaml build
 
       - name: Push Docker images to Docker Hub
-        run: docker compose -f dev.yaml push
+        run: docker compose -f build.yaml push
