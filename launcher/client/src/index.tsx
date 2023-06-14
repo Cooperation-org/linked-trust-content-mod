@@ -23,8 +23,8 @@ import theme from './theme';
 import './global.css';
 import AuthProvider from './hooks/auth';
 import { AppStateProvider } from './state';
-import OnboardingMod from './components/OnboardingMod';
-import OnboardDash from './components/OnboardDash';
+import OnboardingMod from './components/Onboarding';
+import OnboardDash from './components/Onboarding/OnboardDash';
 
 window.Buffer = window.Buffer || require('buffer').Buffer;
 

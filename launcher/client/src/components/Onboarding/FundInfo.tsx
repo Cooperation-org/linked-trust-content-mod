@@ -4,14 +4,14 @@ import FormControl, { useFormControl } from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import TextField from '@mui/material/TextField';
 
-const Onboard3 = () => {
+const FundInfo = () => {
   const average = [
     {
       value: 'select from the options',
     },
   ];
   return (
-    <div style={{color:'black'}}>
+    <div style={{ color: 'black' }}>
       <div className="mac">
         <FormControl sx={{ width: '25ch' }}>
           <label htmlFor="" style={{ fontSize: '14px' }}>
@@ -109,7 +109,7 @@ const Onboard3 = () => {
           </TextField>
         </FormControl>
       </div>
-      <div style={{marginBottom:'1rem'}}>
+      <div style={{ marginBottom: '1rem' }}>
         <FormControl sx={{ width: '100%' }}>
           <label htmlFor="" style={{ fontSize: '14px' }}>
             Type of content to be moderated
@@ -140,4 +140,4 @@ const Onboard3 = () => {
   );
 };
 
-export default Onboard3;
+export default FundInfo;

@@ -1,4 +1,9 @@
 -- AlterTable
+ALTER TABLE "Group" ADD COLUMN     "contactPersonEmail" TEXT,
+ADD COLUMN     "contactPersonName" TEXT,
+ADD COLUMN     "webhook" TEXT;
+
+-- AlterTable
 ALTER TABLE "JobCreator" ADD COLUMN     "companyId" INTEGER;
 
 -- CreateTable
