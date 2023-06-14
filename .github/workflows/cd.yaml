@@ -8,14 +8,6 @@ on:
       - completed
   workflow_dispatch:
 
-env:
-  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  REGISTRY_ADDRESS: ${{ secrets.DOCKER_USERNAME }}
-  MINIO_USER: dev
-  MINIO_PASS: devdevdev
-  MANIFEST_FILE: manifest.json
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -34,5 +26,5 @@ jobs:
           script: |
             cd linked-trust-content-mod 
             git pull origin main 
-            docker compose -f dev.yaml pull
-            docker compose -f dev.yaml up -d
+            docker compose -f dev.yaml --env-file .env.development pull
+            docker compose -f dev.yaml --env-file .env.development up -d
