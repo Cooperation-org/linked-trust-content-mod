@@ -18,6 +18,7 @@ export function LoginWithMetamask({
   const {
     walletModalOpen,
     handleClickCrypto,
+    handleSignInWithNonce,
     setWalletModalOpen,
     isConnected,
   } = useMetamaskLogin({
@@ -75,7 +76,7 @@ export function LoginWithMetamask({
             <Button
               variant="outlined"
               sx={{ mt: 2.5, minWidth: '200px' }}
-              onClick={handleClickCrypto}
+              onClick={() => handleSignInWithNonce()}
             >
               Continue
             </Button>

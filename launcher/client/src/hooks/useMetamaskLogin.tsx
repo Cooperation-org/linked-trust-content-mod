@@ -89,22 +89,25 @@ export const useMetamaskLogin = ({
   };
 
   const handleClickCrypto = async () => {
-    console.log('isConnected', isConnected);
+    if (!isConnected) setWalletModalOpen(true);
+  };
+
+  const handleSignInWithNonce = async (
+    companyName?: string,
+    companySize?: number,
+    averageMonthlyVolume?: string
+  ) => {
     if (isConnected) {
       setShowSignBtn(true);
       await connectWallet();
-    } else {
-      console.log('Else block');
-      setWalletModalOpen(true);
     }
   };
-
-  console.log(walletModalOpen);
 
   return {
     walletModalOpen,
     setWalletModalOpen,
     handleClickCrypto,
+    handleSignInWithNonce,
     showSignBtn,
     isConnected,
   };

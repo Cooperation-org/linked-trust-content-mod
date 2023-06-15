@@ -131,6 +131,7 @@ const Intro: React.FC<Updateprops> = ({
                 borderWidth: '1px',
                 borderStyle: 'solid',
               }}
+              type="number"
               value={companySize}
               onChange={(event) => {
                 onCompanySizeChange(Number(event.currentTarget.value));
@@ -213,10 +214,11 @@ const Intro: React.FC<Updateprops> = ({
                 color: 'white',
                 margin: 'auto',
                 padding: '0.5rem 3rem',
+                borderWidth: '2px',
+                borderStyle: 'solid',
+                borderColor: 'transparent',
                 '&:hover': {
                   borderColor: '#EE814D',
-                  borderWidth: '2px',
-                  borderStyle: 'solid',
                   color: '#EE814D',
                 },
               }}

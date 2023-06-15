@@ -20,7 +20,6 @@ const steps = ['groupinfo', 'fundinfo', 'webhooks'];
 
 const OnboardingSteps: React.FC = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
-  // const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false); // State to control modal visibility
   const { id } = useAuth();
 
@@ -28,13 +27,23 @@ const OnboardingSteps: React.FC = () => {
     walletModalOpen,
     setWalletModalOpen,
     handleClickCrypto,
+    handleSignInWithNonce,
     isConnected,
   } = useMetamaskLogin({});
 
-  console.log('walletModalOpen', walletModalOpen);
+  const handleGoToNextStep = useCallback(() => {
+    setModalOpen(false);
+    if (activeStep !== steps.length - 1) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
+  }, [activeStep]);
 
   const handleNext = () => {
-    handleModalOpen();
+    if (activeStep === 0 && isConnected && id) {
+      handleGoToNextStep();
+      return;
+    }
+    setModalOpen(true);
   };
 
   const handleBack = () => {
@@ -43,18 +52,6 @@ const OnboardingSteps: React.FC = () => {
 
   const handleReset = () => {
     setActiveStep(0);
-    // setCompletedSteps([]);
-  };
-
-  const handleModalOpen = () => {
-    setModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setModalOpen(false);
-    if (activeStep !== steps.length - 1) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    } // Call handleNext when closing the modal
   };
 
   const getStepContent = (step: number): JSX.Element | null => {
@@ -70,146 +67,159 @@ const OnboardingSteps: React.FC = () => {
     }
   };
 
-  const getModalContent = useCallback((step: number): JSX.Element => {
-    switch (step) {
-      case 0:
-        return (
-          <Box sx={{ borderRadius: '30px', color: 'black', padding: '1rem' }}>
-            <h2
-              style={{
-                fontSize: '30px',
-                fontWeight: 'bold',
-                marginBottom: '1rem',
-              }}
-            >
-              Authentication
-            </h2>
-            <p>
-              in order to create an organisation you need to connect a wallet
-              and authenticate it off chain{' '}
-              <b> by signing a standard message</b>{' '}
-            </p>
-            <Stack
-              direction="row"
-              sx={{
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-                marginTop: '2rem',
-              }}
-            >
-              <ol style={{ listStyle: 'number' }}>
-                <li style={{ marginBottom: '1rem' }}>
-                  Select your wallet address
-                </li>
-                <li>sign in with your wallet address</li>
-              </ol>
-              <div>
-                <Button
-                  variant="contained"
-                  sx={{
-                    background: '#EE814D',
-                    padding: '0.5rem 2rem',
-                    '&:hover': {
-                      borderColor: '#EE814D',
-                      borderWidth: '2px',
-                      borderStyle: 'solid',
-                      background: 'white',
-                      color: '#EE814D',
-                    },
-                  }}
-                  disabled={isConnected}
-                  onClick={handleClickCrypto}
-                >
-                  Connect
-                </Button>
-                <br />
-                <Button
-                  variant="contained"
-                  sx={{
-                    padding: '0.5rem 2.2rem',
-                    borderColor: '#EE814D',
-                    borderWidth: '2px',
-                    borderStyle: 'solid',
-                    background: 'white',
-                    color: '#EE814D',
-                    margin: '1rem 0',
-                    '&:hover': {
-                      borderColor: '#EE814D',
-                      borderWidth: '2px',
-                      borderStyle: 'solid',
-                      background: 'white',
-                      color: '#EE814D',
-                    },
-                    '&:disabled': {
-                      border: 'none',
-                    },
-                  }}
-                  disabled={Boolean(id)}
-                  onClick={handleClickCrypto}
-                >
-                  Sign In
-                </Button>
-              </div>
-            </Stack>
-            <WalletModal
-              open={walletModalOpen}
-              // open={true}
-              onClose={() => setWalletModalOpen(false)}
-            />
-          </Box>
-        );
-      case 1:
-        return (
-          <div style={{ textAlign: 'center', width: '60%', margin: 'auto' }}>
-            <h2
-              style={{
-                fontSize: '25px',
-                color: 'black',
-                fontWeight: 'bold',
-                marginBottom: '2rem',
-              }}
-            >
-              Are you sure you want to add XYZ Fund Amount
-            </h2>
+  const handleSignIn = useCallback(async () => {
+    await handleSignInWithNonce();
+    handleGoToNextStep();
+  }, [handleSignInWithNonce, handleGoToNextStep]);
 
-            <Button
-              variant="contained"
-              sx={{
-                padding: '0.5rem 2.2rem',
-                borderColor: '#EE814D',
-                borderWidth: '2px',
-                borderStyle: 'solid',
-                background: 'white',
-                color: '#EE814D',
-                margin: '1rem 0',
-                '&:hover': {
+  const getModalContent = useCallback(
+    (step: number): JSX.Element => {
+      switch (step) {
+        case 0:
+          return (
+            <Box sx={{ borderRadius: '30px', color: 'black', padding: '1rem' }}>
+              <h2
+                style={{
+                  fontSize: '30px',
+                  fontWeight: 'bold',
+                  marginBottom: '1rem',
+                }}
+              >
+                Authentication
+              </h2>
+              <p>
+                in order to create an organisation you need to connect a wallet
+                and authenticate it off chain{' '}
+                <b> by signing a standard message</b>{' '}
+              </p>
+              <Stack
+                direction="row"
+                sx={{
+                  justifyContent: 'space-between',
+                  alignItems: 'flex-start',
+                  marginTop: '2rem',
+                }}
+              >
+                <ol style={{ listStyle: 'number' }}>
+                  <li style={{ marginBottom: '1rem' }}>Connect your wallet</li>
+                  <li>sign in with your wallet</li>
+                </ol>
+                <div>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      background: '#EE814D',
+                      padding: '0.5rem 2rem',
+                      '&:hover': {
+                        borderColor: '#EE814D',
+                        borderWidth: '2px',
+                        borderStyle: 'solid',
+                        background: 'white',
+                        color: '#EE814D',
+                      },
+                    }}
+                    disabled={isConnected}
+                    onClick={handleClickCrypto}
+                  >
+                    Connect
+                  </Button>
+                  <br />
+                  <Button
+                    variant="contained"
+                    sx={{
+                      padding: '0.5rem 2.2rem',
+                      borderColor: '#EE814D',
+                      borderWidth: '2px',
+                      borderStyle: 'solid',
+                      background: 'white',
+                      color: '#EE814D',
+                      margin: '1rem 0',
+                      '&:hover': {
+                        borderColor: '#EE814D',
+                        borderWidth: '2px',
+                        borderStyle: 'solid',
+                        background: 'white',
+                        color: '#EE814D',
+                      },
+                      '&:disabled': {
+                        border: 'none',
+                      },
+                    }}
+                    disabled={Boolean(id)}
+                    onClick={handleSignIn}
+                  >
+                    Sign In
+                  </Button>
+                </div>
+              </Stack>
+              <WalletModal
+                open={walletModalOpen}
+                onClose={() => setWalletModalOpen(false)}
+              />
+            </Box>
+          );
+        case 1:
+          return (
+            <div style={{ textAlign: 'center', width: '60%', margin: 'auto' }}>
+              <h2
+                style={{
+                  fontSize: '25px',
+                  color: 'black',
+                  fontWeight: 'bold',
+                  marginBottom: '2rem',
+                }}
+              >
+                Are you sure you want to add XYZ Fund Amount
+              </h2>
+
+              <Button
+                variant="contained"
+                sx={{
+                  padding: '0.5rem 2.2rem',
                   borderColor: '#EE814D',
                   borderWidth: '2px',
                   borderStyle: 'solid',
                   background: 'white',
                   color: '#EE814D',
-                },
-              }}
-              onClick={handleModalClose}
-            >
-              {' '}
-              Continue
-            </Button>
-          </div>
-        );
-      case 2:
-        return (
-          <div>
-            <h2>Step 3 Confirmation</h2>
-            <p>Confirmation content for Step 3...</p>
+                  margin: '1rem 0',
+                  '&:hover': {
+                    borderColor: '#EE814D',
+                    borderWidth: '2px',
+                    borderStyle: 'solid',
+                    background: 'white',
+                    color: '#EE814D',
+                  },
+                }}
+                onClick={handleGoToNextStep}
+              >
+                {' '}
+                Continue
+              </Button>
+            </div>
+          );
+        case 2:
+          return (
+            <div>
+              <h2>Step 3 Confirmation</h2>
+              <p>Confirmation content for Step 3...</p>
 
-            <Button onClick={handleModalClose}>Close Modal</Button>
-          </div>
-        );
-      default:
-        return <div></div>;
-    }
-  }, []);
+              <Button onClick={handleGoToNextStep}>Close Modal</Button>
+            </div>
+          );
+        default:
+          return <div></div>;
+      }
+    },
+    [
+      walletModalOpen,
+      handleClickCrypto,
+      isConnected,
+      id,
+      handleGoToNextStep,
+      setWalletModalOpen,
+      handleSignIn,
+    ]
+  );
 
   return (
     <div style={{ position: 'relative' }}>
@@ -276,20 +286,22 @@ const OnboardingSteps: React.FC = () => {
                   ) : (
                     <Button
                       variant="contained"
-                      onClick={activeStep === 1 ? handleModalOpen : handleNext}
+                      onClick={handleNext}
                       sx={{
                         background: '#EE814D',
                         padding: '0.5rem 3rem',
+                        borderWidth: '2px',
+                        borderStyle: 'solid',
+                        borderColor: 'transparent',
+                        marginTop: '20px',
                         '&:hover': {
                           borderColor: '#EE814D',
-                          borderWidth: '2px',
-                          borderStyle: 'solid',
                           background: 'white',
                           color: '#EE814D',
                         },
                       }}
                     >
-                      next
+                      Next
                     </Button>
                   )}
                 </div>
@@ -298,7 +310,7 @@ const OnboardingSteps: React.FC = () => {
           )}
         </div>
       </Box>
-      <Modal open={modalOpen} onClose={handleModalClose}>
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
         <div
           style={{
             position: 'absolute',

@@ -7,9 +7,7 @@ import {
   useTheme,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState, useEffect } from 'react';
-import { useAccount, useNetwork, useSignMessage, useConnect } from 'wagmi';
-import { SiweMessage } from 'siwe';
+import { useConnect } from 'wagmi';
 import metaMaskSvg from 'src/assets/metamask.svg';
 import coinbaseSvg from 'src/assets/coinbase.svg';
 import walletConnectSvg from 'src/assets/walletconnect.svg';
@@ -27,8 +25,6 @@ export default function WalletModal({
   open: boolean;
   onClose: () => void;
 }) {
-  console.log('open', open);
-
   const { connect, connectors, error, isLoading, pendingConnector } =
     useConnect();
 
