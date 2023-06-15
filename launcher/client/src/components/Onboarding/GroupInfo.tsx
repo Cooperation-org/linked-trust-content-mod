@@ -1,10 +1,18 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Box from '@mui/material/Box';
 import { Stack } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 
-const GropInfo: FC = () => {
+interface GropInfoProps {
+  companyEmail?: string;
+}
+
+const GropInfo: FC<GropInfoProps> = ({ companyEmail = '' }) => {
+  const [groupName, setGroupName] = useState('');
+  const [contactName, setContactName] = useState('');
+  const [email, setEmail] = useState(companyEmail);
+
   return (
     <Box sx={{ background: 'white', color: 'black' }}>
       <Box
@@ -35,6 +43,8 @@ const GropInfo: FC = () => {
                 borderWidth: '1px',
                 borderStyle: 'solid',
               }}
+              value={groupName}
+              onChange={(e) => setGroupName(e.target.value)}
             />
           </FormControl>
           <FormControl sx={{ width: '100%' }} style={{ marginTop: 0 }}>
@@ -48,6 +58,8 @@ const GropInfo: FC = () => {
                 borderWidth: '1px',
                 borderStyle: 'solid',
               }}
+              value={contactName}
+              onChange={(e) => setContactName(e.target.value)}
             />
           </FormControl>
           <FormControl sx={{ width: '100%' }}>
@@ -61,6 +73,8 @@ const GropInfo: FC = () => {
                 borderWidth: '1px',
                 borderStyle: 'solid',
               }}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </FormControl>
         </Stack>

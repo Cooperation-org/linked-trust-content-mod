@@ -43,6 +43,7 @@ const OnboardingSteps: React.FC = () => {
       handleGoToNextStep();
       return;
     }
+
     setModalOpen(true);
   };
 
