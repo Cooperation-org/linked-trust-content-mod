@@ -1,15 +1,8 @@
 import React, { useState, useCallback } from 'react';
-import {
-  Stepper,
-  Step,
-  StepLabel,
-  Button,
-  Box,
-  Modal,
-  Stack,
-} from '@mui/material';
+import { Stepper, Step, StepLabel, Button, Box, Stack } from '@mui/material';
 import GroupInfo from './GroupInfo';
 import FundInfo from './FundInfo';
+import Modal from '../Modal';
 import HooksAndKeysInfo from './HooksAndKeysInfo';
 import { Link } from 'react-router-dom';
 import { useMetamaskLogin } from '../../hooks/useMetamaskLogin';
@@ -312,19 +305,7 @@ const OnboardingSteps: React.FC = () => {
         </div>
       </Box>
       <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-        <div
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '50%',
-            background: 'white',
-            padding: '2rem',
-          }}
-        >
-          {getModalContent(activeStep)}
-        </div>
+        {getModalContent(activeStep)}
       </Modal>
     </div>
   );
