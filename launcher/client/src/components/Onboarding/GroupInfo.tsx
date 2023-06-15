@@ -1,20 +1,50 @@
-import { FC, useState } from 'react';
-import Box from '@mui/material/Box';
-import { Stack } from '@mui/material';
+import { FC, useState, useCallback } from 'react';
 import FormControl from '@mui/material/FormControl';
-import OutlinedInput from '@mui/material/OutlinedInput';
+import { Box, Stack } from '@mui/material';
+import Modal from '../Modal';
+import Button from '../Button';
+import StyledInput from './StyledInput';
+import WalletModal from '../WalletModal';
+import { useAuth } from '../../hooks/auth';
+import { useMetamaskLogin } from '../../hooks/useMetamaskLogin';
 
 interface GropInfoProps {
   companyEmail?: string;
+  onGoToNextStep: () => void;
 }
 
-const GropInfo: FC<GropInfoProps> = ({ companyEmail = '' }) => {
+const GropInfo: FC<GropInfoProps> = ({ companyEmail = '', onGoToNextStep }) => {
   const [groupName, setGroupName] = useState('');
   const [contactName, setContactName] = useState('');
   const [email, setEmail] = useState(companyEmail);
 
+  const [showModal, setShowModal] = useState(false);
+
+  const { id } = useAuth();
+  const {
+    walletModalOpen,
+    setWalletModalOpen,
+    handleClickCrypto,
+    handleSignInWithNonce,
+    isConnected,
+  } = useMetamaskLogin({});
+
+  const handleGoToNextStep = () => {
+    if (isConnected && id) {
+      onGoToNextStep();
+      return;
+    }
+
+    setShowModal(true);
+  };
+
+  const handleSignIn = useCallback(async () => {
+    await handleSignInWithNonce();
+    onGoToNextStep();
+  }, [handleSignInWithNonce, onGoToNextStep]);
+
   return (
-    <Box sx={{ background: 'white', color: 'black' }}>
+    <Box sx={{ color: 'black' }}>
       <Box
         component="form"
         noValidate
@@ -29,7 +59,7 @@ const GropInfo: FC<GropInfoProps> = ({ companyEmail = '' }) => {
             gridTemplateColumns: 'repeat(2, 1fr)',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: '4rem',
+            marginBottom: '1rem',
             gap: 4,
           }}
         >
@@ -37,7 +67,7 @@ const GropInfo: FC<GropInfoProps> = ({ companyEmail = '' }) => {
             <label htmlFor="" style={{ fontSize: '14px' }}>
               Group Name <span style={{ color: 'red' }}>*</span>
             </label>
-            <OutlinedInput
+            <StyledInput
               sx={{
                 borderColor: 'grey',
                 borderWidth: '1px',
@@ -51,7 +81,7 @@ const GropInfo: FC<GropInfoProps> = ({ companyEmail = '' }) => {
             <label htmlFor="" style={{ fontSize: '14px' }}>
               Contact Name <span style={{ color: 'red' }}>*</span>
             </label>
-            <OutlinedInput
+            <StyledInput
               placeholder="Please enter text"
               sx={{
                 borderColor: 'grey',
@@ -67,7 +97,7 @@ const GropInfo: FC<GropInfoProps> = ({ companyEmail = '' }) => {
               {' '}
               Email <span style={{ color: 'red' }}>*</span>
             </label>
-            <OutlinedInput
+            <StyledInput
               sx={{
                 borderColor: 'grey',
                 borderWidth: '1px',
@@ -79,6 +109,52 @@ const GropInfo: FC<GropInfoProps> = ({ companyEmail = '' }) => {
           </FormControl>
         </Stack>
       </Box>
+      <Box sx={{ textAlign: 'center' }}>
+        <Button onClick={handleGoToNextStep}>Next</Button>
+      </Box>
+      <Modal open={showModal} onClose={() => setShowModal(false)}>
+        <Box sx={{ borderRadius: '30px', color: 'black', padding: '1rem' }}>
+          <h2
+            style={{
+              fontSize: '30px',
+              fontWeight: 'bold',
+              marginBottom: '1rem',
+            }}
+          >
+            Authentication
+          </h2>
+          <p>
+            in order to create an organisation you need to connect a wallet and
+            authenticate it off chain <b> by signing a standard message</b>{' '}
+          </p>
+          <Stack
+            direction="row"
+            sx={{
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              marginTop: '2rem',
+            }}
+          >
+            <ol style={{ listStyle: 'number' }}>
+              <li style={{ marginBottom: '1rem' }}>Connect your wallet</li>
+              <li>sign in with your wallet</li>
+            </ol>
+            <div>
+              <Button disabled={isConnected} onClick={handleClickCrypto}>
+                Connect
+              </Button>
+              <br />
+              <Button disabled={Boolean(id)} onClick={handleSignIn}>
+                Sign In
+              </Button>
+            </div>
+          </Stack>
+          <WalletModal
+            open={walletModalOpen}
+            onClose={() => setWalletModalOpen(false)}
+          />
+        </Box>
+      </Modal>
     </Box>
   );
 };

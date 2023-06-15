@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react';
 import { Stepper, Step, StepLabel, Button, Box, Stack } from '@mui/material';
 import GroupInfo from './GroupInfo';
 import FundInfo from './FundInfo';
-import Modal from '../Modal';
 import HooksAndKeysInfo from './HooksAndKeysInfo';
 import { Link } from 'react-router-dom';
 import { useMetamaskLogin } from '../../hooks/useMetamaskLogin';
@@ -46,19 +45,6 @@ const OnboardingSteps: React.FC = () => {
 
   const handleReset = () => {
     setActiveStep(0);
-  };
-
-  const getStepContent = (step: number): JSX.Element | null => {
-    switch (step) {
-      case 0:
-        return <GroupInfo />;
-      case 1:
-        return <FundInfo />;
-      case 2:
-        return <HooksAndKeysInfo />;
-      default:
-        return null;
-    }
   };
 
   const handleSignIn = useCallback(async () => {
@@ -221,7 +207,6 @@ const OnboardingSteps: React.FC = () => {
         sx={{
           width: '50%',
           padding: '2rem',
-          paddingBottom: 0,
           background: 'rgba(238, 129, 77, 0.05)',
           border: '1px solid #EE814D',
           margin: 'auto',
@@ -248,7 +233,13 @@ const OnboardingSteps: React.FC = () => {
             </div>
           ) : (
             <div>
-              <div>{getStepContent(activeStep)}</div>
+              <div>
+                {activeStep === 0 && (
+                  <GroupInfo onGoToNextStep={handleGoToNextStep} />
+                )}
+                {activeStep === 1 && <FundInfo />}
+                {activeStep === 2 && <HooksAndKeysInfo />}
+              </div>
               <div>
                 <Button
                   disabled={activeStep === 0}
@@ -257,7 +248,7 @@ const OnboardingSteps: React.FC = () => {
                 >
                   Back
                 </Button>
-                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                {/* <div style={{ textAlign 'center', marginBottom: '2rem' }}>
                   {activeStep === steps.length - 1 ? (
                     <Link to="/onboarddash">
                       <Button
@@ -298,15 +289,15 @@ const OnboardingSteps: React.FC = () => {
                       Next
                     </Button>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
           )}
         </div>
       </Box>
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
+      {/* <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
         {getModalContent(activeStep)}
-      </Modal>
+      </Modal> */}
     </div>
   );
 };
