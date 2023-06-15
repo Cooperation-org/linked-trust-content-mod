@@ -94,7 +94,7 @@ export const login = async (
       return res.status(422).json({ message: 'Invalid nonce.' });
 
     let user;
-    let isAdmin: boolean | any = false;
+    let isAdmin: boolean = false;
     if (role === 'jobCreator') {
       user = await prisma.jobCreator.findUnique({
         where: { address },
