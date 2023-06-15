@@ -94,16 +94,16 @@ export const login = async (
       return res.status(422).json({ message: 'Invalid nonce.' });
 
     let user;
-    let isAdmin;
+    let isAdmin: boolean | any = false;
     if (role === 'jobCreator') {
       user = await prisma.jobCreator.findUnique({
         where: { address },
       });
-      isAdmin = user?.isAdmin;
 
       if (!user) {
         user = await prisma.jobCreator.create({ data: { address } });
       }
+      isAdmin = user.isAdmin;
     } else if (role === 'worker') {
       user = await prisma.worker.findUnique({ where: { address } });
 
@@ -122,17 +122,16 @@ export const login = async (
 
     // Generate a new JWT token with the user ID and role
 
-    const token = isAdmin
-      ? jwt.sign(
-          { id: user?.id, role: role, isAdmin: isAdmin },
-          process.env.JWT_SECRET,
-          {
-            expiresIn: '5m', // Expires in 5 min
-          }
-        )
-      : jwt.sign({ id: user?.id, role: role }, process.env.JWT_SECRET, {
-          expiresIn: '5m', // Expires in 5 min
-        });
+    let payload: object = {
+      id: user.id,
+      role: role,
+    };
+
+    if (isAdmin) payload = { ...payload, isAdmin: isAdmin };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: '5m', // Expires in 5 min
+    });
 
     res.status(200).send({ message: 'Login successful.', token });
   } catch (error) {
