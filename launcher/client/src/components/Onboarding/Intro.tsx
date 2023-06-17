@@ -1,23 +1,29 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import { Stack, Typography, Button } from '@mui/material';
-import FormControl from '@mui/material/FormControl';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import {
+  OutlinedInput,
+  FormControl,
+  TextField,
+  Checkbox,
+  Stack,
+  Typography,
+  Button,
+  FormControlLabel,
+} from '@mui/material';
 
 interface Updateprops {
   view: (newvalue: boolean) => void;
+  email: string;
+  onEmailChange: React.Dispatch<React.SetStateAction<string>>;
   companyName: string;
   onCompanyNameChange: React.Dispatch<React.SetStateAction<string>>;
   companySize: number;
   onCompanySizeChange: React.Dispatch<React.SetStateAction<number>>;
-  email: string;
-  onEmailChange: React.Dispatch<React.SetStateAction<string>>;
-  averageMonthlyVolume: string;
-  onaverageMonthlyVolume: React.Dispatch<React.SetStateAction<string>>;
+  avgMonthlyVolume: string;
+  onAvgMonthlyVolume: React.Dispatch<React.SetStateAction<string>>;
+  avgMonthlyVolumeOptions: string[];
 }
+
 const Intro: React.FC<Updateprops> = ({
   view,
   companyName,
@@ -26,26 +32,15 @@ const Intro: React.FC<Updateprops> = ({
   onCompanySizeChange,
   email,
   onEmailChange,
-  averageMonthlyVolume,
-  onaverageMonthlyVolume,
+  avgMonthlyVolume,
+  onAvgMonthlyVolume,
+  avgMonthlyVolumeOptions,
 }) => {
   const [checked, setChecked] = React.useState(true);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
-
-  const averageMonthlyVolumeOptions = [
-    {
-      value: 'Less than 10.000',
-    },
-    {
-      value: 'More than 10.000  ',
-    },
-    {
-      value: 'No idea',
-    },
-  ];
 
   return (
     <div
@@ -168,13 +163,13 @@ const Intro: React.FC<Updateprops> = ({
                 native: true,
               }}
               onChange={(event) => {
-                onaverageMonthlyVolume(event.target.value);
+                onAvgMonthlyVolume(event.target.value);
               }}
-              value={averageMonthlyVolume}
+              value={avgMonthlyVolume}
             >
-              {averageMonthlyVolumeOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.value}
+              {avgMonthlyVolumeOptions.map((optionVal) => (
+                <option key={optionVal} value={optionVal}>
+                  {optionVal}
                 </option>
               ))}
             </TextField>

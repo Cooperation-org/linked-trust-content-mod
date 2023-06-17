@@ -38,7 +38,6 @@ const FundInfo: FC<FundInfoProps> = ({ onGoToNextStep }) => {
               ))}
             </TextField>
           </FormControl>
-          d
         </div>
         <div className="mac">
           <FormControl sx={{ width: '80%' }} style={{ marginTop: 0 }}>

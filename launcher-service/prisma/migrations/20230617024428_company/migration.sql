@@ -11,7 +11,7 @@ CREATE TABLE "Company" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "size" INTEGER,
-    "avgMonthlyVolume" INTEGER,
+    "avgMonthlyVolume" TEXT,
 
     CONSTRAINT "Company_pkey" PRIMARY KEY ("id")
 );

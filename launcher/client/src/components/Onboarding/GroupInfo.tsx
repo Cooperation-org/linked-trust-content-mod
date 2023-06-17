@@ -8,12 +8,21 @@ import { FC, useState, useCallback } from 'react';
 import FormControl from '@mui/material/FormControl';
 import { useMetamaskLogin } from '../../hooks/useMetamaskLogin';
 
-interface GropInfoProps {
+interface GroupInfoProps {
+  companyName: string;
+  companySize: number;
   companyEmail?: string;
+  avgMonthlyVolume: string;
   onGoToNextStep: () => void;
 }
 
-const GropInfo: FC<GropInfoProps> = ({ companyEmail = '', onGoToNextStep }) => {
+const GroupInfo: FC<GroupInfoProps> = ({
+  companyEmail = '',
+  onGoToNextStep,
+  companyName,
+  companySize,
+  avgMonthlyVolume,
+}) => {
   const [groupName, setGroupName] = useState('');
   const [contactName, setContactName] = useState('');
   const [email, setEmail] = useState(companyEmail);
@@ -43,8 +52,19 @@ const GropInfo: FC<GropInfoProps> = ({ companyEmail = '', onGoToNextStep }) => {
   };
 
   const handleSignIn = useCallback(async () => {
-    await handleSignInWithNonce();
-  }, [handleSignInWithNonce]);
+    await handleSignInWithNonce(
+      email,
+      companyName,
+      companySize,
+      avgMonthlyVolume
+    );
+  }, [
+    handleSignInWithNonce,
+    email,
+    companyName,
+    companySize,
+    avgMonthlyVolume,
+  ]);
 
   return (
     <Box sx={{ color: 'black' }}>
@@ -162,4 +182,4 @@ const GropInfo: FC<GropInfoProps> = ({ companyEmail = '', onGoToNextStep }) => {
   );
 };
 
-export default GropInfo;
+export default GroupInfo;

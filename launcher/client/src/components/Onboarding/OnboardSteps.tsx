@@ -6,7 +6,19 @@ import { Stepper, Step, StepLabel, Button, Box } from '@mui/material';
 
 const steps = ['groupinfo', 'fundinfo', 'webhooks'];
 
-const OnboardingSteps: React.FC = () => {
+interface OnboardingStepsProps {
+  companyName: string;
+  companySize: number;
+  companyEmail: string;
+  avgMonthlyVolume: string;
+}
+
+const OnboardingSteps: React.FC<OnboardingStepsProps> = ({
+  companyEmail,
+  companyName,
+  companySize,
+  avgMonthlyVolume,
+}) => {
   const [activeStep, setActiveStep] = useState<number>(0);
 
   const handleGoToNextStep = useCallback(() => {
@@ -57,7 +69,13 @@ const OnboardingSteps: React.FC = () => {
             <div>
               <div>
                 {activeStep === 0 && (
-                  <GroupInfo onGoToNextStep={handleGoToNextStep} />
+                  <GroupInfo
+                    avgMonthlyVolume={avgMonthlyVolume}
+                    companyName={companyName}
+                    companySize={companySize}
+                    companyEmail={companyEmail}
+                    onGoToNextStep={handleGoToNextStep}
+                  />
                 )}
                 {activeStep === 1 && (
                   <FundInfo onGoToNextStep={handleGoToNextStep} />

@@ -48,7 +48,12 @@ export const useMetamaskLogin = ({
   const { chain } = useNetwork();
   const { signMessageAsync } = useSignMessage();
 
-  const connectWallet = async () => {
+  const connectWallet = async (
+    email?: string,
+    companyName?: string,
+    companySize?: number,
+    avgMonthlyVolume?: string
+  ) => {
     try {
       const chainId = chain?.id;
       if (!address || !chainId) return;
@@ -73,6 +78,10 @@ export const useMetamaskLogin = ({
         message,
         signature,
         role: 'jobCreator',
+        email,
+        companyName,
+        companySize,
+        avgMonthlyVolume,
       });
 
       if (verifyRes.status !== 200) throw new Error('Error verifying message');
@@ -93,13 +102,14 @@ export const useMetamaskLogin = ({
   };
 
   const handleSignInWithNonce = async (
+    email?: string,
     companyName?: string,
     companySize?: number,
-    averageMonthlyVolume?: string
+    avgMonthlyVolume?: string
   ) => {
     if (isConnected) {
       setShowSignBtn(true);
-      await connectWallet();
+      await connectWallet(email, companyName, companySize, avgMonthlyVolume);
     }
   };
 

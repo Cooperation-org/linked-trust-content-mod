@@ -14,7 +14,7 @@ model Company {
   id               Int          @id @default(autoincrement())
   name             String       @unique
   size             Int?
-  avgMonthlyVolume Int?
+  avgMonthlyVolume String?
   JobCreator       JobCreator[]
 }
 

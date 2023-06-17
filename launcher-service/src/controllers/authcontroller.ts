@@ -79,6 +79,7 @@ export const login = async (
       message,
       signature,
       role,
+      email,
       companyName,
       companySize,
       avgMonthlyVolume,
@@ -107,7 +108,7 @@ export const login = async (
       });
 
       if (!user) {
-        user = await prisma.jobCreator.create({ data: { address } });
+        user = await prisma.jobCreator.create({ data: { address, email } });
 
         if (companyName && companySize && avgMonthlyVolume) {
           await prisma.company.create({
