@@ -1,11 +1,11 @@
-import { FC, useState, useCallback } from 'react';
-import FormControl from '@mui/material/FormControl';
-import { Box, Stack } from '@mui/material';
 import Modal from '../Modal';
 import Button from '../Button';
 import StyledInput from './StyledInput';
 import WalletModal from '../WalletModal';
 import { useAuth } from '../../hooks/auth';
+import { Box, Stack } from '@mui/material';
+import { FC, useState, useCallback } from 'react';
+import FormControl from '@mui/material/FormControl';
 import { useMetamaskLogin } from '../../hooks/useMetamaskLogin';
 
 interface GropInfoProps {
@@ -27,7 +27,11 @@ const GropInfo: FC<GropInfoProps> = ({ companyEmail = '', onGoToNextStep }) => {
     handleClickCrypto,
     handleSignInWithNonce,
     isConnected,
-  } = useMetamaskLogin({});
+  } = useMetamaskLogin({
+    onLogin: () => {
+      onGoToNextStep();
+    },
+  });
 
   const handleGoToNextStep = () => {
     if (isConnected && id) {
@@ -40,8 +44,7 @@ const GropInfo: FC<GropInfoProps> = ({ companyEmail = '', onGoToNextStep }) => {
 
   const handleSignIn = useCallback(async () => {
     await handleSignInWithNonce();
-    onGoToNextStep();
-  }, [handleSignInWithNonce, onGoToNextStep]);
+  }, [handleSignInWithNonce]);
 
   return (
     <Box sx={{ color: 'black' }}>
