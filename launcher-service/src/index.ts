@@ -13,14 +13,14 @@ const swaggerUi = require('swagger-ui-express');
 const fs = require('fs');
 const YAML = require('yaml');
 
-app.use(
-  '/docs',
-  swaggerUi.serveFiles,
-  swaggerUi.setup(YAML.parse(fs.readFileSync('./docs/swagger.yaml', 'utf8')))
-);
+// app.use(
+//   '/docs',
+//   swaggerUi.serve,
+//   swaggerUi.setup(YAML.parse(fs.readFileSync('./docs/swagger.yaml', 'utf8')))
+// );
 app.use(
   '/api-docs',
-  swaggerUi.serveFiles,
+  swaggerUi.serve,
   swaggerUi.setup(
     YAML.parse(fs.readFileSync('./docs/swagger-external.yaml', 'utf8'))
   )
