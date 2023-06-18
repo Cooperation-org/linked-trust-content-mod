@@ -29,7 +29,7 @@ router.post('/groups', jwtDBAuth, createGroup);
 router.put('/groups/:id', jwtDBAuth, updateGroup);
 router.get('/groups/:id', jwtDBAuth, getGroup);
 router.post('/groups/:groupId/add-workers', jwtDBAuth, addWorkersToGroup);
-router.post('/groups/:groupId/jobs', jwtDBAuth, apiKeyAccess, createJob);
+router.post('/groups/:groupId/jobs', apiKeyAccess, createJob);
 router.post('/groups/:id/newApiKey', jwtDBAuth, generateApiKey);
 router.get('/jobs/:id', jwtDBAuth, getJob);
 router.get('/groups/worker/:workerId', jwtDBAuth, getGroupByWorker);
