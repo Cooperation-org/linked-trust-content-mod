@@ -3,9 +3,8 @@ import Button from '../Button';
 import StyledInput from './StyledInput';
 import WalletModal from '../WalletModal';
 import { useAuth } from '../../hooks/auth';
-import { Box, Stack } from '@mui/material';
 import { FC, useState, useCallback } from 'react';
-import FormControl from '@mui/material/FormControl';
+import { Box, Stack, FormControl } from '@mui/material';
 import { useMetamaskLogin } from '../../hooks/useMetamaskLogin';
 
 interface GroupInfoProps {
@@ -43,6 +42,11 @@ const GroupInfo: FC<GroupInfoProps> = ({
   });
 
   const handleGoToNextStep = () => {
+    if (!groupName || !contactName || !email) {
+      alert('Please fill all the fields');
+      return;
+    }
+
     if (isConnected && id) {
       onGoToNextStep();
       return;

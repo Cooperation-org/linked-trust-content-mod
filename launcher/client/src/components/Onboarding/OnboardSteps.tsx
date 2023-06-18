@@ -4,7 +4,7 @@ import HooksAndKeysInfo from './HooksAndKeysInfo';
 import React, { useState, useCallback } from 'react';
 import { Stepper, Step, StepLabel, Button, Box } from '@mui/material';
 
-const steps = ['groupinfo', 'fundinfo', 'webhooks'];
+const steps = ['GROUP_INFO', 'FUND_INFO', 'WEB_HOOKS'];
 
 interface OnboardingStepsProps {
   companyName: string;

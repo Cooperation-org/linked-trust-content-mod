@@ -12,16 +12,20 @@ const avgMonthlyVolumeOptions = [
 
 const OnboardingMod = () => {
   const [showcontent, setshowcontent] = useState<boolean>(false);
-  function contentview(newvalue: boolean) {
-    setshowcontent(newvalue);
-  }
-
   const [companyName, setCompanyName] = useState('');
   const [companySize, setCompanySize] = useState(0);
   const [email, setEmail] = useState('');
   const [avgMonthlyVolume, setAvgeMonthlyVolume] = useState(
     avgMonthlyVolumeOptions[0]
   );
+
+  function contentview(shouldShow: boolean) {
+    if (!companyName || !companySize || !email || !avgMonthlyVolume) {
+      alert('Please fill all the fields');
+      return;
+    }
+    setshowcontent(shouldShow);
+  }
 
   return (
     <Box
