@@ -22,10 +22,10 @@ import {
 } from '../../controllers';
 const router = Router();
 
+router.post('/groups/:groupId/jobs', apiKeyAccess, createJob);
 router.get('/job-creators', jwtDBAuth, getJobCreators);
 router.post('/job-creators', jwtDBAuth, createJobCreator);
 router.post('/workers', jwtDBAuth, createWorker);
-router.post('/groups/:groupId/jobs', apiKeyAccess, createJob);
 router.post('/groups', jwtDBAuth, createGroup);
 router.put('/groups/:id', jwtDBAuth, updateGroup);
 router.get('/groups/:id', jwtDBAuth, getGroup);
