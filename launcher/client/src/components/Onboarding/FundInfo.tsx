@@ -15,6 +15,7 @@ const FundInfo: FC<FundInfoProps> = ({ onGoToNextStep }) => {
       value: 'select from the options',
     },
   ];
+
   return (
     <div style={{ color: 'black' }}>
       <div style={{ marginBottom: '2rem' }}>

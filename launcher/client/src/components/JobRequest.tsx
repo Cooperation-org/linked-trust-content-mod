@@ -1,4 +1,4 @@
-import HMTokenABI from '@human-protocol/core/abis/HMToken.json';
+import { useState, useContext } from 'react';
 import {
   Box,
   Button,
@@ -12,28 +12,17 @@ import {
   Select,
   TextField,
   Typography,
+  Tabs,
+  Tab,
 } from '@mui/material';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-
-import axiosInstance from './../config/axiosInterceptor';
-import { ethers } from 'ethers';
-import { useState, useContext } from 'react';
-import { useAccount, useChainId, useSigner, useSwitchNetwork } from 'wagmi';
-import {
-  ChainId,
-  ESCROW_NETWORKS,
-  HM_TOKEN_DECIMALS,
-  SUPPORTED_CHAIN_IDS,
-} from '../constants';
-// import RandomKey from './APIKey';
-import { RoundedBox } from './RoundedBox';
-import { FortuneJobRequestType, JobLaunchResponse, TabsTypes } from './types';
-// import { FortuneJobRequest } from '.';
 import Dashboard from './Dashboard';
-import { useAuth } from 'src/hooks/auth';
 import { AppContext } from 'src/state';
+import { useAuth } from 'src/hooks/auth';
+import { RoundedBox } from './RoundedBox';
 import { goToTab } from 'src/state/actions';
+import useCreateGroup from '../hooks/useCreateGroup';
+import { ChainId, ESCROW_NETWORKS, SUPPORTED_CHAIN_IDS } from '../constants';
+import { FortuneJobRequestType, JobLaunchResponse, TabsTypes } from './types';
 
 type JobRequestProps = {
   onBack: () => void;
@@ -77,10 +66,12 @@ export const JobRequest = ({
   onFail,
 }: JobRequestProps) => {
   const { id, role } = useAuth();
-  const { address } = useAccount();
-  const { data: signer } = useSigner();
-  const chainId = useChainId();
-  const { switchNetwork } = useSwitchNetwork();
+
+  const { isLoading, handleLaunch } = useCreateGroup({
+    onLaunch,
+    onSuccess,
+    onFail,
+  });
 
   const [jobRequest, setJobRequest] = useState<FortuneJobRequestType>({
     chainId: SUPPORTED_CHAIN_IDS.includes(ChainId.LOCALHOST)
@@ -99,8 +90,6 @@ export const JobRequest = ({
     rules: '',
   });
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const handleJobRequestFormFieldChange = (
     fieldName: keyof FortuneJobRequestType,
     fieldValue: any
@@ -112,57 +101,6 @@ export const JobRequest = ({
     // } else if (regex.test(fieldValue) || fieldValue === '') {
     //  setJobRequest({ ...jobRequest, [fieldName]: fieldValue });
     // }
-  };
-
-  const handleLaunch = async () => {
-    if (!signer || !address) return;
-
-    if (chainId !== jobRequest.chainId) {
-      switchNetwork?.(jobRequest.chainId);
-      return;
-    }
-
-    setIsLoading(true);
-    const data: FortuneJobRequestType = {
-      ...jobRequest,
-      jobRequester: address,
-      token: ESCROW_NETWORKS[jobRequest.chainId as ChainId]?.hmtAddress!,
-    };
-
-    try {
-      const contract = new ethers.Contract(data.token, HMTokenABI, signer);
-      const jobLauncherAddress = process.env.REACT_APP_JOB_LAUNCHER_ADDRESS;
-      if (!jobLauncherAddress) {
-        alert('Job Launcher address is missing');
-        setIsLoading(false);
-        return;
-      }
-      const balance = await contract.balanceOf(address);
-
-      const fundAmount = ethers.utils.parseUnits(
-        data.fundedAmt,
-        HM_TOKEN_DECIMALS
-      );
-      if (balance.lt(fundAmount)) {
-        throw new Error('Balance not enough for funding the escrow');
-      }
-      const allowance = await contract.allowance(address, jobLauncherAddress);
-
-      if (allowance.lt(fundAmount)) {
-        const tx = await contract.approve(jobLauncherAddress, fundAmount);
-        const receipt = await tx.wait();
-      }
-      onLaunch();
-      const result = await axiosInstance.post('/api/groups', data);
-      // onSuccess(result.data);
-      onSuccess({ escrowAddress: result.data.id, exchangeUrl: '' });
-    } catch (err: any) {
-      console.log(err);
-      if (err.name === 'AxiosError') onFail(err.response.data);
-      else onFail(err.message);
-    }
-
-    setIsLoading(false);
   };
 
   const {
@@ -399,7 +337,7 @@ export const JobRequest = ({
                   <Button
                     variant="contained"
                     sx={{ minWidth: '240px', py: 1 }}
-                    onClick={handleLaunch}
+                    onClick={() => handleLaunch(jobRequest)}
                     disabled={isLoading}
                   >
                     {isLoading && <CircularProgress size={24} sx={{ mr: 1 }} />}{' '}

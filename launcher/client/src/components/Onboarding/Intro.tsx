@@ -1,7 +1,7 @@
 import React from 'react';
-import Box from '@mui/material/Box';
+import StyledInput from './StyledInput';
 import {
-  OutlinedInput,
+  Box,
   FormControl,
   TextField,
   Checkbox,
@@ -103,12 +103,7 @@ const Intro: React.FC<Updateprops> = ({
             <label htmlFor="" style={{ fontSize: '14px' }}>
               Company Name <span style={{ color: 'red' }}>*</span>
             </label>
-            <OutlinedInput
-              sx={{
-                borderColor: 'grey',
-                borderWidth: '1px',
-                borderStyle: 'solid',
-              }}
+            <StyledInput
               value={companyName}
               onChange={(event) => {
                 onCompanyNameChange(event.currentTarget.value);
@@ -119,7 +114,7 @@ const Intro: React.FC<Updateprops> = ({
             <label htmlFor="" style={{ fontSize: '14px' }}>
               Company Size <span style={{ color: 'red' }}>*</span>
             </label>
-            <OutlinedInput
+            <StyledInput
               placeholder="Please enter text"
               sx={{
                 borderColor: 'grey',
@@ -138,12 +133,7 @@ const Intro: React.FC<Updateprops> = ({
               {' '}
               Email <span style={{ color: 'red' }}>*</span>
             </label>
-            <OutlinedInput
-              sx={{
-                borderColor: 'grey',
-                borderWidth: '1px',
-                borderStyle: 'solid',
-              }}
+            <StyledInput
               value={email}
               onChange={(event) => {
                 onEmailChange(event.currentTarget.value);
@@ -157,6 +147,7 @@ const Intro: React.FC<Updateprops> = ({
             </label>
 
             <TextField
+              sx={{ background: '#fff' }}
               id="outlined-select-currency-native"
               select
               SelectProps={{
