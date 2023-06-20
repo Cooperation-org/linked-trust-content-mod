@@ -32,7 +32,7 @@ import { useSigner, useChainId } from 'wagmi';
 import { ChainId, ESCROW_NETWORKS } from './constants';
 import { useAuth } from './hooks/auth';
 import { AppContext } from 'src/state';
-import { goToTab } from 'src/state/actions';
+import { goToTab, changeLauncherStatus } from 'src/state/actions';
 
 const useStyles = makeStyles((theme: Theme) => ({
   button: {
@@ -69,11 +69,11 @@ function App() {
   const chainId = useChainId();
   const [showModal, setShowModal] = useState(false);
   const [lastEscrowAddress, setLastEscrowAddress] = useState('');
-  const [status, setStatus] = useState<LauncherStageStatus>(
-    LauncherStageStatus.UNAUTHORIZED
-  );
 
-  const { dispatch } = useContext(AppContext);
+  const {
+    state: { launcherStatus },
+    dispatch,
+  } = useContext(AppContext);
 
   const [jobResponse, setJobResponse] = useState<JobLaunchResponse>({
     escrowAddress: '',
@@ -83,37 +83,36 @@ function App() {
   const [showLog, setShowLog] = useState(false);
 
   const handleChangeStage = (method: FundingMethodType) => {
-    setStatus(LauncherStageStatus.GROUP_REQUEST);
+    dispatch(changeLauncherStatus(LauncherStageStatus.GROUP_REQUEST));
   };
-
   const handleBack = () => {
-    setStatus(status > 0 ? status - 1 : 0);
+    dispatch(changeLauncherStatus(launcherStatus > 0 ? launcherStatus - 1 : 0));
   };
 
   const handleOnSuccess = (data: JobLaunchResponse) => {
     setJobResponse(data);
-    setStatus(LauncherStageStatus.LAUNCH_SUCCESS);
+    dispatch(changeLauncherStatus(LauncherStageStatus.LAUNCH_SUCCESS));
   };
 
   const handleCreateNewEscrow = () => {
     setJobResponse({ escrowAddress: '', exchangeUrl: '' });
-    setStatus(LauncherStageStatus.GROUP_REQUEST);
+    dispatch(changeLauncherStatus(LauncherStageStatus.GROUP_REQUEST));
   };
 
   const handleGoToJobDashboard = () => {
     dispatch(goToTab(TabsTypes.DASHBOARD));
-    setStatus(LauncherStageStatus.GROUP_REQUEST);
+    dispatch(changeLauncherStatus(LauncherStageStatus.GROUP_REQUEST));
   };
 
   const handleDisConnectWallet = () => {
     disconnect();
     handleLogout();
-    setStatus(LauncherStageStatus.UNAUTHORIZED);
+    dispatch(changeLauncherStatus(LauncherStageStatus.UNAUTHORIZED));
   };
 
   const handleOnError = (message: string) => {
     setErrorMessage(message);
-    setStatus(LauncherStageStatus.LAUNCH_FAIL);
+    dispatch(changeLauncherStatus(LauncherStageStatus.LAUNCH_FAIL));
   };
 
   const handleLogout = () => {
@@ -133,9 +132,9 @@ function App() {
 
   useEffect(() => {
     if (id) {
-      setStatus(LauncherStageStatus.GROUP_REQUEST);
+      dispatch(changeLauncherStatus(LauncherStageStatus.GROUP_REQUEST));
     } else {
-      setStatus(LauncherStageStatus.UNAUTHORIZED);
+      dispatch(changeLauncherStatus(LauncherStageStatus.UNAUTHORIZED));
     }
   }, [id]);
 
@@ -177,10 +176,12 @@ function App() {
         }}
       >
         <Grid container spacing={4}>
-          {status === LauncherStageStatus.UNAUTHORIZED && (
+          {launcherStatus === LauncherStageStatus.UNAUTHORIZED && (
             <Grid item xs={12} sm={12} md={5} lg={4}>
               <Typography color="primary" fontWeight={600} variant="h4">
-                <a href="https://repute.social/" target="_blank">Repute.Social</a>
+                <a href="https://repute.social/" target="_blank">
+                  Repute.Social
+                </a>
               </Typography>
               <Typography color="primary" fontWeight={500} variant="h6">
                 Content Moderation
@@ -199,11 +200,11 @@ function App() {
             item
             xs={12}
             sm={12}
-            md={status === LauncherStageStatus.UNAUTHORIZED ? 7 : 12}
-            lg={status === LauncherStageStatus.UNAUTHORIZED ? 7 : 12}
+            md={launcherStatus === LauncherStageStatus.UNAUTHORIZED ? 7 : 12}
+            lg={launcherStatus === LauncherStageStatus.UNAUTHORIZED ? 7 : 12}
           >
             <Box mt={3}>
-              {status === LauncherStageStatus.UNAUTHORIZED && (
+              {launcherStatus === LauncherStageStatus.UNAUTHORIZED && (
                 <LoginWithMetamask
                   onSuccess={({ address }) =>
                     setState((x) => ({ ...x, address }))
@@ -212,26 +213,34 @@ function App() {
                   onLogin={handleChangeStage}
                 />
               )}
-              {status === LauncherStageStatus.GROUP_REQUEST && (
+              {launcherStatus === LauncherStageStatus.GROUP_REQUEST && (
                 <FortuneJobRequest
                   onBack={handleBack}
-                  onLaunch={() => setStatus(LauncherStageStatus.LAUNCH)}
+                  onLaunch={() =>
+                    dispatch(changeLauncherStatus(LauncherStageStatus.LAUNCH))
+                  }
                   onSuccess={handleOnSuccess}
                   onFail={handleOnError}
                 />
               )}
-              {status === LauncherStageStatus.LAUNCH && <FortuneLaunch />}
-              {status === LauncherStageStatus.LAUNCH_SUCCESS && (
+              {launcherStatus === LauncherStageStatus.LAUNCH && (
+                <FortuneLaunch />
+              )}
+              {launcherStatus === LauncherStageStatus.LAUNCH_SUCCESS && (
                 <FortuneLaunchSuccess
                   jobResponse={jobResponse}
                   onCreateNewEscrow={handleCreateNewEscrow}
                   onGoToDashboard={handleGoToJobDashboard}
                 />
               )}
-              {status === LauncherStageStatus.LAUNCH_FAIL && (
+              {launcherStatus === LauncherStageStatus.LAUNCH_FAIL && (
                 <FortuneLaunchFail
                   message={errorMessage}
-                  onBack={() => setStatus(LauncherStageStatus.GROUP_REQUEST)}
+                  onBack={() =>
+                    dispatch(
+                      changeLauncherStatus(LauncherStageStatus.GROUP_REQUEST)
+                    )
+                  }
                 />
               )}
             </Box>

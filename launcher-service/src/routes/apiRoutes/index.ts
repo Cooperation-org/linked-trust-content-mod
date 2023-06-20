@@ -22,6 +22,7 @@ import {
 } from '../../controllers';
 const router = Router();
 
+router.post('/groups/:groupId/jobs', apiKeyAccess, createJob);
 router.get('/job-creators', jwtDBAuth, getJobCreators);
 router.post('/job-creators', jwtDBAuth, createJobCreator);
 router.post('/workers', jwtDBAuth, createWorker);
@@ -29,7 +30,6 @@ router.post('/groups', jwtDBAuth, createGroup);
 router.put('/groups/:id', jwtDBAuth, updateGroup);
 router.get('/groups/:id', jwtDBAuth, getGroup);
 router.post('/groups/:groupId/add-workers', jwtDBAuth, addWorkersToGroup);
-router.post('/groups/:groupId/jobs', jwtDBAuth, apiKeyAccess, createJob);
 router.post('/groups/:id/newApiKey', jwtDBAuth, generateApiKey);
 router.get('/jobs/:id', jwtDBAuth, getJob);
 router.get('/groups/worker/:workerId', jwtDBAuth, getGroupByWorker);
