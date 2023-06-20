@@ -5,6 +5,9 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       IRONSESSION_PASSWORD: string;
+      JWT_SECRET: string;
+      ACCESS_TOKEN_SECRET: string;
+      REFRESH_TOKEN_SECRET: string;
     }
   }
 

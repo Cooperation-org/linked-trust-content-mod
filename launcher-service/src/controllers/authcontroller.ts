@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { prisma } from '../db';
-const jwt = require('jsonwebtoken');
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { SiweMessage } from 'siwe';
 
 export const createNonce = async (
@@ -47,7 +47,10 @@ export const renewToken = async (
     const refreshToken = req.body.refreshToken;
 
     // Verify the refresh token and extract the payload
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    ) as JwtPayload;
 
     // Check if the payload contains the necessary data
     if (!decoded.id || !decoded.role) {
@@ -94,7 +97,7 @@ export const login = async (
       return res.status(422).json({ message: 'Invalid nonce.' });
 
     let user;
-    let isAdmin: boolean = false;
+    let isAdmin = false;
     if (role === 'jobCreator') {
       user = await prisma.jobCreator.findUnique({
         where: { address },
@@ -120,17 +123,15 @@ export const login = async (
       return res.status(500).json({ message: 'Internal server error' });
     }
 
-    // Generate a new JWT token with the user ID and role
-
     let payload: object = {
       id: user.id,
       role: role,
     };
 
-    if (isAdmin) payload = { ...payload, isAdmin: isAdmin };
+    if (role === 'jobCreator') payload = { ...payload, isAdmin };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: '5m', // Expires in 5 min
+      expiresIn: '1d',
     });
 
     res.status(200).send({ message: 'Login successful.', token });

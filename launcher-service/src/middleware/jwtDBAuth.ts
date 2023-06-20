@@ -17,10 +17,7 @@ export const jwtDBAuth = async (
 
   if (token) {
     try {
-      const decoded = jwt.verify(
-        token,
-        process.env.JWT_SECRET as string
-      ) as TokenPayload;
+      const decoded = jwt.verify(token, process.env.JWT_SECRET) as TokenPayload;
       if (decoded.role === 'jobCreator') {
         const jobCreator = await prisma.jobCreator.findFirst({
           where: { id: decoded.id },
