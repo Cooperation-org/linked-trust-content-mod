@@ -3,6 +3,7 @@ import GroupInfo from './GroupInfo';
 import HooksAndKeysInfo from './HooksAndKeysInfo';
 import React, { useState, useCallback } from 'react';
 import { Stepper, Step, StepLabel, Button, Box } from '@mui/material';
+import { JobLaunchResponse } from '../types';
 
 const steps = ['GROUP_INFO', 'FUND_INFO', 'WEB_HOOKS'];
 
@@ -21,6 +22,7 @@ const OnboardingSteps: React.FC<OnboardingStepsProps> = ({
 }) => {
   const [activeStep, setActiveStep] = useState<number>(0);
   const [groupName, setGroupName] = useState('');
+  const [createdGroupId, setCreatedGroupId] = useState<string>();
 
   const handleGoToNextStep = useCallback(() => {
     if (activeStep !== steps.length - 1) {
@@ -34,6 +36,12 @@ const OnboardingSteps: React.FC<OnboardingStepsProps> = ({
 
   const handleReset = () => {
     setActiveStep(0);
+  };
+
+  // onSuccess({ escrowAddress: result.data.id, exchangeUrl: '' });
+  const onFundSuccess = ({ escrowAddress }: JobLaunchResponse) => {
+    setCreatedGroupId(escrowAddress);
+    handleGoToNextStep();
   };
 
   return (
@@ -83,10 +91,12 @@ const OnboardingSteps: React.FC<OnboardingStepsProps> = ({
                 {activeStep === 1 && (
                   <FundInfo
                     groupName={groupName}
-                    onGoToNextStep={handleGoToNextStep}
+                    onFundSuccess={onFundSuccess}
                   />
                 )}
-                {activeStep === 2 && <HooksAndKeysInfo />}
+                {activeStep === 2 && createdGroupId && (
+                  <HooksAndKeysInfo activeGroupId={createdGroupId} />
+                )}
               </div>
               <div>
                 <Button

@@ -32,7 +32,7 @@ router.get('/groups/:id', jwtDBAuth, getGroup);
 router.post('/groups/:groupId/add-workers', jwtDBAuth, addWorkersToGroup);
 router.post('/groups/:groupId/jobs', jwtDBAuth, apiKeyAccess, createJob);
 router.post('/groups/:id/newApiKey', jwtDBAuth, generateApiKey);
-router.post('/gorups/:id/webhook', jwtDBAuth, createWebHook);
+router.post('/groups/:id/webhook', jwtDBAuth, createWebHook);
 router.get('/jobs/:id', jwtDBAuth, getJob);
 router.get('/groups/worker/:workerId', jwtDBAuth, getGroupByWorker);
 router.get('/groups/creator/:creatorId', jwtDBAuth, getGroupByJobCreator);

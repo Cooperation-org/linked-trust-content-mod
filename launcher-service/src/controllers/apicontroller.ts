@@ -637,7 +637,7 @@ export const createWebHook = async (
     });
 
     res.status(200).send({
-      message: 'New webhook created successfully.',
+      message: 'Webhook stored successfully.',
       webHook,
     });
   } catch (error) {

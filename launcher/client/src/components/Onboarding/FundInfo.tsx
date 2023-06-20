@@ -3,7 +3,7 @@ import Button from './Button';
 import { FC, useState } from 'react';
 import StyledInput from './StyledInput';
 import { useAuth } from 'src/hooks/auth';
-import { FortuneJobRequestType } from '../types';
+import { FortuneJobRequestType, JobLaunchResponse } from '../types';
 import {
   Box,
   TextField,
@@ -16,15 +16,15 @@ import useCreateGroup from '../../hooks/useCreateGroup';
 import { ChainId, ESCROW_NETWORKS, SUPPORTED_CHAIN_IDS } from '../../constants';
 
 interface FundInfoProps {
-  onGoToNextStep: () => void;
+  onFundSuccess: (response: JobLaunchResponse) => void;
   groupName: string;
 }
 
-const FundInfo: FC<FundInfoProps> = ({ onGoToNextStep, groupName }) => {
+const FundInfo: FC<FundInfoProps> = ({ onFundSuccess, groupName }) => {
   const { id } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const { isLoading, handleLaunch } = useCreateGroup({
-    onSuccess: onGoToNextStep,
+    onSuccess: onFundSuccess,
   });
 
   const [jobRequest, setJobRequest] = useState<FortuneJobRequestType>({
@@ -52,7 +52,6 @@ const FundInfo: FC<FundInfoProps> = ({ onGoToNextStep, groupName }) => {
   };
 
   const handleFundGroupClick = () => {
-    console.log(typeof jobRequest.fundedAmt);
     if (!jobRequest.fundedAmt || !jobRequest.description) {
       alert('Please fill all fields');
       return;
