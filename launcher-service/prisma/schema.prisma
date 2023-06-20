@@ -16,6 +16,7 @@ model JobCreator {
   email    String?
   password String?
   address  String  @unique
+  isAdmin  Boolean @default(false)
   groups   Group[]
 }
 
