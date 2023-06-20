@@ -8,6 +8,7 @@ import {
   createJobCreator,
   createWorker,
   generateApiKey,
+  createWebHook,
   getGroup,
   getGroupByWorker,
   getGroupJobsByWorker,
@@ -31,6 +32,7 @@ router.put('/groups/:id', jwtDBAuth, updateGroup);
 router.get('/groups/:id', jwtDBAuth, getGroup);
 router.post('/groups/:groupId/add-workers', jwtDBAuth, addWorkersToGroup);
 router.post('/groups/:id/newApiKey', jwtDBAuth, generateApiKey);
+router.post('/groups/:id/webhook', jwtDBAuth, createWebHook);
 router.get('/jobs/:id', jwtDBAuth, getJob);
 router.get('/groups/worker/:workerId', jwtDBAuth, getGroupByWorker);
 router.get('/groups/creator/:creatorId', jwtDBAuth, getGroupByJobCreator);

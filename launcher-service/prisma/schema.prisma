@@ -10,14 +10,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Company {
+  id               Int          @id @default(autoincrement())
+  name             String       @unique
+  size             Int?
+  avgMonthlyVolume String?
+  JobCreator       JobCreator[]
+}
+
 model JobCreator {
-  id       Int     @id @default(autoincrement())
-  name     String?
-  email    String?
-  password String?
-  address  String  @unique
-  isAdmin  Boolean @default(false)
-  groups   Group[]
+  id        Int      @id @default(autoincrement())
+  name      String?
+  email     String?
+  password  String?
+  address   String   @unique
+  groups    Group[]
+  isAdmin   Boolean  @default(false)
+  company   Company? @relation(fields: [companyId], references: [id])
+  companyId Int?
 }
 
 model Worker {
@@ -31,21 +41,24 @@ model Worker {
 }
 
 model Group {
-  id            Int        @id @default(autoincrement())
-  name          String
-  description   String?
-  creator       JobCreator @relation(fields: [createdById], references: [id])
-  createdById   Int
-  jobs          Job[]
-  members       Worker[]   @relation("Members")
-  funded        Boolean    @default(false)
-  funded_amt    Int
-  used_amt      Float?
-  guideline_url String
-  apiKey        String?    @unique
-  chainId       Int
-  token         String
-  rules         String?
+  id                 Int        @id @default(autoincrement())
+  name               String
+  description        String?
+  creator            JobCreator @relation(fields: [createdById], references: [id])
+  createdById        Int
+  jobs               Job[]
+  members            Worker[]   @relation("Members")
+  funded             Boolean    @default(false)
+  funded_amt         Int
+  used_amt           Float?
+  guideline_url      String
+  apiKey             String?    @unique
+  chainId            Int
+  token              String
+  rules              String?
+  webhook            String?
+  contactPersonName  String?
+  contactPersonEmail String?
 }
 
 model Job {

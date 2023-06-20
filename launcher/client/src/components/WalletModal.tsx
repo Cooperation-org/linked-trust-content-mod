@@ -7,9 +7,7 @@ import {
   useTheme,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import {useState ,useEffect} from 'react';
-import { useAccount, useNetwork, useSignMessage,useConnect } from 'wagmi'
-import { SiweMessage } from 'siwe'
+import { useConnect } from 'wagmi';
 import metaMaskSvg from 'src/assets/metamask.svg';
 import coinbaseSvg from 'src/assets/coinbase.svg';
 import walletConnectSvg from 'src/assets/walletconnect.svg';
@@ -27,15 +25,11 @@ export default function WalletModal({
   open: boolean;
   onClose: () => void;
 }) {
-
-
   const { connect, connectors, error, isLoading, pendingConnector } =
     useConnect();
-    
-   
+
   const theme = useTheme();
 
-    
   return (
     <Dialog
       open={open}
@@ -43,7 +37,7 @@ export default function WalletModal({
       maxWidth={false}
       PaperProps={{ sx: { mx: 2, maxWidth: 'calc(100% - 32px)' } }}
     >
-      <Box display="flex" maxWidth="784px" height='400px'>
+      <Box display="flex" maxWidth="784px" height="400px">
         <Box
           width={{ xs: '0', md: '50%' }}
           display={{ xs: 'none', md: 'flex' }}
@@ -105,7 +99,6 @@ export default function WalletModal({
                     ' (connecting)'}
                 </span>
               </Button>
-             
             ))}
           </Box>
 

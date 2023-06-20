@@ -78,6 +78,8 @@ export const createGroup = async (
     chainId,
     token,
     rules,
+    contactPersonName,
+    contactPersonEmail,
   } = req.body;
 
   try {
@@ -92,6 +94,8 @@ export const createGroup = async (
         chainId,
         token,
         rules,
+        contactPersonName,
+        contactPersonEmail,
       },
       include: {
         creator: true,
@@ -608,6 +612,37 @@ export const generateApiKey = async (
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: 'Error generating new apiKey.' });
+  }
+};
+
+export const createWebHook = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { webHook } = req.body;
+    const { id } = req.params;
+    const group = await prisma.group.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!group) {
+      return res.status(404).send({ message: 'Group not found.' });
+    }
+
+    await prisma.group.update({
+      where: { id: Number(id) },
+      data: { webhook: webHook },
+    });
+
+    res.status(200).send({
+      message: 'Webhook stored successfully.',
+      webHook,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'Error creating webhook.' });
   }
 };
 
