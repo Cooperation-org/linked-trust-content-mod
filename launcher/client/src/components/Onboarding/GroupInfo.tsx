@@ -1,5 +1,5 @@
 import Modal from '../Modal';
-import Button from '../Button';
+import Button from './Button';
 import StyledInput from './StyledInput';
 import WalletModal from '../WalletModal';
 import { useAuth } from '../../hooks/auth';
@@ -13,6 +13,8 @@ interface GroupInfoProps {
   companyEmail?: string;
   avgMonthlyVolume: string;
   onGoToNextStep: () => void;
+  groupName: string;
+  onGroupNameChange: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const GroupInfo: FC<GroupInfoProps> = ({
@@ -21,8 +23,9 @@ const GroupInfo: FC<GroupInfoProps> = ({
   companyName,
   companySize,
   avgMonthlyVolume,
+  groupName,
+  onGroupNameChange,
 }) => {
-  const [groupName, setGroupName] = useState('');
   const [contactName, setContactName] = useState('');
   const [email, setEmail] = useState(companyEmail);
 
@@ -101,7 +104,7 @@ const GroupInfo: FC<GroupInfoProps> = ({
                 borderStyle: 'solid',
               }}
               value={groupName}
-              onChange={(e) => setGroupName(e.target.value)}
+              onChange={(e) => onGroupNameChange(e.target.value)}
             />
           </FormControl>
           <FormControl sx={{ width: '100%' }} style={{ marginTop: 0 }}>

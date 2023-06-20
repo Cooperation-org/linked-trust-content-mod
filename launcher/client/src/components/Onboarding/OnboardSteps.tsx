@@ -20,6 +20,7 @@ const OnboardingSteps: React.FC<OnboardingStepsProps> = ({
   avgMonthlyVolume,
 }) => {
   const [activeStep, setActiveStep] = useState<number>(0);
+  const [groupName, setGroupName] = useState('');
 
   const handleGoToNextStep = useCallback(() => {
     if (activeStep !== steps.length - 1) {
@@ -75,10 +76,15 @@ const OnboardingSteps: React.FC<OnboardingStepsProps> = ({
                     companySize={companySize}
                     companyEmail={companyEmail}
                     onGoToNextStep={handleGoToNextStep}
+                    groupName={groupName}
+                    onGroupNameChange={setGroupName}
                   />
                 )}
                 {activeStep === 1 && (
-                  <FundInfo onGoToNextStep={handleGoToNextStep} />
+                  <FundInfo
+                    groupName={groupName}
+                    onGoToNextStep={handleGoToNextStep}
+                  />
                 )}
                 {activeStep === 2 && <HooksAndKeysInfo />}
               </div>

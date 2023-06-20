@@ -95,7 +95,7 @@ export const JobRequest = ({
     fieldValue: any
   ) => {
     // todo check string and number validity
-    const regex = /^[0-9\b]+$/;
+    // const regex = /^[0-9\b]+$/;
     //if (fieldName !== 'fortunesRequired') {
     setJobRequest({ ...jobRequest, [fieldName]: fieldValue });
     // } else if (regex.test(fieldValue) || fieldValue === '') {

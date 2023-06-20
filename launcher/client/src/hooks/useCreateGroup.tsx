@@ -8,9 +8,9 @@ import { FortuneJobRequestType, JobLaunchResponse } from '../components/types';
 import axiosInstance from './../config/axiosInterceptor';
 
 type UseCreateGroupProps = {
-  onLaunch: () => void;
-  onSuccess: (response: JobLaunchResponse) => void;
-  onFail: (message: string) => void;
+  onLaunch?: () => void;
+  onSuccess?: (response: JobLaunchResponse) => void;
+  onFail?: (message: string) => void;
 };
 
 const useCreateGroup = ({
@@ -63,13 +63,15 @@ const useCreateGroup = ({
         const tx = await contract.approve(jobLauncherAddress, fundAmount);
         const receipt = await tx.wait();
       }
-      onLaunch();
+      if (onLaunch) onLaunch();
       const result = await axiosInstance.post('/api/groups', data);
-      // onSuccess(result.data);
-      onSuccess({ escrowAddress: result.data.id, exchangeUrl: '' });
+      if (onSuccess)
+        onSuccess({ escrowAddress: result.data.id, exchangeUrl: '' });
     } catch (err: any) {
-      if (err.name === 'AxiosError') onFail(err.response.data);
-      else onFail(err.message);
+      if (onFail) {
+        if (err.name === 'AxiosError') onFail(err.response.data);
+        else onFail(err.message);
+      }
     }
 
     setIsLoading(false);

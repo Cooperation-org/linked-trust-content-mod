@@ -1,20 +1,68 @@
 import Modal from '../Modal';
-import Button from '../Button';
+import Button from './Button';
 import { FC, useState } from 'react';
-import FormControl from '@mui/material/FormControl';
-import { Box, TextField, OutlinedInput } from '@mui/material';
+import StyledInput from './StyledInput';
+import { useAuth } from 'src/hooks/auth';
+import { FortuneJobRequestType } from '../types';
+import {
+  Box,
+  TextField,
+  FormControl,
+  InputAdornment,
+  Typography,
+  CircularProgress,
+} from '@mui/material';
+import useCreateGroup from '../../hooks/useCreateGroup';
+import { ChainId, ESCROW_NETWORKS, SUPPORTED_CHAIN_IDS } from '../../constants';
 
 interface FundInfoProps {
   onGoToNextStep: () => void;
+  groupName: string;
 }
 
-const FundInfo: FC<FundInfoProps> = ({ onGoToNextStep }) => {
+const FundInfo: FC<FundInfoProps> = ({ onGoToNextStep, groupName }) => {
+  const { id } = useAuth();
   const [showModal, setShowModal] = useState(false);
-  const average = [
-    {
-      value: 'select from the options',
-    },
-  ];
+  const { isLoading, handleLaunch } = useCreateGroup({
+    onSuccess: onGoToNextStep,
+  });
+
+  const [jobRequest, setJobRequest] = useState<FortuneJobRequestType>({
+    chainId: SUPPORTED_CHAIN_IDS.includes(ChainId.LOCALHOST)
+      ? ChainId.LOCALHOST
+      : SUPPORTED_CHAIN_IDS.includes(ChainId.POLYGON_MUMBAI)
+      ? ChainId.POLYGON_MUMBAI
+      : SUPPORTED_CHAIN_IDS[0],
+    name: groupName,
+    description: '',
+    token: '',
+    fundedAmt: '',
+    jobRequester: '',
+    guidelineUrl: '',
+    creatorId: id,
+    funded: true,
+    rules: '',
+  });
+
+  const handleJobRequestFormFieldChange = (
+    fieldName: keyof FortuneJobRequestType,
+    fieldValue: any
+  ) => {
+    setJobRequest({ ...jobRequest, [fieldName]: fieldValue });
+  };
+
+  const handleFundGroupClick = () => {
+    console.log(typeof jobRequest.fundedAmt);
+    if (!jobRequest.fundedAmt || !jobRequest.description) {
+      alert('Please fill all fields');
+      return;
+    }
+    if (Number(jobRequest.fundedAmt) <= 0) {
+      alert('Token has to be positive number');
+      return;
+    }
+    setShowModal(true);
+  };
 
   return (
     <div style={{ color: 'black' }}>
@@ -31,12 +79,23 @@ const FundInfo: FC<FundInfoProps> = ({ onGoToNextStep }) => {
               SelectProps={{
                 native: true,
               }}
+              sx={{ background: '#fff' }}
+              value={jobRequest.chainId}
+              name="chainId"
+              onChange={(e) =>
+                handleJobRequestFormFieldChange(
+                  'chainId',
+                  Number(e.target.value)
+                )
+              }
             >
-              {average.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.value}
-                </option>
-              ))}
+              {SUPPORTED_CHAIN_IDS.map((chainId) => {
+                return (
+                  <option key={chainId} value={chainId}>
+                    {ESCROW_NETWORKS[chainId]?.title}
+                  </option>
+                );
+              })}
             </TextField>
           </FormControl>
         </div>
@@ -45,14 +104,9 @@ const FundInfo: FC<FundInfoProps> = ({ onGoToNextStep }) => {
             <label htmlFor="" style={{ fontSize: '14px' }}>
               Token <span style={{ color: 'red' }}>*</span>
             </label>
-            <OutlinedInput
-              placeholder="0x0376D26246Eb35FF4F9924cF13E6C05fd0bD7Fb4
-                  "
-              sx={{
-                borderColor: 'grey',
-                borderWidth: '1px',
-                borderStyle: 'solid',
-              }}
+            <StyledInput
+              value={ESCROW_NETWORKS[jobRequest.chainId as ChainId]?.hmtAddress}
+              disabled
             />
           </FormControl>
         </div>
@@ -61,51 +115,19 @@ const FundInfo: FC<FundInfoProps> = ({ onGoToNextStep }) => {
             <label htmlFor="" style={{ fontSize: '14px' }}>
               Fund Amount <span style={{ color: 'red' }}>*</span>
             </label>
-            <OutlinedInput
-              placeholder="Please enter text"
-              sx={{
-                borderColor: 'grey',
-                borderWidth: '1px',
-                borderStyle: 'solid',
-              }}
+            <StyledInput
+              value={jobRequest.fundedAmt}
+              onChange={(e) =>
+                handleJobRequestFormFieldChange('fundedAmt', e.target.value)
+              }
+              startAdornment={
+                <InputAdornment position="start">
+                  <Typography color={'primary'} variant="body2">
+                    HMT
+                  </Typography>
+                </InputAdornment>
+              }
             />
-          </FormControl>
-        </div>
-        <div className="mac">
-          <FormControl sx={{ width: '25ch' }} style={{ marginTop: 0 }}>
-            <label htmlFor="" style={{ fontSize: '14px' }}>
-              Project Name <span style={{ color: 'red' }}>*</span>
-            </label>
-            <OutlinedInput
-              placeholder="Please enter text"
-              sx={{
-                borderColor: 'grey',
-                borderWidth: '1px',
-                borderStyle: 'solid',
-              }}
-            />
-          </FormControl>
-        </div>
-        <div className="mac">
-          <FormControl sx={{ width: '25ch' }}>
-            <label htmlFor="" style={{ fontSize: '14px' }}>
-              Type of content to be moderated
-              <span style={{ color: 'red' }}>*</span>
-            </label>
-
-            <TextField
-              id="outlined-select-currency-native"
-              select
-              SelectProps={{
-                native: true,
-              }}
-            >
-              {average.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.value}
-                </option>
-              ))}
-            </TextField>
           </FormControl>
         </div>
         <div style={{ marginBottom: '1rem' }}>
@@ -118,9 +140,7 @@ const FundInfo: FC<FundInfoProps> = ({ onGoToNextStep }) => {
                 social media handles/brand will the moderation be for?)
               </span>
             </label>
-
             <textarea
-              name=""
               style={{
                 width: '100%',
                 minHeight: '150px',
@@ -132,12 +152,17 @@ const FundInfo: FC<FundInfoProps> = ({ onGoToNextStep }) => {
                 borderRadius: '5px',
               }}
               id=""
+              name="description"
+              value={jobRequest.description}
+              onChange={(e) =>
+                handleJobRequestFormFieldChange('description', e.target.value)
+              }
             ></textarea>
           </FormControl>
         </div>
       </div>
       <Box sx={{ textAlign: 'center' }}>
-        <Button onClick={() => setShowModal(true)}>Next</Button>
+        <Button onClick={handleFundGroupClick}>Fund Group</Button>
       </Box>
       <Modal open={showModal} onClose={() => setShowModal(false)}>
         <div style={{ textAlign: 'center', width: '60%', margin: 'auto' }}>
@@ -149,9 +174,28 @@ const FundInfo: FC<FundInfoProps> = ({ onGoToNextStep }) => {
               marginBottom: '2rem',
             }}
           >
-            Are you sure you want to add XYZ Fund Amount
+            Are you sure you want to add "HMT {jobRequest.fundedAmt}" Fund
+            Amount
           </h2>
-          <Button onClick={onGoToNextStep}>Continue</Button>
+          <Button
+            onClick={() => {
+              handleLaunch(jobRequest);
+            }}
+            disabled={isLoading}
+          >
+            {isLoading && (
+              <CircularProgress
+                sx={{
+                  mr: 1,
+                  '& .MuiCircularProgress-circle': {
+                    stroke: '#FFF',
+                  },
+                }}
+                size={24}
+              />
+            )}{' '}
+            Continue
+          </Button>
         </div>
       </Modal>
     </div>
