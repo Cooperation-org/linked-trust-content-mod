@@ -25,6 +25,7 @@ model JobCreator {
   password  String?
   address   String   @unique
   groups    Group[]
+  isAdmin   Boolean  @default(false)
   company   Company? @relation(fields: [companyId], references: [id])
   companyId Int?
 }

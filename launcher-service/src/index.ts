@@ -12,10 +12,12 @@ const app = express();
 const swaggerUi = require('swagger-ui-express');
 const fs = require('fs');
 const YAML = require('yaml');
-const file = fs.readFileSync('./docs/swagger.yaml', 'utf8');
-const swaggerDocument = YAML.parse(file);
 
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// app.use(
+//   '/docs',
+//   swaggerUi.serve,
+//   swaggerUi.setup(YAML.parse(fs.readFileSync('./docs/swagger.yaml', 'utf8')))
+// );
 app.use(
   '/api-docs',
   swaggerUi.serve,

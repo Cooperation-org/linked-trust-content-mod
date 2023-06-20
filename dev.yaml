@@ -76,6 +76,9 @@ services:
 
   launcher-server:
     image: ${REGISTRY_ADDRESS}/launcher-server:latest
+    build:
+      context: ./launcher/server
+      dockerfile: Dockerfile
     restart: always
     expose:
       - 8080
@@ -88,6 +91,9 @@ services:
 
   recording-oracle:
     image: ${REGISTRY_ADDRESS}/recording-oracle:latest
+    build:
+      context: ./recording-oracle
+      dockerfile: Dockerfile
     restart: always
     expose:
       - 3005
@@ -97,6 +103,9 @@ services:
 
   reputation-oracle:
     image: ${REGISTRY_ADDRESS}/reputation-oracle:latest
+    build:
+      context: ./reputation-oracle
+      dockerfile: Dockerfile
     restart: always
     expose:
       - 3006
@@ -106,6 +115,9 @@ services:
 
   launcher-service:
     image: ${REGISTRY_ADDRESS}/launcher-service:latest
+    build:
+      context: ./launcher-service
+      dockerfile: Dockerfile
     restart: always
     labels:
       - 'traefik.enable=true'
@@ -129,6 +141,9 @@ services:
 
   launcher-client:
     image: ${REGISTRY_ADDRESS}/launcher-client:latest
+    build:
+      context: ./launcher/client
+      dockerfile: Dockerfile
     restart: always
     labels:
       - 'traefik.enable=true'
@@ -146,6 +161,9 @@ services:
 
   exchange-client:
     image: ${REGISTRY_ADDRESS}/exchange-client:latest
+    build:
+      context: ./exchange
+      dockerfile: Dockerfile
     restart: always
     labels:
       - 'traefik.enable=true'
