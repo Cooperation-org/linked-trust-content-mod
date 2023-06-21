@@ -37,9 +37,12 @@ const Job = ({ jobId }: JobProps) => {
 
   const submitReview = async (risk: boolean) => {
     try {
-      await axiosInstance.post(`/jobs/${jobId}/content/${job?.content?.id}/review`, {
-        risk,
-      });
+      await axiosInstance.post(
+        `/jobs/${jobId}/content/${job?.content?.id}/review`,
+        {
+          risk,
+        }
+      );
       setReviewed(true);
       setRisk(risk);
     } catch (error) {

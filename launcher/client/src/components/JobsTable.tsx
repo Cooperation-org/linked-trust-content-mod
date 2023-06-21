@@ -26,7 +26,20 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-interface Job {
+
+interface ReviewContent {
+  reviews: [
+    {
+      id: number;
+      reviewer: {
+        address: string;
+      };
+      status: string;
+    }
+  ];
+}
+
+export interface Job {
   id: number;
   status: string;
   createdAt: string;
@@ -36,6 +49,8 @@ interface Job {
   reviewersRequired: number;
   title: string;
   escrowAddress: string;
+  groupId: number;
+  content: ReviewContent;
 }
 
 const useStyles = makeStyles({
@@ -81,7 +96,6 @@ export const JobTable = ({
           `/api/job-creator/groups/${activeGroupId}/jobs`
         );
         const data = response.data;
-        console.log(data);
         setJobs(data);
         setIsLoading(false);
       }

@@ -728,7 +728,13 @@ export const getAllJobsForGroup = async (
             id: true,
             status: true,
             reviews: {
-              select: { id: true },
+              select: {
+                id: true,
+                status: true,
+                reviewer: {
+                  select: { address: true },
+                },
+              },
             },
           },
         },

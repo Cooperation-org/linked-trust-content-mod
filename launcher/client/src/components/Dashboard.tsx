@@ -5,18 +5,7 @@ import Container from '@mui/material/Container';
 import MyGroups from './MyGroups';
 import { JobTable } from './JobsTable';
 import { ViewReport } from './ViewReport';
-
-interface Job {
-  id: number;
-  status: string;
-  createdAt: string;
-  fundAmount: number;
-  description: string;
-  reviewCount: string;
-  reviewersRequired: number;
-  title: string;
-  escrowAddress: string;
-}
+import { Job } from './JobsTable';
 
 function Copyright(props: any) {
   return (
