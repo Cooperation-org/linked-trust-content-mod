@@ -50,6 +50,7 @@ const useStyles = makeStyles({
 interface JobTableProps {
   activeGroupId: number;
   onBackButtonClick: () => void;
+  onViewReportClick: (job: Job) => void;
 }
 
 interface ChipData {
@@ -59,6 +60,7 @@ interface ChipData {
 export const JobTable = ({
   activeGroupId,
   onBackButtonClick,
+  onViewReportClick,
 }: JobTableProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [infoDialogOpen, setInfoDialogOpen] = useState(false);
@@ -79,6 +81,7 @@ export const JobTable = ({
           `/api/job-creator/groups/${activeGroupId}/jobs`
         );
         const data = response.data;
+        console.log(data);
         setJobs(data);
         setIsLoading(false);
       }
@@ -209,8 +212,6 @@ export const JobTable = ({
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Title</TableCell>
-                  <TableCell>Description</TableCell>
                   <TableCell>Escrow Address</TableCell>
                   <TableCell>Fund Amount</TableCell>
                   <TableCell>Reviewers Required</TableCell>
@@ -223,8 +224,6 @@ export const JobTable = ({
               <TableBody>
                 {jobs.map((job) => (
                   <TableRow key={job.id}>
-                    <TableCell>{job.title}</TableCell>
-                    <TableCell>{job.description}</TableCell>
                     <TableCell>{job.escrowAddress}</TableCell>
                     <TableCell>{job.fundAmount}</TableCell>
                     <TableCell>{job.reviewersRequired}</TableCell>
@@ -236,9 +235,9 @@ export const JobTable = ({
                         variant="contained"
                         color="primary"
                         size="small"
-                        onClick={() =>
-                          console.log(`Action button clicked for ${job.title}`)
-                        }
+                        onClick={() => {
+                          onViewReportClick(job);
+                        }}
                       >
                         View Report
                       </Button>

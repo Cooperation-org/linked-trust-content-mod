@@ -4,6 +4,19 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import MyGroups from './MyGroups';
 import { JobTable } from './JobsTable';
+import { ViewReport } from './ViewReport';
+
+interface Job {
+  id: number;
+  status: string;
+  createdAt: string;
+  fundAmount: number;
+  description: string;
+  reviewCount: string;
+  reviewersRequired: number;
+  title: string;
+  escrowAddress: string;
+}
 
 function Copyright(props: any) {
   return (
@@ -28,6 +41,7 @@ export default function Dashboard() {
   };
 
   const [activeGroupId, setActiveGroupId] = React.useState<number>();
+  const [job, setJob] = React.useState<Job>();
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -39,11 +53,23 @@ export default function Dashboard() {
             }}
           />
         )}
-        {activeGroupId && (
+        {activeGroupId && !job && (
           <JobTable
             activeGroupId={activeGroupId}
             onBackButtonClick={() => {
               setActiveGroupId(undefined);
+            }}
+            onViewReportClick={(job) => {
+              setJob(job);
+            }}
+          />
+        )}
+
+        {job && (
+          <ViewReport
+            job={job}
+            handleBackButton={() => {
+              setJob(undefined);
             }}
           />
         )}
