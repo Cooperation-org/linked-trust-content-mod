@@ -26,7 +26,20 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-interface Job {
+
+interface ReviewContent {
+  reviews: [
+    {
+      id: number;
+      reviewer: {
+        address: string;
+      };
+      status: string;
+    }
+  ];
+}
+
+export interface Job {
   id: number;
   status: string;
   createdAt: string;
@@ -36,6 +49,8 @@ interface Job {
   reviewersRequired: number;
   title: string;
   escrowAddress: string;
+  groupId: number;
+  content: ReviewContent;
 }
 
 const useStyles = makeStyles({
@@ -50,6 +65,7 @@ const useStyles = makeStyles({
 interface JobTableProps {
   activeGroupId: number;
   onBackButtonClick: () => void;
+  onViewReportClick: (job: Job) => void;
 }
 
 interface ChipData {
@@ -59,6 +75,7 @@ interface ChipData {
 export const JobTable = ({
   activeGroupId,
   onBackButtonClick,
+  onViewReportClick,
 }: JobTableProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [infoDialogOpen, setInfoDialogOpen] = useState(false);
@@ -209,8 +226,6 @@ export const JobTable = ({
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Title</TableCell>
-                  <TableCell>Description</TableCell>
                   <TableCell>Escrow Address</TableCell>
                   <TableCell>Fund Amount</TableCell>
                   <TableCell>Reviewers Required</TableCell>
@@ -223,8 +238,6 @@ export const JobTable = ({
               <TableBody>
                 {jobs.map((job) => (
                   <TableRow key={job.id}>
-                    <TableCell>{job.title}</TableCell>
-                    <TableCell>{job.description}</TableCell>
                     <TableCell>{job.escrowAddress}</TableCell>
                     <TableCell>{job.fundAmount}</TableCell>
                     <TableCell>{job.reviewersRequired}</TableCell>
@@ -236,9 +249,9 @@ export const JobTable = ({
                         variant="contained"
                         color="primary"
                         size="small"
-                        onClick={() =>
-                          console.log(`Action button clicked for ${job.title}`)
-                        }
+                        onClick={() => {
+                          onViewReportClick(job);
+                        }}
                       >
                         View Report
                       </Button>
