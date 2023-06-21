@@ -4,7 +4,7 @@ import StyledInput from './StyledInput';
 import WalletModal from '../WalletModal';
 import { useAuth } from '../../hooks/auth';
 import { FC, useState, useCallback } from 'react';
-import { Box, Stack, FormControl } from '@mui/material';
+import { Box, Stack, FormControl, Typography } from '@mui/material';
 import { useMetamaskLogin } from '../../hooks/useMetamaskLogin';
 
 interface GroupInfoProps {
@@ -157,27 +157,39 @@ const GroupInfo: FC<GroupInfoProps> = ({
             in order to create an organisation you need to connect a wallet and
             authenticate it off chain <b> by signing a standard message</b>{' '}
           </p>
-          <Stack
-            direction="row"
-            sx={{
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-              marginTop: '2rem',
-            }}
-          >
-            <ol style={{ listStyle: 'number' }}>
-              <li style={{ marginBottom: '1rem' }}>Connect your wallet</li>
-              <li>sign in with your wallet</li>
-            </ol>
-            <div>
-              <Button disabled={isConnected} onClick={handleClickCrypto}>
+          <Stack spacing={2} sx={{ marginTop: '2rem' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Typography>Connect your wallet</Typography>
+              <Button
+                disabled={isConnected}
+                onClick={handleClickCrypto}
+                sx={{ width: '150px' }}
+              >
                 Connect
               </Button>
-              <br />
-              <Button disabled={Boolean(id)} onClick={handleSignIn}>
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Typography>Sign in with your wallet</Typography>
+              <Button
+                disabled={Boolean(id)}
+                onClick={handleSignIn}
+                sx={{ width: '150px' }}
+              >
                 Sign In
               </Button>
-            </div>
+            </Box>
           </Stack>
           <WalletModal
             open={walletModalOpen}
