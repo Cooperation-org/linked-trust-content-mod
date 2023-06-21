@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useContext } from 'react';
 import {
   Box,
   Divider,
@@ -7,12 +7,15 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
-import StyledCircularProgress from './StyledCircularProgress';
-import { ContentCopy as ContentCopyIcon } from '@mui/icons-material';
-import axiosInstance from '../../config/axiosInterceptor';
-import StyledInput from './StyledInput';
 import Button from './Button';
+import { AppContext } from 'src/state';
+import StyledInput from './StyledInput';
 import { useNavigate } from 'react-router-dom';
+import axiosInstance from '../../config/axiosInterceptor';
+import StyledCircularProgress from './StyledCircularProgress';
+import { goToTab, changeLauncherStatus } from 'src/state/actions';
+import { ContentCopy as ContentCopyIcon } from '@mui/icons-material';
+import { LauncherStageStatus, TabsTypes } from 'src/components/types';
 
 interface HooksAndKeysInfoProps {
   activeGroupId: string;
@@ -46,13 +49,21 @@ const HooksAndKeysInfo: FC<HooksAndKeysInfoProps> = ({ activeGroupId }) => {
     }, 2000);
   };
 
+  const { dispatch } = useContext(AppContext);
+
+  const goToJobDashboard = () => {
+    dispatch(goToTab(TabsTypes.DASHBOARD));
+    dispatch(changeLauncherStatus(LauncherStageStatus.GROUP_REQUEST));
+    navigate('/');
+  };
+
   const handleStoringWebhook = async () => {
     setIsStoringWebhook(true);
     try {
       await axiosInstance.post(`/api/groups/${activeGroupId}/webhook`, {
         webHook,
       });
-      navigate('/');
+      goToJobDashboard();
     } catch (err: any) {
       console.log(err?.message);
     } finally {
