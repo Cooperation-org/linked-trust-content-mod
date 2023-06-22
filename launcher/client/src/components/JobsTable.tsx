@@ -86,6 +86,7 @@ export const JobTable = ({
   const [openAddWorkerPopup, setOpenAddWorkerPopup] = useState(false);
   const [workerAddress, setWorkerAddress] = useState('');
   const [workerLoading, setWorkerLoading] = useState(false);
+  const [workerAdding, setWorkerAdding] = useState(false);
   const swaggerUrl = `${process.env.REACT_APP_JOB_LAUNCHER_SERVER_URL}/api-docs`;
   const [chips, setChips] = useState<ChipData[]>([]);
 
@@ -102,6 +103,14 @@ export const JobTable = ({
     };
     fetchJobs();
   }, [activeGroupId]);
+
+  useEffect(() => {
+    if (chips.length > 0) {
+      setWorkerAdding(false);
+    } else {
+      setWorkerAdding(true);
+    }
+  }, [chips.length]);
 
   const handleGenerateApiKey = () => {
     // Call API to generate API key
@@ -122,6 +131,7 @@ export const JobTable = ({
   };
 
   const handleOpenAddWorkerPopup = () => {
+    setWorkerAdding(true);
     setChips([]);
     setOpenAddWorkerPopup(true);
   };
@@ -386,7 +396,7 @@ export const JobTable = ({
                 variant="contained"
                 color="primary"
                 sx={{ minWidth: '120px', py: 1 }}
-                disabled={workerLoading}
+                disabled={workerLoading || workerAdding}
               >
                 {workerLoading && <CircularProgress size={24} sx={{ mr: 1 }} />}
                 Submit
