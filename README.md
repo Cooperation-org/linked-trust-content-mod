@@ -1,9 +1,10 @@
 # The Linked Trust Content Moderation
 
-## What is it about ? 
+## What it is about 
 
 Leverages blockchain technology and human protocol integration to ensure accurate and transparent content reviews. 
 The project aims to provide a secure and efficient way to moderate content using blockchain technology and a human protocol integration. It facilitates content review tasks, enforces moderation rules defined by group owners, and ensures fair compensation for content workers. 
+
 
 ## Features 
 
@@ -14,8 +15,24 @@ The project aims to provide a secure and efficient way to moderate content using
 - On-chain job registration, routing, and settlement.
 
 
-## How to run 
+## Getting started 
 
+### Run the dev environment from project root
+
+```yarn dev```
+
+
+## How is made 
+
+### Flow 
+
+![image1](./assets/flow1.png) ![image2](./assets/flow2.png)
+![image3](./assets/flow3.png)
+![image4](./assets/flow4.png)
+
+
+
+## How to run the Repute Launcher & Exchange 
 
 ### Metamask Account Setup
 1. Set up Accounts: In Metamask, create 3 accounts: 1 account for the **Job Creator** and 2 accounts for **Moderators** . 
