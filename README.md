@@ -2,8 +2,7 @@
 
 ## What it is about 
 
-Leverages blockchain technology and human protocol integration to ensure accurate and transparent content reviews. 
-The project aims to provide a secure and efficient way to moderate content using blockchain technology and a human protocol integration. It facilitates content review tasks, enforces moderation rules defined by group owners, and ensures fair compensation for content workers. 
+The Linked Trust Content Moderation is a project that aims to provide a secure and efficient way to moderate content combining blockchain and [Human Protocol](https://www.humanprotocol.org/) technology, to ensure accurate and transparent content reviews. It facilitates content review tasks, enforces moderation rules defined by group owners, and ensures fair compensation for content workers. 
 
 
 ## Features 
@@ -22,7 +21,11 @@ The project aims to provide a secure and efficient way to moderate content using
 ```yarn dev```
 
 
-## How is made 
+## How it is made 
+
+### Technology used 
+
+The content moderation process takes advantage of [Human SDK](https://sdk.humanprotocol.org/) and [Human Smart Contracts](https://github.com/humanprotocol/human-protocol/tree/main/packages/core/contracts). 
 
 ### Flow 
 
@@ -56,7 +59,8 @@ The project aims to provide a secure and efficient way to moderate content using
   - Fill in the necessary group details.
   - Click 'Fund and Request Group'.
   - Note down the displayed group ID.
-3. Generate API KEY and copy it. 
+3. Generate API KEY and copy it.
+
 4. Job Creation via API:
   - Navigate to the job dashboard in the Launcher.
   - Select **View Details** for your new group.
