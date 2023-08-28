@@ -1,9 +1,16 @@
 # The Linked Trust Content Moderation
 
-## What it is about 
+Welcome to the Linked Trust Content Moderation project!  This project aims to provide a secure and efficient way to moderate content combining blockchain and [Human Protocol](https://www.humanprotocol.org/) technology, to ensure accurate and transparent content reviews. It facilitates content review tasks, enforces moderation rules defined by group owners, and ensures fair compensation for content workers. 
 
-The Linked Trust Content Moderation is a project that aims to provide a secure and efficient way to moderate content combining blockchain and [Human Protocol](https://www.humanprotocol.org/) technology, to ensure accurate and transparent content reviews. It facilitates content review tasks, enforces moderation rules defined by group owners, and ensures fair compensation for content workers. 
+## Table of Contents
 
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Architecture](#architecture)
+- [How to run the Repute Launcher & Exchange](#how-to-run-the-repute-launcher--exchange)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
 
 ## Features 
 
@@ -21,7 +28,7 @@ The Linked Trust Content Moderation is a project that aims to provide a secure a
 ```yarn dev```
 
 
-## How it is made 
+## Architecture 
 
 ### Technology used 
 
@@ -32,7 +39,6 @@ The content moderation process takes advantage of [Human SDK](https://sdk.humanp
 ![image1](./assets/flow1.png) ![image2](./assets/flow2.png)
 ![image3](./assets/flow3.png)
 ![image4](./assets/flow4.png)
-
 
 
 ## How to run the Repute Launcher & Exchange 
@@ -86,4 +92,19 @@ The content moderation process takes advantage of [Human SDK](https://sdk.humanp
 3. Verify Token Receipt:
   - Ensure both Worker 1 and Worker 2 received HMTs in their Metamask wallets.
 
+## Contributing
 
+We welcome contributions to improve and expand this project. To contribute:
+
+1. Fork the repository.
+2. Create a new branch.
+3. Make your enhancements or fixes.
+4. Submit a pull request, describing your changes.
+
+## License
+
+This project is licensed under the [MIT License](https://opensource.org/license/mit/)
+
+## Acknowledgements
+
+We would like to acknowledge the generous support of [HUMAN Protocol](https://humanprotocol.org) in completing this work and in support of the team at [Repute.Social](https://repute.social) in putting it to use!
