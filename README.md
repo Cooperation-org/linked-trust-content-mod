@@ -7,7 +7,7 @@ Welcome to the Linked Trust Content Moderation project!  This project aims to pr
 - [Features](#features)
 - [Getting Started](#getting-started)
 - [Architecture](#architecture)
-- [How to run the Repute Launcher & Exchange](#how-to-run-the-repute-launcher-&-exchange)
+- [How to run the Repute Launcher & Exchange](#how-to-run-the-repute-launcher---exchange)
 - [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
