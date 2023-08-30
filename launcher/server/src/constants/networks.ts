@@ -59,7 +59,7 @@ export const ESCROW_NETWORKS: {
   [ChainId.POLYGON_MUMBAI]: {
     chainId: ChainId.POLYGON_MUMBAI,
     title: 'Polygon Mumbai',
-    rpcUrl: 'https://rpc-mumbai.maticvigil.com',
+    rpcUrl: 'https://polygon-mumbai.gateway.tenderly.co/1y380tTjoK90DTfiunNJZT',
     factoryAddress: '0xA8D927C4DA17A6b71675d2D49dFda4E9eBE58f2d',
     hmtAddress: '0x0376D26246Eb35FF4F9924cF13E6C05fd0bD7Fb4',
   },

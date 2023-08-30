@@ -67,6 +67,6 @@ export const consumeRabbitMQmsgs = async () => {
         console.log(err.message);
       }
     },
-    { noAck: false }
+    { noAck: true }
   );
 };
