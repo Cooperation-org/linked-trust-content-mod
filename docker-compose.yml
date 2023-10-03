@@ -6,7 +6,7 @@ services:
       - 5672:5672
       - 15672:15672 
   postgres:
-    image: postgres:latest
+    image: postgres:14.5
     container_name: postgres
     hostname: postgres
     ports:
