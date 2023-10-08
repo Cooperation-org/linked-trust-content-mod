@@ -39,25 +39,7 @@ export const consumeRabbitMQmsgs = async () => {
           },
         });
         if (!job) return;
-        console.log(
-          `tuna job.group.chainId - in rabbitmq file - ${job.group.chainId}`
-        );
-        console.log(
-          `tuna job.description - in rabbitmq file - ${job.description}`
-        );
-        console.log(
-          `tuna job.reviewersRequired - in rabbitmq file - ${job.reviewersRequired}`
-        );
-        console.log(
-          `tuna job.fundAmount - in rabbitmq file - ${job.fundAmount}`
-        );
-        console.log(
-          `tuna job.group.creator.address - in rabbitmq file - ${job.group.creator.address}`
-        );
-        console.log(`tuna job.title - in rabbitmq file - ${job.title}`);
-        console.log(
-          `tuna job.group.token - in rabbitmq file - ${job.group.token}`
-        );
+        console.log(`tuna job - in rabbitmq file - ${job}`);
 
         const launcherServerEscrowUrl = `${process.env.LAUNCHER_SERVER_URL}/escrow`;
 
