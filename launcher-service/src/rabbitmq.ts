@@ -24,6 +24,7 @@ export const consumeRabbitMQmsgs = async () => {
 
         const msgString = msg.content.toString();
         const { jobId } = JSON.parse(msgString);
+        console.log(`tuna jobId - in rabbitmq file - ${jobId}`);
 
         const job = await prisma.job.findFirst({
           where: {
@@ -38,6 +39,7 @@ export const consumeRabbitMQmsgs = async () => {
           },
         });
         if (!job) return;
+        console.log(`tuna job - in rabbitmq file - ${job}`);
 
         const launcherServerEscrowUrl = `${process.env.LAUNCHER_SERVER_URL}/escrow`;
 
