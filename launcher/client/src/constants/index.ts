@@ -76,7 +76,7 @@ export const ESCROW_NETWORKS: {
     subgraphUrl:
       'https://api.thegraph.com/subgraphs/name/humanprotocol/mumbai-v1',
     factoryAddress: '0xA8D927C4DA17A6b71675d2D49dFda4E9eBE58f2d',
-    hmtAddress: '0xc748B2A084F8eFc47E086ccdDD9b7e67aEb571BF',
+    hmtAddress: '0x0376D26246Eb35FF4F9924cF13E6C05fd0bD7Fb4',
   },
 
   [ChainId.LOCALHOST]: {
