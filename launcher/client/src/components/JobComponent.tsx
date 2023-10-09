@@ -13,6 +13,7 @@ type Content = {
   imgUrl?: string;
 };
 
+// Job
 type Job = {
   id: number;
   title: string;
