@@ -7,7 +7,6 @@ import { JobTable } from './JobsTable';
 import { ViewReport } from './ViewReport';
 import { Job } from './JobsTable';
 
-// Copyright
 function Copyright(props: any) {
   return (
     <Typography
