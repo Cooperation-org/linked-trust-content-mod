@@ -41,9 +41,18 @@ export const consumeRabbitMQmsgs = async () => {
         if (!job) return;
         console.log(`tuna job - in rabbitmq file - ${job}`);
 
+        console.log(`chainId: ${job.group.chainId},`);
+        console.log(`description: ${job.description},`);
+        console.log(`fortunesRequired: ${job.reviewersRequired},`);
+        console.log(`fundAmount: ${job.fundAmount},`);
+        console.log(`jobRequester: ${job.group.creator.address},`);
+        console.log(`title: ${job.title},`);
+        console.log(`token: ${job.group.token},`);
+
         const launcherServerEscrowUrl = `${process.env.LAUNCHER_SERVER_URL}/escrow`;
 
         const response = await axios.post(launcherServerEscrowUrl, {
+          groupId: job.group.id,
           chainId: job.group.chainId,
           description: job.description,
           fortunesRequired: job.reviewersRequired,

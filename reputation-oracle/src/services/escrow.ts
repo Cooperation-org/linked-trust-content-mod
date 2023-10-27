@@ -18,7 +18,7 @@ export async function bulkPayOut(
   web3: Web3,
   escrowAddress: string,
   workerAddresses: string[],
-  rewards: Array<string | number>,
+  rewards: Array<number>,
   resultsUrl: string,
   resultHash: string
 ) {

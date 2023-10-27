@@ -9,10 +9,10 @@ import {
 } from './services/escrow';
 import { filterAddressesToReward } from './services/rewards';
 import { uploadResults } from './services/s3';
-import {
-  updateReputations,
-  calculateRewardForWorker,
-} from './services/reputation';
+// import {
+//   updateReputations,
+//   calculateRewardForWorker,
+// } from './services/reputation';
 import getManifest from './services/manifest';
 import { ChainId, REPUTATION_NETWORKS } from './constants/constants';
 import logger from 'morgan';
@@ -77,24 +77,31 @@ app.post('/send-fortunes', async (req, res) => {
       const { recordingOracleAddress } = await getManifest(manifestUrl);
 
       const balance = await getBalance(web3, escrow.escrowAddress);
-      const { workerAddresses, reputationValues } = filterAddressesToReward(
+      const { workerAddresses } = filterAddressesToReward(
         web3,
         fortunes,
         recordingOracleAddress
       );
 
-      await updateReputations(
-        web3,
-        network.reputationAddress,
-        reputationValues
-      );
+      // await updateReputations(
+      //   web3,
+      //   network.reputationAddress,
+      //   reputationValues
+      // );
 
-      const rewards = await calculateRewardForWorker(
-        web3,
-        network.reputationAddress,
-        balance.toString(),
-        workerAddresses
-      );
+      // const rewards = await calculateRewardForWorker(
+      //   web3,
+      //   network.reputationAddress,
+      //   balance.toString(),
+      //   workerAddresses
+      // );
+      const reward = balance / workerAddresses.length;
+      console.log(`reward: ${reward}, and balance: ${balance}`);
+      const rewards: number[] = [];
+      rewards.length = workerAddresses.length;
+      for (let worker in workerAddresses) {
+        rewards[worker] = reward;
+      }
 
       // TODO calculate the URL hash(?)
       const resultsUrl = await uploadResults(escrow, escrow.escrowAddress);

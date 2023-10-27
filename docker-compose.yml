@@ -2,9 +2,9 @@ version: '3.7'
 services:
   rabbitmq:
     image: rabbitmq:3.11-management
-    ports: 
+    ports:
       - 5672:5672
-      - 15672:15672 
+      - 15672:15672
   postgres:
     image: postgres:14.5
     container_name: postgres
@@ -30,10 +30,9 @@ services:
     volumes:
       - ./${MANIFEST_FILE}:/tmp/manifests/docker-manifest.json
     entrypoint: 'sh'
-    command:
-      -c "mkdir -p /data/manifests && cp /tmp/manifests/docker-manifest.json /data/manifests/manifest.json && minio server /data --console-address ':9001'"
+    command: -c "mkdir -p /data/manifests && cp /tmp/manifests/docker-manifest.json /data/manifests/manifest.json && minio server /data --console-address ':9001'"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
       interval: 5s
       timeout: 5s
       retries: 3
@@ -48,7 +47,7 @@ services:
       /usr/bin/mc config host add myminio http://minio:9000 dev devdevdev;
       /usr/bin/mc mb myminio/manifests;
       /usr/bin/mc anonymous set public myminio/manifests;
-      " 
+      "
 
 volumes:
   postgres-data:

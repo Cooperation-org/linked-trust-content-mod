@@ -19,7 +19,7 @@ const ajv = new Ajv({
   allowUnionTypes: true,
 });
 
-class Web3Client {
+export class Web3Client {
   private privKey = process.env.ETH_PRIVATE_KEY as string;
 
   createWeb3(network: IEscrowNetwork, privKey?: string) {

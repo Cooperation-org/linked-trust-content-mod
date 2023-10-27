@@ -48,20 +48,26 @@ const useCreateGroup = ({
         return;
       }
       const balance = await contract.balanceOf(address);
+      console.log(`balance: ${balance}, and address: ${address}`);
 
       const fundAmount = ethers.utils.parseUnits(
         data.fundedAmt,
         HM_TOKEN_DECIMALS
       );
+      console.log(`fundAmount: ${fundAmount}`);
 
       if (balance.lt(fundAmount)) {
         throw new Error('Balance not enough for funding the escrow');
       }
       const allowance = await contract.allowance(address, jobLauncherAddress);
+      console.log(`allowance: ${allowance}`);
 
       if (allowance.lt(fundAmount)) {
         const tx = await contract.approve(jobLauncherAddress, fundAmount);
         const receipt = await tx.wait();
+        console.log(
+          `tx: ${JSON.stringify(tx)}, and receipt: ${JSON.stringify(receipt)}`
+        );
       }
       if (onLaunch) onLaunch();
       const result = await axiosInstance.post('/api/groups', data);

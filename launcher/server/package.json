@@ -7,7 +7,8 @@
   "private": false,
   "dependencies": {
     "@fastify/cors": "^8.2.0",
-    "@human-protocol/core": "1.1.12",
+    "@human-protocol/core": "1.1.16",
+    "@human-protocol/sdk": "^1.1.16",
     "@sinclair/typebox": "^0.25.21",
     "@types/minio": "^7.0.15",
     "ajv": "^8.12.0",

@@ -11,6 +11,15 @@ import {
   ESCROW_NETWORKS,
   IEscrowNetwork,
 } from '../constants/networks';
+// import {
+//   createEscrowClient,
+//   createStakingClientAndApproveStake,
+//   createEscrowAddress,
+//   setUpEscrow,
+//   fundEscrowAddress,
+// } from '../plugins/escrowSdk';
+import { EscrowClient, StakingClient } from '@human-protocol/sdk';
+import { ethers } from 'ethers';
 
 const escrowPreValidations = function (
   request: FastifyRequest,
@@ -30,6 +39,15 @@ const escrowPreValidations = function (
   if (!network) done(new Error('Chain Id not supported'));
   done(undefined);
 };
+
+const provider = new ethers.providers.JsonRpcProvider(
+  'https://polygon-mumbai.gateway.tenderly.co/1y380tTjoK90DTfiunNJZT'
+);
+
+// const network: NetworkData = NETWORKS[cid.POLYGON_MUMBAI]!;
+const privateKey = process.env.ETH_PRIVATE_KEY as string;
+
+const signer = new ethers.Wallet(privateKey, provider);
 
 export const createEscrow: FastifyPluginAsync = async (server) => {
   let escrowData: typeof escrowSchema.properties;
@@ -77,6 +95,8 @@ export const createEscrow: FastifyPluginAsync = async (server) => {
     async function (request, reply) {
       const { escrow, s3, web3, stripe, currency } = server;
 
+      const escrowClient = await EscrowClient.build(signer);
+
       escrowData = request.body as typeof escrowSchema.properties;
       const chainId = Number(escrowData.chainId) as ChainId;
       const escrowNetwork = ESCROW_NETWORKS[chainId] as IEscrowNetwork;
@@ -84,11 +104,11 @@ export const createEscrow: FastifyPluginAsync = async (server) => {
         ? JSON.parse(escrowData?.fiat?.toString())
         : false;
 
-      let funderAddress: string, fundAmount: string;
+      let funderAddress: string, fundAmount: any;
       const web3Client = web3.createWeb3(escrowNetwork);
       const jobRequester = escrowData.jobRequester as unknown as string;
       const token = escrowData.token as unknown as string;
-
+      console.log(`fiat in /escrow endpoint: ${fiat}`);
       if (fiat) {
         funderAddress = web3Client.eth.defaultAccount as string;
         const payment = await stripe.getPayment(
@@ -121,25 +141,27 @@ export const createEscrow: FastifyPluginAsync = async (server) => {
             );
         }
       } else {
+        //originally jobRequester
         funderAddress = jobRequester;
-        fundAmount = web3Client.utils.toWei(
+        fundAmount = ethers.utils.parseUnits(
           Number(escrowData.fundAmount).toString(),
           'ether'
         );
-        if (
-          !(await escrow.checkApproved(
-            web3Client,
-            token,
-            funderAddress,
-            fundAmount
-          ))
-        ) {
+        console.log(
+          `fundAmount before checkApproved: ${fundAmount}, and escrowData.fundAmount: ${escrowData.fundAmount}`
+        );
+        const isApproved = await escrow.checkApproved(
+          web3Client,
+          token,
+          funderAddress,
+          fundAmount
+        );
+        if (!isApproved) {
           return reply
             .status(400)
             .send('Balance or allowance not enough for funding the escrow');
         }
       }
-
       const description = escrowData.description as unknown as string;
       const title = escrowData.title as unknown as string;
       if (escrow.checkCurseWords(description) || escrow.checkCurseWords(title))
@@ -147,22 +169,50 @@ export const createEscrow: FastifyPluginAsync = async (server) => {
           .status(400)
           .send('Title or description contains curse words');
 
-      const escrowAddress = await escrow.createEscrow(
-        web3Client,
-        escrowNetwork.factoryAddress,
+      // const escrowAddress = await escrow.createEscrow(
+      //   web3Client,
+      //   escrowNetwork.factoryAddress,
+      //   token,
+      //   jobRequester,
+      //   Number(escrowData.groupId)
+      // );
+      const stakeAmount = ethers.utils.parseUnits('1', 'ether');
+      const stakingClient = await StakingClient.build(signer);
+      await stakingClient.approveStake(stakeAmount);
+      await stakingClient.stake(stakeAmount);
+      const escrowAddress = await escrowClient.createEscrow(
         token,
-        jobRequester
+        [jobRequester],
+        String(escrowData.groupId)
       );
-      await escrow.fundEscrow(
-        web3Client,
-        token,
-        funderAddress,
-        escrowAddress,
-        fundAmount
-      );
+      console.log(`escrowaddress: ${escrowAddress}`);
+      // await escrow.fundEscrow(
+      //   web3Client,
+      //   token,
+      //   funderAddress,
+      //   escrowAddress,
+      //   fundAmount
+      // );
+      await escrowClient.fund(escrowAddress, fundAmount);
       const data = escrow.addOraclesData(escrowData);
       const url = await s3.uploadManifest(data, escrowAddress);
-      await escrow.setupEscrow(web3Client, escrowAddress, url);
+      // await escrow.setupEscrow(web3Client, escrowAddress, url);
+      const recOracleAddress = process.env.REC_ORACLE_ADDRESS as string;
+      const repOracleAddress = process.env.REP_ORACLE_ADDRESS as string;
+      const exOracleAddress = process.env.EX_ORACLE_ADDRESS as string;
+      const recOracleFee = Number(process.env.REC_ORACLE_PERCENTAGE_FEE);
+      const repOracleFee = Number(process.env.REP_ORACLE_PERCENTAGE_FEE);
+      const exOracleFee = Number(process.env.EX_ORACLE_PERCENTAGE_FEE);
+      await escrowClient.setup(escrowAddress, {
+        recordingOracle: recOracleAddress,
+        reputationOracle: repOracleAddress,
+        exchangeOracle: exOracleAddress,
+        recordingOracleFee: ethers.BigNumber.from(recOracleFee),
+        reputationOracleFee: ethers.BigNumber.from(repOracleFee),
+        exchangeOracleFee: ethers.BigNumber.from(exOracleFee),
+        manifestUrl: url,
+        manifestHash: 'test',
+      });
       return {
         escrowAddress,
         exchangeUrl: `${data.exchangeOracleUrl}?address=${escrowAddress}`,

@@ -1,6 +1,7 @@
 export const escrow = {
   type: 'object',
   properties: {
+    groupId: { type: 'number' },
     chainId: { type: 'number' },
     title: { type: 'string' },
     description: { type: 'string' },

@@ -13,6 +13,7 @@ const startServer = async () => {
   const port = +server.config.API_PORT;
   const host = server.config.API_HOST;
   await server.listen({ host, port });
+  console.log(`ETH_PRIVATE_KEY: ${process.env.ETH_PRIVATE_KEY}`);
 
   for (const signal of ['SIGINT', 'SIGTERM']) {
     process.on(signal, () =>
